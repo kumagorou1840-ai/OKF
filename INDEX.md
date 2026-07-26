@@ -18,6 +18,10 @@
 | **ナレッジ管理** | **OKF仕様・運用ガイド** | 人間・AI共通の標準ドキュメント仕様（荷札・分割・リンク）と運用法 | 📄 [okf_specification_overview.md](file:///C:/Users/PC_User/OKF/okf_specification_overview.md) |
 | **AI拡張・ブレイン** | **OKF AIブレイン構築ガイド** | Marie Haynes氏デモに基づく個人用AIブレイン・プレイブックの構築と知識グラフ化 | 📄 [okf_brain_build_guide.md](file:///C:/Users/PC_User/OKF/okf_brain_build_guide.md) |
 | **実践・オーケストレーション** | **OKF実践活用ガイド** | Antigravityによる自律ロード・コード実行・自動ナレッジ拡張の実践活用モデル | 📄 [okf_practical_usage.md](file:///C:/Users/PC_User/OKF/okf_practical_usage.md) |
+| **AIグラフィックス** | **PlantUML 言語リファレンス (メイン)** | PlantUML公式リファレンスの完全OKF仕様統合ナビゲーション | 📄 [plantuml_language_reference.md](file:///C:/Users/PC_User/OKF/plantuml_language_reference.md) |
+| **ソフトウェア開発** | **PlantUML UMLダイアグラム仕様** | シーケンス・クラス・アクティビティ・ステート等9大UML構文リファレンス | 📄 [plantuml_uml_diagrams.md](file:///C:/Users/PC_User/OKF/plantuml_uml_diagrams.md) |
+| **データ構造・可視化** | **PlantUML 非UML・可視化仕様** | JSON/YAMLツリー・nwdiag・Salt・ガント・WBS・ER図構文リファレンス | 📄 [plantuml_non_uml_diagrams.md](file:///C:/Users/PC_User/OKF/plantuml_non_uml_diagrams.md) |
+| **デザインシステム** | **PlantUML スタイル・プリプロセッサ仕様** | skinparam・Creole・スプライト・!includeマクロ・標準ライブラリ仕様 | 📄 [plantuml_styling_and_preprocessor.md](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md) |
 
 ---
 
@@ -50,3 +54,7 @@ OKFの全ナレッジドキュメントは、以下の標準フレームワー�
 - 📚 [OKF (Open Knowledge Format) 仕様・運用ガイド](file:///C:/Users/PC_User/OKF/okf_specification_overview.md)
 - 🧠 [OKF AIブレイン構築・運用ガイド (Marie Haynesデモ)](file:///C:/Users/PC_User/OKF/okf_brain_build_guide.md)
 - ⚡ [OKF実践活用ガイド (自律エージェント駆動)](file:///C:/Users/PC_User/OKF/okf_practical_usage.md)
+- 🎨 [PlantUML 言語リファレンス メイン (全586ページOKF統合版)](file:///C:/Users/PC_User/OKF/plantuml_language_reference.md)
+- 📐 [PlantUML UMLダイアグラム仕様 (シーケンス/クラス/アクティビティ等)](file:///C:/Users/PC_User/OKF/plantuml_uml_diagrams.md)
+- 📊 [PlantUML 非UML・可視化仕様 (JSON/nwdiag/Salt/ガント/WBS)](file:///C:/Users/PC_User/OKF/plantuml_non_uml_diagrams.md)
+- 🖌️ [PlantUML スタイル・プリプロセッサ仕様 (skinparam/Creole/マクロ)](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md)
