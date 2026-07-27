@@ -18,6 +18,7 @@
 | **データサイエンス** | **モンテカルロシミュレーション** | 15,000回試行によるITプロジェクト遅延・予算超過の複合リスク算定 | 📄 [monte_carlo_simulation.md](file:///C:/Users/PC_User/OKF/monte_carlo_simulation.md) |
 | **データサイエンス** | **時系列異常検知** | 3シグマ法/Zスコアによるアクセス数急減等の異常検知と要因特定 | 📄 [timeseries_anomaly_detection.md](file:///C:/Users/PC_User/OKF/timeseries_anomaly_detection.md) |
 | **ナレッジ管理** | **OKF仕様・運用ガイド** | 人間・AI共通の標準ドキュメント仕様（荷札・分割・リンク）と運用法 | 📄 [okf_specification_overview.md](file:///C:/Users/PC_User/OKF/okf_specification_overview.md) |
+| **知的生産・ナレッジ** | **読書メモのアクション化** | 『イシューからはじめよ』に基づくイシュー検証・仮説ツリー・Python集計 | 📄 [reading_notes_issue_action.md](file:///C:/Users/PC_User/OKF/reading_notes_issue_action.md) |
 | **AI拡張・ブレイン** | **OKF AIブレイン構築ガイド** | Marie Haynes氏デモに基づく個人用AIブレイン・プレイブックの構築と知識グラフ化 | 📄 [okf_brain_build_guide.md](file:///C:/Users/PC_User/OKF/okf_brain_build_guide.md) |
 | **実践・オーケストレーション** | **OKF実践活用ガイド** | Antigravityによる自律ロード・コード実行・自動ナレッジ拡張の実践活用モデル | 📄 [okf_practical_usage.md](file:///C:/Users/PC_User/OKF/okf_practical_usage.md) |
 | **AIグラフィックス** | **PlantUML 言語リファレンス (メイン)** | PlantUML公式リファレンスの完全OKF仕様統合ナビゲーション | 📄 [plantuml_language_reference.md](file:///C:/Users/PC_User/OKF/plantuml_language_reference.md) |
@@ -55,6 +56,7 @@ OKFの全ナレッジドキュメントは、以下の標準フレームワー�
 - 📊 [多変量解析自動実行 (重回帰分析)](file:///C:/Users/PC_User/OKF/multivariate_analysis.md)
 - 🎲 [モンテカルロシミュレーション (ITプロジェクト遅延・予算超過確率評価)](file:///C:/Users/PC_User/OKF/monte_carlo_simulation.md)
 - 📈 [時系列異常検知 (3シグマ法によるアクセス急減検知と原因レポート)](file:///C:/Users/PC_User/OKF/timeseries_anomaly_detection.md)
+- 📘 [読書メモのアクション化 (『イシューからはじめよ』の実践的課題検証)](file:///C:/Users/PC_User/OKF/reading_notes_issue_action.md)
 - 📚 [OKF (Open Knowledge Format) 仕様・運用ガイド](file:///C:/Users/PC_User/OKF/okf_specification_overview.md)
 - 🧠 [OKF AIブレイン構築・運用ガイド (Marie Haynesデモ)](file:///C:/Users/PC_User/OKF/okf_brain_build_guide.md)
 - ⚡ [OKF実践活用ガイド (自律エージェント駆動)](file:///C:/Users/PC_User/OKF/okf_practical_usage.md)
