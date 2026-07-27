@@ -25,6 +25,7 @@
 | **ソフトウェア開発** | [**PlantUML UMLダイアグラム仕様**](file:///C:/Users/PC_User/OKF/plantuml_uml_diagrams.md) | シーケンス・クラス・アクティビティ・ステート等9大UML構文リファレンス | 📄 [plantuml_uml_diagrams.md](file:///C:/Users/PC_User/OKF/plantuml_uml_diagrams.md) |
 | **データ構造・可視化** | [**PlantUML 非UML・可視化仕様**](file:///C:/Users/PC_User/OKF/plantuml_non_uml_diagrams.md) | JSON/YAMLツリー・nwdiag・Salt・ガント・WBS・ER図構文リファレンス | 📄 [plantuml_non_uml_diagrams.md](file:///C:/Users/PC_User/OKF/plantuml_non_uml_diagrams.md) |
 | **デザインシステム** | [**PlantUML スタイル・プリプロセッサ仕様**](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md) | skinparam・Creole・スプライト・!includeマクロ・標準ライブラリ仕様 | 📄 [plantuml_styling_and_preprocessor.md](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md) |
+| **AIオーケストレーション** | [**AIエージェント10分野スキル・300選アプローチ**](file:///C:/Users/PC_User/OKF/ai_agent_skills_10_domains.md) | バイオ・プラグイン管理・CS・データアナリスト・デザイン・技術・検索・財務・HR・法務の全スキルと300選 | 📄 [ai_agent_skills_10_domains.md](file:///C:/Users/PC_User/OKF/ai_agent_skills_10_domains.md) |
 
 ---
 
@@ -64,3 +65,4 @@ OKFの全ナレッジドキュメントは、以下の標準フレームワー�
 - 📐 [PlantUML UMLダイアグラム仕様 (シーケンス/クラス/アクティビティ等)](file:///C:/Users/PC_User/OKF/plantuml_uml_diagrams.md)
 - 📊 [PlantUML 非UML・可視化仕様 (JSON/nwdiag/Salt/ガント/WBS)](file:///C:/Users/PC_User/OKF/plantuml_non_uml_diagrams.md)
 - 🖌️ [PlantUML スタイル・プリプロセッサ仕様 (skinparam/Creole/マクロ)](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md)
+- 🤖 [AIエージェント10分野スキル・300選アプローチガイド](file:///C:/Users/PC_User/OKF/ai_agent_skills_10_domains.md)
