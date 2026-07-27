@@ -27,6 +27,7 @@
 | **デザインシステム** | [**PlantUML スタイル・プリプロセッサ仕様**](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md) | skinparam・Creole・スプライト・!includeマクロ・標準ライブラリ仕様 | 📄 [plantuml_styling_and_preprocessor.md](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md) |
 | **AIオーケストレーション** | [**AIエージェント全18分野スキル・540選アプローチ**](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md) | 全18業務分野の完全AIスキルと540選アプローチ活用ガイド (完全版) | 📄 [ai_agent_skills_all_domains.md](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md) |
 | **法務・不動産交渉** | [**土地賃貸借模擬裁判 & 交渉プレイブック**](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md) | 事前許可・法定更新・信義則・勝訴確率85%に基づく模擬裁判記録と内容証明書面 | 📄 [land_lease_court_simulation.md](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md) |
+| **AIシステム設計** | [**Antigravityポータル拡張性検討 2階層マルチエージェント意思決定**](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md) | 秘書＋5人専門家による意思決定ログ、Ganttロードマップ、ホットリロードPythonコード | 📄 [antigravity_portal_extension_roadmap.md](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md) |
 
 ---
 
@@ -132,3 +133,4 @@ OKFの全ナレッジドキュメントは、以下の標準フレームワー�
 - 🖌️ [PlantUML スタイル・プリプロセッサ仕様 (skinparam/Creole/マクロ)](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md)
 - 🤖 [AIエージェント全18分野スキル・540選アプローチガイド (完全版)](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md)
 - ⚖️ [土地賃貸借模擬裁判 & 法的交渉プレイブック (勝訴確率85%・内容証明付き)](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md)
+- 🛸 [Antigravityポータル拡張性検討 2階層マルチエージェント意思決定 & ロードマップ](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md)
