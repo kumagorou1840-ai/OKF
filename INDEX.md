@@ -28,6 +28,7 @@
 | **AIオーケストレーション** | [**AIエージェント全18分野スキル・540選アプローチ**](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md) | 全18業務分野の完全AIスキルと540選アプローチ活用ガイド (完全版) | 📄 [ai_agent_skills_all_domains.md](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md) |
 | **法務・不動産交渉** | [**土地賃貸借模擬裁判 & 交渉プレイブック**](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md) | 事前許可・法定更新・信義則・勝訴確率85%に基づく模擬裁判記録と内容証明書面 | 📄 [land_lease_court_simulation.md](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md) |
 | **AIシステム設計** | [**Antigravityポータル拡張性検討 2階層マルチエージェント意思決定**](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md) | 秘書＋5人専門家による意思決定ログ、Ganttロードマップ、ホットリロードPythonコード | 📄 [antigravity_portal_extension_roadmap.md](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md) |
+| **データサイエンス・最適化** | [**数理モデル実データ自動最適化 & 在庫シミュレーター**](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md) | MILP (PuLP/CBC) による損益分岐点14.8%削減・Streamlit Plotly可動スライダーアプリ | 📄 [mathematical_inventory_optimization.md](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md) |
 
 ---
 
@@ -58,7 +59,7 @@
 20. **Vault / Secrets Manager による機密情報ハードコード完全排除**: APIキー等の暗号化金庫動的注入。
 
 ### 📊 3. データサイエンス・統計解析・異常検知 (10選)
-21. **重回帰分析による最重要影響要因の統計的自動特定**: [multivariate_analysis.md](file:///C:/Users/PC_User/OKF/multivariate_analysis.md) による貢献度算出。
+21. **重回帰分析 & 数理最適化 (MILP) による最重要影響要因の特定と損益分岐点14.8%削減**: [multivariate_analysis.md](file:///C:/Users/PC_User/OKF/multivariate_analysis.md) や [mathematical_inventory_optimization.md](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md) により、在庫維持費と発注固定費のトレードオフを自動最適化。
 22. **15,000回試行モンテカルロシミュレーションによるリスク算定**: [monte_carlo_simulation.md](file:///C:/Users/PC_User/OKF/monte_carlo_simulation.md) で遅延・予算超過確率評価。
 23. **3シグマ法 / Zスコアによるアクセス数急減等の自動異常検知**: [timeseries_anomaly_detection.md](file:///C:/Users/PC_User/OKF/timeseries_anomaly_detection.md) によるスパイク検知。
 24. **障害・タグ剥がれ等の異常原因5大要因自動レポート作成**: 原因仮説の自動調査と報告書起稿。
@@ -134,3 +135,4 @@ OKFの全ナレッジドキュメントは、以下の標準フレームワー�
 - 🤖 [AIエージェント全18分野スキル・540選アプローチガイド (完全版)](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md)
 - ⚖️ [土地賃貸借模擬裁判 & 法的交渉プレイブック (勝訴確率85%・内容証明付き)](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md)
 - 🛸 [Antigravityポータル拡張性検討 2階層マルチエージェント意思決定 & ロードマップ](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md)
+- 📦 [数理モデル実データ自動最適化 & 在庫シミュレーター (損益分岐点14.8%削減)](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md)
