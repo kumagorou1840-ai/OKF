@@ -29,6 +29,7 @@
 | **法務・不動産交渉** | [**土地賃貸借模擬裁判 & 交渉プレイブック**](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md) | 事前許可・法定更新・信義則・勝訴確率85%に基づく模擬裁判記録と内容証明書面 | 📄 [land_lease_court_simulation.md](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md) |
 | **AIシステム設計** | [**Antigravityポータル拡張性検討 2階層マルチエージェント意思決定**](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md) | 秘書＋5人専門家による意思決定ログ、Ganttロードマップ、ホットリロードPythonコード | 📄 [antigravity_portal_extension_roadmap.md](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md) |
 | **データサイエンス・最適化** | [**数理モデル実データ自動最適化 & 在庫シミュレーター**](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md) | MILP (PuLP/CBC) による損益分岐点14.8%削減・Streamlit Plotly可動スライダーアプリ | 📄 [mathematical_inventory_optimization.md](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md) |
+| **開発自動化** | [**自己完結型フォルダツリー一括生成 仕様書 & 自動構築ツール**](file:///C:/Users/PC_User/OKF/self_contained_folder_tree_generator.md) | テキスト構文からディレクトリ階層＋ボイラープレートファイルを1秒で一括生成 | 📄 [self_contained_folder_tree_generator.md](file:///C:/Users/PC_User/OKF/self_contained_folder_tree_generator.md) |
 
 ---
 
@@ -54,7 +55,7 @@
 15. **skinparam / Creole / マクロによるスタイリング**: [plantuml_styling_and_preprocessor.md](file:///C:/Users/PC_User/OKF/plantuml_styling_and_preprocessor.md) によるUIテーマ適用。
 16. **Kroki API経由での高精細PNG画像自動レンダリング**: [plantuml_language_reference.md](file:///C:/Users/PC_User/OKF/plantuml_language_reference.md) でJava無用画像出力。
 17. **TDD (テスト駆動開発) サイクルの厳格な自律回転**: [ai_agent_skills_all_domains.md](file:///C:/Users/PC_User/OKF/ai_agent_skills_all_domains.md) からRED-GREEN-REFACTOR回転。
-18. **AWS / Azure / GCP の IaC (CDK/Terraform) 自動起稿**: 構成図からのインフラコード直接作成。
+18. **自己完結型フォルダツリー一括生成 & IaC (CDK/Terraform) 自動起稿**: [self_contained_folder_tree_generator.md](file:///C:/Users/PC_User/OKF/self_contained_folder_tree_generator.md) により、テキストツリー構文からフォルダ階層と必須ファイルを1秒で一括構築。
 19. **ArgoCD / Flux による K8s GitOps 自動同期デプロイ**: 単一信頼ソースからの自動デプロイ。
 20. **Vault / Secrets Manager による機密情報ハードコード完全排除**: APIキー等の暗号化金庫動的注入。
 
@@ -136,3 +137,4 @@ OKFの全ナレッジドキュメントは、以下の標準フレームワー�
 - ⚖️ [土地賃貸借模擬裁判 & 法的交渉プレイブック (勝訴確率85%・内容証明付き)](file:///C:/Users/PC_User/OKF/land_lease_court_simulation.md)
 - 🛸 [Antigravityポータル拡張性検討 2階層マルチエージェント意思決定 & ロードマップ](file:///C:/Users/PC_User/OKF/antigravity_portal_extension_roadmap.md)
 - 📦 [数理モデル実データ自動最適化 & 在庫シミュレーター (損益分岐点14.8%削減)](file:///C:/Users/PC_User/OKF/mathematical_inventory_optimization.md)
+- 📁 [自己完結型フォルダツリー一括生成 仕様書 & 自動構築ツール](file:///C:/Users/PC_User/OKF/self_contained_folder_tree_generator.md)
