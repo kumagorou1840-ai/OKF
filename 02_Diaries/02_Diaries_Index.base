@@ -1,0 +1,47 @@
+filters:
+  and:
+    - file.inFolder("02_Diaries")
+    - file.ext == "md"
+formulas:
+  day_of_week: |+
+    date(created).format("dddd")
+
+
+
+
+
+
+
+
+  days_ago: if(created, (today() - date(created)).days, "")
+properties:
+  file.name:
+    displayName: 日記タイトル
+  tags:
+    displayName: タグ
+  created:
+    displayName: 作成日付
+  formula.day_of_week:
+    displayName: 曜日
+  formula.days_ago:
+    displayName: 経過日数
+views:
+  - type: table
+    name: 全日記一覧 (テーブル)
+    order:
+      - file.name
+      - created
+      - formula.day_of_week
+      - tags
+      - formula.days_ago
+    sort:
+      - property: file.ctime
+        direction: DESC
+    summaries:
+      file.name: Filled
+  - type: cards
+    name: 日記ギャラリー (カード)
+    order:
+      - file.name
+      - created
+      - tags

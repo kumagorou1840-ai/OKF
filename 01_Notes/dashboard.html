@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>損益分岐点（BEP）シミュレーション ダッシュボード</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Plotly.js CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        /* CSS Variables for Sleek Dark Mode */
+        :root {
+            --bg-color: #0d0e12;
+            --card-bg: #161922;
+            --card-border: #232836;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6; /* Blue */
+            --primary-hover: #2563eb;
+            --accent-sales: #10b981; /* Emerald */
+            --accent-cost: #ef4444; /* Red */
+            --accent-fixed: #8b5cf6; /* Violet */
+            --accent-bep: #f59e0b; /* Amber */
+            --accent-current: #06b6d4; /* Cyan */
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .title-area h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-area p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .selector-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .selector-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        select {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.6rem 2.5rem 0.6rem 1rem;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2rem;
+            transition: all 0.2s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Main Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .panel {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+            transition: border-color 0.3s ease;
+        }
+
+        .panel:hover {
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            border-left: 4px solid var(--primary);
+            padding-left: 0.75rem;
+            line-height: 1.2;
+        }
+
+        /* KPI Summary Cards */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .kpi-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            font-family: var(--font-sans);
+        }
+
+        .kpi-value.profit-positive {
+            color: var(--accent-sales);
+        }
+
+        .kpi-value.profit-negative {
+            color: var(--accent-cost);
+        }
+
+        /* Controls Panel */
+        .controls-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        /* Input & Slider */
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .number-input {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            width: 120px;
+            text-align: right;
+            transition: all 0.2s ease;
+        }
+
+        .number-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .slider-input {
+            flex-grow: 1;
+            height: 6px;
+            background: var(--card-border);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            transition: background 0.3s;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        .slider-input::-webkit-slider-thumb:hover {
+            transform: scale(1.25);
+            background: var(--primary-hover);
+        }
+
+        .validation-warning {
+            color: var(--accent-cost);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* Graph Panel */
+        .graph-panel {
+            position: relative;
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        #bep-chart {
+            width: 100%;
+            height: 100%;
+            min-height: 550px;
+            flex-grow: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="title-area">
+            <h1>損益分岐点（BEP）シミュレーション ダッシュボード</h1>
+            <p>Plotly.jsを用いた、インタラクティブな損益分岐分析と動的パラメーター調整</p>
+        </div>
+        <div class="selector-area">
+            <span class="selector-label">シミュレーションパターン:</span>
+            <select id="product-select">
+                <!-- パターンは JavaScript で動的に生成 -->
+            </select>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <!-- コントロールパネル -->
+        <div class="panel">
+            <div class="panel-title">パラメーター設定</div>
+            
+            <div class="controls-list">
+                <!-- 固定費 -->
+                <div class="control-group">
+                    <div class="control-header">
+                        <span class="control-label">固定費 (Fixed Costs)</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="range" id="fixed_costs_slider" class="slider-input">
+                        <input type="number" id="fixed_costs" class="number-input">
+                    </div>
+                </div>
+
+                <!-- 販売単価 -->
+                <div class="control-group">
+                    <div class="control-header">
+                        <span class="control-label">販売単価 (Unit Price)</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="range" id="unit_price_slider" class="slider-input">
+                        <input type="number" id="unit_price" class="number-input">
+                    </div>
+                    <div id="price-warning" class="validation-warning">⚠️ 販売単価は単位当たり変動費より大きく設定してください。</div>
+                </div>
+
+                <!-- 単位当たり変動費 -->
+                <div class="control-group">
+                    <div class="control-header">
+                        <span class="control-label">単位当たり変動費 (Variable Cost)</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="range" id="unit_variable_cost_slider" class="slider-input">
+                        <input type="number" id="unit_variable_cost" class="number-input">
+                    </div>
+                </div>
+
+                <!-- 販売数量 -->
+                <div class="control-group">
+                    <div class="control-header">
+                        <span class="control-label">販売数量 (Sales Volume)</span>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="range" id="sales_volume_slider" class="slider-input">
+                        <input type="number" id="sales_volume" class="number-input">
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPI集計表示 -->
+            <div class="panel-title" style="margin-top: 0.5rem;">分析結果</div>
+            <div class="kpi-container">
+                <div class="kpi-card">
+                    <span class="kpi-label">損益分岐点売上数量</span>
+                    <span class="kpi-value" id="kpi-bep-units">---</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">損益分岐点売上高</span>
+                    <span class="kpi-value" id="kpi-bep-sales">---</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">現在の予想利益</span>
+                    <span class="kpi-value" id="kpi-profit">---</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- グラフパネル -->
+        <div class="graph-panel">
+            <div class="panel-title">BEP 損益分岐点分析グラフ</div>
+            <div id="bep-chart"></div>
+        </div>
+    </div>
+
+    <script>
+        // Python から埋め込まれたシミュレーション結果の生データ
+        const simulationData = [
+    {
+        "pattern_id": "P01",
+        "product_name": "Product_01",
+        "fixed_costs": 1440975.0,
+        "unit_price": 2824.0,
+        "unit_variable_cost": 1150.0,
+        "sales_volume": 2353.0,
+        "bep_units": 860.8,
+        "bep_sales": 2430899.2,
+        "current_profit": 2497947.0
+    },
+    {
+        "pattern_id": "P02",
+        "product_name": "Product_02",
+        "fixed_costs": 613575.0,
+        "unit_price": 4657.0,
+        "unit_variable_cost": 2057.0,
+        "sales_volume": 939.0,
+        "bep_units": 235.99,
+        "bep_sales": 1099005.43,
+        "current_profit": 1827825.0
+    },
+    {
+        "pattern_id": "P03",
+        "product_name": "Product_03",
+        "fixed_costs": 1243716.0,
+        "unit_price": 2424.0,
+        "unit_variable_cost": 1399.0,
+        "sales_volume": 360.0,
+        "bep_units": 1213.38,
+        "bep_sales": 2941233.12,
+        "current_profit": -874716.0
+    },
+    {
+        "pattern_id": "P04",
+        "product_name": "Product_04",
+        "fixed_costs": 162489.0,
+        "unit_price": 2535.0,
+        "unit_variable_cost": 1180.0,
+        "sales_volume": 4239.0,
+        "bep_units": 119.92,
+        "bep_sales": 303997.2,
+        "current_profit": 5581356.0
+    },
+    {
+        "pattern_id": "P05",
+        "product_name": "Product_05",
+        "fixed_costs": 1362524.0,
+        "unit_price": 1434.0,
+        "unit_variable_cost": 815.0,
+        "sales_volume": 4564.0,
+        "bep_units": 2201.17,
+        "bep_sales": 3156477.78,
+        "current_profit": 1462592.0
+    },
+    {
+        "pattern_id": "P06",
+        "product_name": "Product_06",
+        "fixed_costs": 979796.0,
+        "unit_price": 4611.0,
+        "unit_variable_cost": 2465.0,
+        "sales_volume": 2378.0,
+        "bep_units": 456.57,
+        "bep_sales": 2105244.27,
+        "current_profit": 4123392.0
+    },
+    {
+        "pattern_id": "P07",
+        "product_name": "Product_07",
+        "fixed_costs": 113628.0,
+        "unit_price": 3615.0,
+        "unit_variable_cost": 2203.0,
+        "sales_volume": 2887.0,
+        "bep_units": 80.47,
+        "bep_sales": 290899.05,
+        "current_profit": 3962816.0
+    },
+    {
+        "pattern_id": "P08",
+        "product_name": "Product_08",
+        "fixed_costs": 682738.0,
+        "unit_price": 3547.0,
+        "unit_variable_cost": 1647.0,
+        "sales_volume": 2857.0,
+        "bep_units": 359.34,
+        "bep_sales": 1274578.98,
+        "current_profit": 4745562.0
+    },
+    {
+        "pattern_id": "P09",
+        "product_name": "Product_09",
+        "fixed_costs": 314350.0,
+        "unit_price": 2519.0,
+        "unit_variable_cost": 1294.0,
+        "sales_volume": 3040.0,
+        "bep_units": 256.61,
+        "bep_sales": 646400.59,
+        "current_profit": 3409650.0
+    },
+    {
+        "pattern_id": "P10",
+        "product_name": "Product_10",
+        "fixed_costs": 821327.0,
+        "unit_price": 5333.0,
+        "unit_variable_cost": 3424.0,
+        "sales_volume": 3863.0,
+        "bep_units": 430.24,
+        "bep_sales": 2294469.92,
+        "current_profit": 6553140.0
+    },
+    {
+        "pattern_id": "P11",
+        "product_name": "Product_11",
+        "fixed_costs": 1224551.0,
+        "unit_price": 3045.0,
+        "unit_variable_cost": 2106.0,
+        "sales_volume": 3200.0,
+        "bep_units": 1304.1,
+        "bep_sales": 3970984.5,
+        "current_profit": 1780249.0
+    },
+    {
+        "pattern_id": "P12",
+        "product_name": "Product_12",
+        "fixed_costs": 265255.0,
+        "unit_price": 5803.0,
+        "unit_variable_cost": 3765.0,
+        "sales_volume": 3062.0,
+        "bep_units": 130.15,
+        "bep_sales": 755260.45,
+        "current_profit": 5975101.0
+    },
+    {
+        "pattern_id": "P13",
+        "product_name": "Product_13",
+        "fixed_costs": 1310795.0,
+        "unit_price": 4150.0,
+        "unit_variable_cost": 2537.0,
+        "sales_volume": 475.0,
+        "bep_units": 812.64,
+        "bep_sales": 3372456.0,
+        "current_profit": -544620.0
+    },
+    {
+        "pattern_id": "P14",
+        "product_name": "Product_14",
+        "fixed_costs": 1486769.0,
+        "unit_price": 4733.0,
+        "unit_variable_cost": 2990.0,
+        "sales_volume": 753.0,
+        "bep_units": 852.99,
+        "bep_sales": 4037201.67,
+        "current_profit": -174290.0
+    },
+    {
+        "pattern_id": "P15",
+        "product_name": "Product_15",
+        "fixed_costs": 588197.0,
+        "unit_price": 2654.0,
+        "unit_variable_cost": 1364.0,
+        "sales_volume": 3814.0,
+        "bep_units": 455.97,
+        "bep_sales": 1210144.38,
+        "current_profit": 4331863.0
+    },
+    {
+        "pattern_id": "P16",
+        "product_name": "Product_16",
+        "fixed_costs": 1433126.0,
+        "unit_price": 6977.0,
+        "unit_variable_cost": 3131.0,
+        "sales_volume": 3010.0,
+        "bep_units": 372.63,
+        "bep_sales": 2599839.51,
+        "current_profit": 10143334.0
+    },
+    {
+        "pattern_id": "P17",
+        "product_name": "Product_17",
+        "fixed_costs": 539368.0,
+        "unit_price": 5374.0,
+        "unit_variable_cost": 3281.0,
+        "sales_volume": 684.0,
+        "bep_units": 257.7,
+        "bep_sales": 1384879.8,
+        "current_profit": 892244.0
+    },
+    {
+        "pattern_id": "P18",
+        "product_name": "Product_18",
+        "fixed_costs": 1377440.0,
+        "unit_price": 3803.0,
+        "unit_variable_cost": 2130.0,
+        "sales_volume": 2105.0,
+        "bep_units": 823.34,
+        "bep_sales": 3131162.02,
+        "current_profit": 2144225.0
+    },
+    {
+        "pattern_id": "P19",
+        "product_name": "Product_19",
+        "fixed_costs": 442679.0,
+        "unit_price": 8573.0,
+        "unit_variable_cost": 4405.0,
+        "sales_volume": 4662.0,
+        "bep_units": 106.21,
+        "bep_sales": 910538.33,
+        "current_profit": 18988537.0
+    },
+    {
+        "pattern_id": "P20",
+        "product_name": "Product_20",
+        "fixed_costs": 560566.0,
+        "unit_price": 6313.0,
+        "unit_variable_cost": 4121.0,
+        "sales_volume": 558.0,
+        "bep_units": 255.73,
+        "bep_sales": 1614423.49,
+        "current_profit": 662570.0
+    },
+    {
+        "pattern_id": "P21",
+        "product_name": "Product_21",
+        "fixed_costs": 580348.0,
+        "unit_price": 1525.0,
+        "unit_variable_cost": 978.0,
+        "sales_volume": 3386.0,
+        "bep_units": 1060.97,
+        "bep_sales": 1617979.25,
+        "current_profit": 1271794.0
+    },
+    {
+        "pattern_id": "P22",
+        "product_name": "Product_22",
+        "fixed_costs": 661493.0,
+        "unit_price": 2084.0,
+        "unit_variable_cost": 965.0,
+        "sales_volume": 4746.0,
+        "bep_units": 591.15,
+        "bep_sales": 1231956.6,
+        "current_profit": 4649281.0
+    },
+    {
+        "pattern_id": "P23",
+        "product_name": "Product_23",
+        "fixed_costs": 759927.0,
+        "unit_price": 4483.0,
+        "unit_variable_cost": 2674.0,
+        "sales_volume": 3341.0,
+        "bep_units": 420.08,
+        "bep_sales": 1883218.64,
+        "current_profit": 5283942.0
+    },
+    {
+        "pattern_id": "P24",
+        "product_name": "Product_24",
+        "fixed_costs": 1448158.0,
+        "unit_price": 8517.0,
+        "unit_variable_cost": 3771.0,
+        "sales_volume": 1243.0,
+        "bep_units": 305.13,
+        "bep_sales": 2598792.21,
+        "current_profit": 4451120.0
+    },
+    {
+        "pattern_id": "P25",
+        "product_name": "Product_25",
+        "fixed_costs": 617215.0,
+        "unit_price": 9830.0,
+        "unit_variable_cost": 4706.0,
+        "sales_volume": 4888.0,
+        "bep_units": 120.46,
+        "bep_sales": 1184121.8,
+        "current_profit": 24428897.0
+    },
+    {
+        "pattern_id": "P26",
+        "product_name": "Product_26",
+        "fixed_costs": 998490.0,
+        "unit_price": 7543.0,
+        "unit_variable_cost": 3836.0,
+        "sales_volume": 1233.0,
+        "bep_units": 269.35,
+        "bep_sales": 2031707.05,
+        "current_profit": 3572241.0
+    },
+    {
+        "pattern_id": "P27",
+        "product_name": "Product_27",
+        "fixed_costs": 1168554.0,
+        "unit_price": 9085.0,
+        "unit_variable_cost": 3881.0,
+        "sales_volume": 485.0,
+        "bep_units": 224.55,
+        "bep_sales": 2040036.75,
+        "current_profit": 1355386.0
+    },
+    {
+        "pattern_id": "P28",
+        "product_name": "Product_28",
+        "fixed_costs": 329950.0,
+        "unit_price": 3504.0,
+        "unit_variable_cost": 2061.0,
+        "sales_volume": 3558.0,
+        "bep_units": 228.66,
+        "bep_sales": 801224.64,
+        "current_profit": 4804244.0
+    },
+    {
+        "pattern_id": "P29",
+        "product_name": "Product_29",
+        "fixed_costs": 1350760.0,
+        "unit_price": 2040.0,
+        "unit_variable_cost": 1051.0,
+        "sales_volume": 4981.0,
+        "bep_units": 1365.78,
+        "bep_sales": 2786191.2,
+        "current_profit": 3575449.0
+    },
+    {
+        "pattern_id": "P30",
+        "product_name": "Product_30",
+        "fixed_costs": 1081571.0,
+        "unit_price": 9669.0,
+        "unit_variable_cost": 4596.0,
+        "sales_volume": 4632.0,
+        "bep_units": 213.2,
+        "bep_sales": 2061430.8,
+        "current_profit": 22416565.0
+    }
+];
+
+        let currentProduct = null;
+        let isChartInitialized = false;
+
+        // 初期化処理
+        window.addEventListener('DOMContentLoaded', () => {
+            const selectEl = document.getElementById('product-select');
+            
+            // ドロップダウンメニューの生成
+            simulationData.forEach(prod => {
+                const opt = document.createElement('option');
+                opt.value = prod.pattern_id;
+                opt.textContent = `[${prod.pattern_id}] ${prod.product_name}`;
+                selectEl.appendChild(opt);
+            });
+
+            initEventListeners();
+
+            // 最初のデータを読み込む
+            if (simulationData.length > 0) {
+                loadProduct(simulationData[0].pattern_id);
+            }
+        });
+
+        function initEventListeners() {
+            const fields = ['fixed_costs', 'unit_price', 'unit_variable_cost', 'sales_volume'];
+            fields.forEach(field => {
+                const numInput = document.getElementById(field);
+                const slider = document.getElementById(field + '_slider');
+
+                // 数値入力の変更イベント
+                numInput.addEventListener('input', (e) => {
+                    let val = parseFloat(e.target.value) || 0;
+                    if (val < 0) val = 0;
+                    
+                    // スライダーの範囲を動的に拡張
+                    if (val > parseFloat(slider.max)) {
+                        slider.max = Math.ceil(val * 1.5);
+                    }
+                    slider.value = val;
+                    recalculateAndRender(false);
+                });
+
+                // スライダー入力の変更イベント
+                slider.addEventListener('input', (e) => {
+                    numInput.value = e.target.value;
+                    recalculateAndRender(false);
+                });
+            });
+
+            // 商品切り替えイベント
+            document.getElementById('product-select').addEventListener('change', (e) => {
+                loadProduct(e.target.value);
+            });
+        }
+
+        function loadProduct(patternId) {
+            currentProduct = simulationData.find(d => d.pattern_id === patternId);
+            if (!currentProduct) return;
+
+            // 各コントロールの初期化とスライダー範囲の設定 (初期値の2.5倍、最低値担保)
+            setupSlider('fixed_costs', currentProduct.fixed_costs, 0, Math.max(currentProduct.fixed_costs * 2.5, 100000), 1000);
+            setupSlider('unit_price', currentProduct.unit_price, 0, Math.max(currentProduct.unit_price * 2.5, 100), 1);
+            setupSlider('unit_variable_cost', currentProduct.unit_variable_cost, 0, Math.max(currentProduct.unit_variable_cost * 2.5, 100), 1);
+            setupSlider('sales_volume', currentProduct.sales_volume, 0, Math.max(currentProduct.sales_volume * 2.5, 100), 1);
+
+            // 商品切り替え時はレイアウト範囲もリセットする
+            recalculateAndRender(true);
+        }
+
+        function setupSlider(id, value, min, max, step) {
+            const numInput = document.getElementById(id);
+            const slider = document.getElementById(id + '_slider');
+
+            slider.min = min;
+            slider.max = Math.ceil(max);
+            slider.step = step;
+
+            numInput.value = Math.round(value);
+            slider.value = Math.round(value);
+        }
+
+        function recalculateAndRender(resetLayout = false) {
+            const fixed_costs = parseFloat(document.getElementById('fixed_costs').value) || 0;
+            const unit_price = parseFloat(document.getElementById('unit_price').value) || 0;
+            const unit_variable_cost = parseFloat(document.getElementById('unit_variable_cost').value) || 0;
+            const sales_volume = parseFloat(document.getElementById('sales_volume').value) || 0;
+
+            // バリデーション：単価 ≦ 変動費 の警告
+            const warningEl = document.getElementById('price-warning');
+            let hasError = false;
+            if (unit_price <= unit_variable_cost) {
+                warningEl.style.display = 'block';
+                hasError = true;
+            } else {
+                warningEl.style.display = 'none';
+            }
+
+            // 計算
+            let bep_units = 0;
+            let bep_sales = 0;
+            let current_profit = (unit_price - unit_variable_cost) * sales_volume - fixed_costs;
+
+            if (!hasError) {
+                bep_units = fixed_costs / (unit_price - unit_variable_cost);
+                bep_sales = bep_units * unit_price;
+            }
+
+            // KPI 表示更新
+            document.getElementById('kpi-bep-units').textContent = hasError 
+                ? '---' 
+                : bep_units.toLocaleString(undefined, {maximumFractionDigits: 1}) + ' 個';
+            
+            document.getElementById('kpi-bep-sales').textContent = hasError 
+                ? '---' 
+                : '¥' + Math.round(bep_sales).toLocaleString();
+            
+            const profitEl = document.getElementById('kpi-profit');
+            profitEl.textContent = '¥' + Math.round(current_profit).toLocaleString();
+            
+            if (current_profit >= 0) {
+                profitEl.className = 'kpi-value profit-positive';
+            } else {
+                profitEl.className = 'kpi-value profit-negative';
+            }
+
+            // グラフ描画
+            updateChart(fixed_costs, unit_price, unit_variable_cost, sales_volume, bep_units, bep_sales, resetLayout);
+        }
+
+        function updateChart(fixed_costs, unit_price, unit_variable_cost, sales_volume, bep_units, bep_sales, resetLayout) {
+            // X軸の上限範囲を設定 (現在の販売数量や損益分岐点の1.5倍、最低100個)
+            const maxX = Math.max(sales_volume * 1.5, bep_units * 1.5, 100);
+            
+            // グラフプロット用の点群を生成 (50分割)
+            const xValues = [];
+            const steps = 50;
+            for (let i = 0; i <= steps; i++) {
+                xValues.push((maxX / steps) * i);
+            }
+
+            const salesY = xValues.map(x => unit_price * x);
+            const costY = xValues.map(x => fixed_costs + unit_variable_cost * x);
+            const fixedY = xValues.map(x => fixed_costs);
+
+            const traces = [];
+
+            // 1. 売上線
+            traces.push({
+                x: xValues,
+                y: salesY,
+                mode: 'lines',
+                name: '売上高 (Sales)',
+                line: { color: '#10b981', width: 3 }
+            });
+
+            // 2. 総費用線
+            traces.push({
+                x: xValues,
+                y: costY,
+                mode: 'lines',
+                name: '総費用 (Total Cost)',
+                line: { color: '#ef4444', width: 3 }
+            });
+
+            // 3. 固定費線
+            traces.push({
+                x: xValues,
+                y: fixedY,
+                mode: 'lines',
+                name: '固定費 (Fixed Cost)',
+                line: { color: '#8b5cf6', width: 2, dash: 'dash' }
+            });
+
+            // 4. 現在値プロット（売上）
+            traces.push({
+                x: [sales_volume],
+                y: [sales_volume * unit_price],
+                mode: 'markers+text',
+                name: '現在の売上高',
+                marker: { color: '#06b6d4', size: 10, symbol: 'circle' },
+                text: ['現在の売上'],
+                textposition: 'top left',
+                showlegend: true
+            });
+
+            // 5. 現在値プロット（費用）
+            traces.push({
+                x: [sales_volume],
+                y: [fixed_costs + unit_variable_cost * sales_volume],
+                mode: 'markers+text',
+                name: '現在の総費用',
+                marker: { color: '#ec4899', size: 10, symbol: 'circle' },
+                text: ['現在の費用'],
+                textposition: 'bottom right',
+                showlegend: true
+            });
+
+            // 6. 損益分岐点プロット
+            if (unit_price > unit_variable_cost && bep_units > 0) {
+                traces.push({
+                    x: [bep_units],
+                    y: [bep_sales],
+                    mode: 'markers+text',
+                    name: '損益分岐点 (BEP)',
+                    marker: { color: '#f59e0b', size: 12, symbol: 'diamond', line: { color: '#ffffff', width: 1.5 } },
+                    text: [`BEP: ${Math.round(bep_units)}個`],
+                    textposition: 'top center',
+                    showlegend: true
+                });
+            }
+
+            const layout = {
+                paper_bgcolor: '#161922',
+                plot_bgcolor: '#161922',
+                margin: { l: 80, r: 40, t: 40, b: 60 },
+                font: {
+                    family: 'Inter, sans-serif',
+                    color: '#94a3b8'
+                },
+                xaxis: {
+                    title: '販売数量 (個)',
+                    gridcolor: '#232836',
+                    zerolinecolor: '#232836',
+                    tickfont: { color: '#94a3b8' },
+                    titlefont: { color: '#f8fafc' }
+                },
+                yaxis: {
+                    title: '金額 (円)',
+                    gridcolor: '#232836',
+                    zerolinecolor: '#232836',
+                    tickfont: { color: '#94a3b8' },
+                    titlefont: { color: '#f8fafc' }
+                },
+                hovermode: 'closest',
+                legend: {
+                    orientation: 'h',
+                    y: -0.2,
+                    x: 0.5,
+                    xanchor: 'center',
+                    font: { color: '#94a3b8' }
+                },
+                showlegend: true
+            };
+
+            if (resetLayout) {
+                layout.xaxis.range = [0, maxX];
+                layout.yaxis.range = [0, Math.max(maxX * unit_price, fixed_costs * 1.5, 1000)];
+            }
+
+            const config = {
+                responsive: true,
+                displayModeBar: false
+            };
+
+            // アニメーション効果を伴う react 呼び出し
+            Plotly.react('bep-chart', traces, layout, config);
+        }
+    </script>
+</body>
+</html>

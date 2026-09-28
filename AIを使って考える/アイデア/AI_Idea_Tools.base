@@ -1,0 +1,29 @@
+filters:
+  and:
+    - file.inFolder("AIを使って考える/アイデア")
+    - file.ext == "md"
+properties:
+  file.name:
+    displayName: アイデアツール名
+  summary:
+    displayName: 要約・概要
+  created:
+    displayName: 作成日
+  tags:
+    displayName: タグ
+views:
+  - type: table
+    name: アイデアツール一覧 (テーブル)
+    order:
+      - file.name
+      - summary
+      - created
+      - tags
+    summaries:
+      file.name: Filled
+  - type: cards
+    name: アイデアツールギャラリー
+    order:
+      - file.name
+      - summary
+      - tags

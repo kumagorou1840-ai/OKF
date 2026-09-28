@@ -1,0 +1,26 @@
+filters:
+  and:
+    - file.inFolder("_agent_inbox")
+    - file.ext == "md"
+properties:
+  file.name:
+    displayName: タイトル
+  summary:
+    displayName: summary
+  created:
+    displayName: created
+  tags:
+    displayName: tags
+  status:
+    displayName: status
+views:
+  - type: table
+    name: 受信ノート一覧
+    order:
+      - file.name
+      - summary
+      - created
+      - tags
+      - status
+    summaries:
+      file.name: Filled

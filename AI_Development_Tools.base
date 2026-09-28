@@ -1,0 +1,41 @@
+filters:
+  and:
+    - file.inFolder("AIを使って考える/開発")
+    - file.ext == "md"
+formulas:
+  char_count: (file.size / 3).round(0)
+  mtime_fmt: file.mtime.format("YYYY-MM-DD")
+  ctime_fmt: file.ctime.format("YYYY-MM-DD")
+properties:
+  file.name:
+    displayName: フレームワーク・ツール名
+  summary:
+    displayName: 概要・要約
+  file.size:
+    displayName: ファイルサイズ(Bytes)
+  formula.char_count:
+    displayName: 概算文字数
+  formula.mtime_fmt:
+    displayName: 最終更新日
+  formula.ctime_fmt:
+    displayName: 作成日
+views:
+  - type: table
+    name: AI思考・開発ツール一覧 (テーブル)
+    order:
+      - file.name
+      - summary
+      - formula.char_count
+      - formula.mtime_fmt
+      - file.size
+    summaries:
+      file.name: Filled
+    columnSize:
+      note.summary: 557
+      formula.char_count: 46
+  - type: cards
+    name: フレームワーク・カードギャラリー
+    order:
+      - file.name
+      - summary
+      - formula.char_count

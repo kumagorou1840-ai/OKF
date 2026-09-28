@@ -1,0 +1,794 @@
+{
+  "main": {
+    "id": "e3b3e754d94358c7",
+    "type": "split",
+    "children": [
+      {
+        "id": "2d62399497a8b857",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "49f4e3cd67c98145",
+            "type": "leaf",
+            "pinned": true,
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "AIを使って考える/アイデア/AI_Idea_Tools.base",
+                "viewName": "アイデアツール一覧 (テーブル)"
+              },
+              "pinned": true,
+              "icon": "lucide-table",
+              "title": "AI_Idea_Tools"
+            }
+          },
+          {
+            "id": "87290139814b2865",
+            "type": "leaf",
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "youtube/youtube_Index.base",
+                "viewName": "YouTube 動画ノート一覧"
+              },
+              "icon": "lucide-table",
+              "title": "youtube_Index"
+            }
+          },
+          {
+            "id": "30a45f33be1d0831",
+            "type": "leaf",
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "_agent_inbox/Inbox_Review.base",
+                "viewName": "受信ノート一覧"
+              },
+              "icon": "lucide-table",
+              "title": "Inbox_Review"
+            }
+          },
+          {
+            "id": "475865542472fe45",
+            "type": "leaf",
+            "state": {
+              "type": "bases",
+              "state": {
+                "file": "youtube/youtube_Index.base",
+                "viewName": "YouTube 動画ノート一覧"
+              },
+              "icon": "lucide-table",
+              "title": "youtube_Index"
+            }
+          },
+          {
+            "id": "159d70b9dc2a2f99",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/データ分析・ＡＩ/No.026_A_Bテスト統計的仮説検定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.026_A_Bテスト統計的仮説検定"
+            }
+          },
+          {
+            "id": "7e5d699d3c077d06",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/データ分析・AI_2/No.160_戦略SWOT分析ジェネレーター.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.160_戦略SWOT分析ジェネレーター"
+            }
+          },
+          {
+            "id": "1f35cd4bbd5ab76e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/データ分析・AI_2/No.160_戦略SWOT分析ジェネレーター.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.160_戦略SWOT分析ジェネレーター"
+            }
+          },
+          {
+            "id": "b611a36f2f7cc6a7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/データ分析・AI_2/No.160_戦略SWOT分析ジェネレーター.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.160_戦略SWOT分析ジェネレーター"
+            }
+          },
+          {
+            "id": "aed9cec3f5331991",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/データ分析・AI_2/No.160_戦略SWOT分析ジェネレーター.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.160_戦略SWOT分析ジェネレーター"
+            }
+          },
+          {
+            "id": "00be4d04de125628",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/データ分析・AI_2/No.160_戦略SWOT分析ジェネレーター.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.160_戦略SWOT分析ジェネレーター"
+            }
+          },
+          {
+            "id": "9960b0add1fbcca9",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notebook Navigator.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Notebook Navigator"
+            }
+          },
+          {
+            "id": "372d8db1c0d4d0f8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "MOC_業務自動化.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "MOC_業務自動化"
+            }
+          },
+          {
+            "id": "9cdb25aa626f53a2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "エージェントプロンプト/セカンドブレイン/No.124_書籍ハイライト・読書メモ昇華.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "No.124_書籍ハイライト・読書メモ昇華"
+            }
+          },
+          {
+            "id": "1aa7ddc8fd8f54dc",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "71a51c80a5381bf3",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "352ee374f1d06e0f",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "719aa415328054fd",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "cf4467d3d9ffcecd",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "ea23cc0bcb3ca1b2",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "c5d092dd41d69eb9",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "56429fd64aaaa65a",
+            "type": "leaf",
+            "state": {
+              "type": "webviewer",
+              "state": {
+                "url": "https://silentvoid13.github.io/Templater/",
+                "title": "Introduction - Templater",
+                "mode": "webview"
+              },
+              "icon": "globe-2",
+              "title": "Introduction - Templater"
+            }
+          },
+          {
+            "id": "a642837839ced0eb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AIを使って考える/開発/6W3H・プランナー（アイデア具体化AI）.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "6W3H・プランナー（アイデア具体化AI）"
+            }
+          },
+          {
+            "id": "fc4983de9ec38b43",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AIを使って考える/アイデア/たたき台メーカー.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "たたき台メーカー"
+            }
+          },
+          {
+            "id": "0eb064906ca2208a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "AI_Office/Discussion_Room/2026-09-26_Discussion_Log.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-09-26_Discussion_Log"
+            }
+          },
+          {
+            "id": "e3e0ac49f19db2a1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "01_Notes/AI_company/2026-06-05-03_最新AIニュース調査手順.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-06-05-03_最新AIニュース調査手順"
+            }
+          },
+          {
+            "id": "1f0df913fc3459df",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notebook Navigator.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Notebook Navigator"
+            }
+          },
+          {
+            "id": "4c70cdea4ccd5f52",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "youtube/思考/【Hermes Agent】いま世界が熱狂しているOpenClaw超え_の自己改善型のAIエージェント。.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "【Hermes Agent】いま世界が熱狂しているOpenClaw超え_の自己改善型のAIエージェント。"
+            }
+          },
+          {
+            "id": "8467714c59616b6d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "無題のファイル.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "無題のファイル"
+            }
+          },
+          {
+            "id": "52d6d32649b375b0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "copilot/memory/秘書設定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "秘書設定"
+            }
+          },
+          {
+            "id": "54c0f02918659dee",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "copilot/memory/秘書設定.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "秘書設定"
+            }
+          },
+          {
+            "id": "b647eb403c69d1fc",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02_Diaries/2026-09-24(木).md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-09-24(木)"
+            }
+          },
+          {
+            "id": "4aae22dfbb20254f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "04_Templates/議事録.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "議事録"
+            }
+          },
+          {
+            "id": "cbc8343d0e8df8cf",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "00_Context.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "00_Context"
+            }
+          },
+          {
+            "id": "9731723682ad8517",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "今日のタスク.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "今日のタスク"
+            }
+          },
+          {
+            "id": "43e1341aec339d93",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "タスク一覧.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "タスク一覧"
+            }
+          },
+          {
+            "id": "97120929315b5fd5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "copilot/memory/技能の使い方の手引き.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "技能の使い方の手引き"
+            }
+          },
+          {
+            "id": "7d915d598d7e8451",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "04_Templates/粘る.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "粘る"
+            }
+          },
+          {
+            "id": "06f0239a958b4766",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "copilot/memory/ai-Antigravityコックピットポータル 実装スニペット.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ai-Antigravityコックピットポータル 実装スニペット"
+            }
+          }
+        ],
+        "currentTab": 24
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a520982a773ae6bf",
+    "type": "split",
+    "children": [
+      {
+        "id": "84c0aa3206a0d959",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e10b7860f9c0acdf",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": true,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "ファイルエクスプローラ"
+            }
+          },
+          {
+            "id": "b1d5f9197356c365",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#各業務の詳細ナレッジ・個別ルール",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "検索"
+            }
+          },
+          {
+            "id": "94e5e1e07f7e42fd",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "ブックマーク"
+            }
+          },
+          {
+            "id": "21a32833f5d884b7",
+            "type": "leaf",
+            "state": {
+              "type": "notebook-navigator",
+              "state": {},
+              "icon": "notebook-navigator",
+              "title": "Notebook Navigator"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 315.5
+  },
+  "right": {
+    "id": "791f6db081133277",
+    "type": "split",
+    "children": [
+      {
+        "id": "1506ac1ab285e9a4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9ef7b63ff6009ef6",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Excalidraw/Drawing 2026-07-19 10.26.22.excalidraw.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Drawing 2026-07-19 10.26.22.excalidrawへのバックリンク"
+            }
+          },
+          {
+            "id": "ee49d0a8c5cbee36",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "タグ"
+            }
+          },
+          {
+            "id": "44cfd7211b02271a",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "すべてのプロパティ"
+            }
+          },
+          {
+            "id": "b252a619d8c184a8",
+            "type": "leaf",
+            "state": {
+              "type": "review-queue-list-view",
+              "state": {},
+              "icon": "SpacedRepIcon",
+              "title": "ノートレビューのキュー"
+            }
+          },
+          {
+            "id": "76d557e846eb4396",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-agent-chat-view",
+              "state": {},
+              "icon": "copilot-agent",
+              "title": "Copilot Agent"
+            }
+          },
+          {
+            "id": "76695a0214716b72",
+            "type": "leaf",
+            "state": {
+              "type": "copilot-chat-view",
+              "state": {},
+              "icon": "message-square",
+              "title": "Copilot (Quick Chat)"
+            }
+          },
+          {
+            "id": "184dab30de3c2321",
+            "type": "leaf",
+            "state": {
+              "type": "TwoHopLinksView",
+              "state": {},
+              "icon": "network",
+              "title": "2Hop Links"
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 236.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "obsidian-git:Open Git source control": false,
+      "workspaces:ワークスペースレイアウトを管理": false,
+      "switcher:クイックスイッチャーを開く": false,
+      "graph:グラフビューを開く": false,
+      "daily-notes:今日のデイリーノートを開く": false,
+      "command-palette:コマンドパレットを開く": false,
+      "bases:新規ベースを作成": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
+      "random-note:ランダムノートを開く": false,
+      "obsidian-spaced-repetition:フラッシュカードのレビュー": false,
+      "terminal:Open terminal": false,
+      "notebook-navigator:Notebook Navigator": false,
+      "templater-obsidian:Templater": false,
+      "copilot:Open Copilot Agent Chat": false,
+      "templates:テンプレートを挿入": false,
+      "omnisearch:Omnisearch": false,
+      "obsidian-kanban:カンバンボードを新規作成": false,
+      "tasknotes:ミニカレンダービューを開く": false,
+      "tasknotes:カレンダービューを開く": false,
+      "tasknotes:タスクビューを開く": false,
+      "tasknotes:アジェンダビューを開く": false,
+      "tasknotes:カンバンボードを開く": false,
+      "tasknotes:ポモドーロタイマーを開く": false,
+      "tasknotes:ポモドーロ統計を開く": false,
+      "tasknotes:新しいタスクを作成": false
+    }
+  },
+  "active": "b252a619d8c184a8",
+  "lastOpenFiles": [
+    "01_Notes/AI_company/2026-06-05-03_最新AIニュース調査手順.md",
+    "01_Notes/AI_company/2026-06-05-02_JSONクレンジング実装マニュアル.md",
+    "01_Notes/AI_company/2026-06-05-01_ハイブリッド診断手順.md",
+    "TaskNotes/Start Here.md",
+    "AI_Office/Discussion_Room/2026-09-26_Discussion_Log.md",
+    "TaskNotes/Views/relationships.base",
+    "TaskNotes/Views/pomodoro-stats.base",
+    "TaskNotes/Views/agenda-default.base",
+    "TaskNotes/Views/calendar-default.base",
+    "TaskNotes/Views/tasks-default.base",
+    "TaskNotes/Views/kanban-default.base",
+    "TaskNotes/Views/mini-calendar-default.base",
+    "TaskNotes/Views",
+    "TaskNotes",
+    "AI_Office/Inbox_Office/2026-09-26_Secretary_Summary.md",
+    "AI_Office/Employee_A/2026-09-26_Report.md.md",
+    "AI_Office/Secretary/secretary.py.md",
+    "AI_Office/Discussion_Room",
+    "AI_Office/Employee_A/Inbox/2026-09-26_Secretary_Summary.md",
+    "03_Tasks/kanban/カンバンtest.md",
+    "03_Tasks/kanban/kanban.md",
+    "01_Notes/無題のカンバン 3.md",
+    "01_Notes/無題のカンバン 1.md",
+    "01_Notes/無題のカンバン 2.md",
+    "タスク一覧.md",
+    "03_Tasks/タスク管理.md",
+    "output/文章を書く.md",
+    "Tasksプラグイン.md",
+    "リンクを作成.md",
+    "03_Tasks/Antigravity_Master_Evaluation_Cockpit.md",
+    "03_Tasks/2026-07-19_08-05_tasks.md",
+    "エージェントプロンプト/セカンドブレイン/No.133_プロジェクト履歴・意思決定ログ.md",
+    "copilot/memory/MEMORY.md",
+    "copilot/copilot-conversations/agent__fileCUsersPC_UserForgemaster_evaluation_cockpit.htmlを読み込むこと@20260924_075941.md",
+    "copilot/copilot-conversations/agent__2._Antigravity_コックピットポータル開発_設計ルール・仕@20260925_201123.md",
+    "copilot/copilot-conversations/agent__1._大家実務（店子対応・物件維持）_店子向け案内テン@20260925_200423.md",
+    "Pasted image 20260912155609.png",
+    "Pasted image 20260912170711.png",
+    "Pasted image 20260912162423.png",
+    "Pasted image 20260912155628.png",
+    "仕組み/優先順位/images/2026-07-12_2201/bar_chart.png",
+    "仕組み/可否決定法/images/2026-07-12_1712_demerit_bubble.png",
+    "仕組み/可否決定法/images/2026-07-12_1712_demerit_bar.png",
+    "無題のファイル.canvas",
+    "仕組み/優先順位/images/2026-07-12_2201/heatmap_chart.png",
+    "仕組み/可否決定法/images/2026-07-12_1712_demerit_scatter.png",
+    "仕組み/資源配分/images/2026-07-13_1251/sankey.png"
+  ]
+}

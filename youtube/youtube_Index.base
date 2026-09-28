@@ -1,0 +1,37 @@
+filters:
+  and:
+    - file.folder.startsWith("youtube")
+    - file.ext == "md"
+formulas:
+  category: if(file.folder != "youtube", file.folder.replace("youtube/", ""), "直下/未分類")
+  created_fmt: if(created, created, if(date, date, file.ctime.format("YYYY-MM-DD")))
+properties:
+  file.name:
+    displayName: タイトル
+  formula.category:
+    displayName: 分類
+  formula.created_fmt:
+    displayName: created
+  tags:
+    displayName: tags
+views:
+  - type: table
+    name: YouTube 動画ノート一覧
+    groupBy:
+      property: formula.category
+      direction: ASC
+    order:
+      - file.name
+      - formula.category
+      - formula.created_fmt
+      - tags
+    summaries:
+      file.name: Filled
+      tags: Filled
+  - type: cards
+    name: 動画ギャラリー
+    order:
+      - file.name
+      - formula.category
+      - formula.created_fmt
+      - tags
