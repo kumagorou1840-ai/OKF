@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thinking Speed Issue Tree Analysis - obsidian_1</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 8px 0;
+      color: var(--accent-color);
+    }
+    p.subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #f43f5e;
+      border-left: 4px solid #f43f5e;
+      padding-left: 10px;
+    }
+    .mermaid-container {
+      overflow-x: auto;
+      background: #090d16;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .section-title {
+      color: #38bdf8;
+      border-left-color: #38bdf8 !important;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: #0f172a;
+      color: var(--accent-color);
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .tag-core { background: #e11d48; color: white; }
+    .tag-sub { background: #0284c7; color: white; }
+    .tag-act { background: #16a34a; color: white; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>「考えることが遅い」のイシューツリー & ハイブリッド要約ダッシュボード</h1>
+    <p class="subtitle">対象ディレクトリ: <code>C:\Users\PC_User\Documents\Obsidian\obsidian_1</code> | 思考高速化・OKFナレッジ構造化分析</p>
+  </header>
+
+  <div class="grid">
+    <!-- イシューツリーダイアグラム -->
+    <div class="card">
+      <h2 class="section-title">🌳 「思考の遅さ」解体イシューツリー (Issue Tree)</h2>
+      <div class="mermaid-container">
+        <pre class="mermaid">
+graph TD
+    %% ノード定義
+    Main["メインイシュー:<br/>なぜ「思考・意思決定のスピード」が遅くなるのか？"]
+    
+    Sub1["1. 前提・情報の構造化不足<br/>(インプットの遅さ)"]
+    Sub2["2. 思考プロセスの未パターン化<br/>(プロセスの滞留)"]
+    Sub3["3. アウトプット・検証の遅延<br/>(アウトプットのブロック)"]
+
+    Insight1["知恵1: 脳内で情報を取り出そうとし<br/>メモ/外部脳へのインデックスが不足"]
+    Insight2["知恵2: 「問い」の解像度が低く<br/>ゼロベースで毎度悩み直している"]
+    Insight3["知恵3: 思考の型(ハイブリッド診断/8つの視点)が<br/>直感的に使えていない"]
+    Insight4["知恵4: 完璧な結論を求めすぎ<br/>仮説検証(Vibe/Surgical)サイクルが回らない"]
+
+    Act1["打ち手1: ノート・思考メモのOKF規格化<br/>(id, category, summary等で検索即完了)"]
+    Act2["打ち手2: イシューツリーによる<br/>「問いのMECE分解」の即時プロトタイピング"]
+    Act3["打ち手3: Karpathy流 8つの視点を用いた<br/>思考コンパイルプロンプトの日常活用"]
+    Act4["打ち手4: 80%の精度で仮説を出し<br/>小さな実験・検証で最速修正するアプローチ"]
+
+    %% 接続
+    Main --> Sub1
+    Main --> Sub2
+    Main --> Sub3
+
+    Sub1 --> Insight1
+    Sub1 --> Insight2
+    Sub2 --> Insight3
+    Sub3 --> Insight4
+
+    Insight1 --> Act1
+    Insight2 --> Act2
+    Insight3 --> Act3
+    Insight4 --> Act4
+
+    %% スタイル定義
+    style Main fill:#be123c,stroke:#fda4af,color:#fff,stroke-width:2px
+    style Sub1 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Sub2 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Sub3 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Insight1 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight2 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight3 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight4 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Act1 fill:#15803d,stroke:#86efac,color:#fff
+    style Act2 fill:#15803d,stroke:#86efac,color:#fff
+    style Act3 fill:#15803d,stroke:#86efac,color:#fff
+    style Act4 fill:#15803d,stroke:#86efac,color:#fff
+        </pre>
+      </div>
+    </div>
+
+    <!-- 要約テーブル -->
+    <div class="card">
+      <h2>🔍 課題・知恵・具体的な解決アクション一覧</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ボトルネック</th>
+            <th>サブイシュー（論点）</th>
+            <th>抽出された知恵・インサイト</th>
+            <th>高速化のための具体的アクション</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-core">インプット</span></td>
+            <td>1. 情報の構造化不足</td>
+            <td>記憶に依存すると検索に時間がかかる。外部脳（Obsidian）の構造化がカギ。</td>
+            <td>フロントマター（id, summary, tags）の自動付与と検索性の高速化</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-sub">思考プロセス</span></td>
+            <td>2. プロセスの未パターン化</td>
+            <td>毎回ゼロから悩むと時間がかかる。標準フレームワークの適用が不可欠。</td>
+            <td>イシューツリーによる問いの分解＋「よっちゃん流ハイブリッド診断」の適用</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-act">アウトプット</span></td>
+            <td>3. 検証の遅延</td>
+            <td>完璧主義が意思決定を遅らせる。80%の仮説で高速に検証を回すのが速さの正体。</td>
+            <td>Surgical/Vibe Codingのアプローチで小さな仮説と検証サイクルを最速実行</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reading Speed Issue Tree Analysis - obsidian_1</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 8px 0;
+      color: var(--accent-color);
+    }
+    p.subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #f43f5e;
+      border-left: 4px solid #f43f5e;
+      padding-left: 10px;
+    }
+    .mermaid-container {
+      overflow-x: auto;
+      background: #090d16;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .section-title {
+      color: #38bdf8;
+      border-left-color: #38bdf8 !important;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: #0f172a;
+      color: var(--accent-color);
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .tag-core { background: #e11d48; color: white; }
+    .tag-sub { background: #0284c7; color: white; }
+    .tag-act { background: #16a34a; color: white; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>「本を読むのが遅い」の解体イシューツリー & ハイブリッド要約</h1>
+    <p class="subtitle">対象Vault: <code>C:\Users\PC_User\Documents\Obsidian\obsidian_1</code> | 読書高速化・OKFナレッジ構造化分析</p>
+  </header>
+
+  <div class="grid">
+    <!-- イシューツリーダイアグラム -->
+    <div class="card">
+      <h2 class="section-title">🌳 「読書の遅さ」解体イシューツリー (Issue Tree)</h2>
+      <div class="mermaid-container">
+        <pre class="mermaid">
+graph TD
+    %% ノード定義
+    Main["メインイシュー:<br/>なぜ「本を読むスピード」が遅くなり<br/>ナレッジ化が滞るのか？"]
+    
+    Sub1["1. 読書目的・問いの未設定<br/>(目的意識の欠損)"]
+    Sub2["2. 線形読書・頭からの均一な読み方<br/>(情報処理の緩急不足)"]
+    Sub3["3. メモ化・ナレッジコンパイルの未確立<br/>(再読による時間ロス)"]
+
+    Insight1["知恵1: 「全部理解しよう」とする心理が<br/>最初の1ページ目からの遅読を生む"]
+    Insight2["知恵2: 目次・見出し・太字のスカウト読書が無く<br/>緩急なく同等スピードで読んでいる"]
+    Insight3["知恵3: 脳内音読(頭の中での文字読み)に頼り<br/>視覚的スキミングが使えていない"]
+    Insight4["知恵4: 読了後の要約メモ(OKF)が残らないため<br/>時間が経つと忘れ再読が必要になる"]
+
+    Act1["打ち手1: 「この本から何を得るか？」の<br/>事前問い(1-3個)の書き出し"]
+    Act2["打ち手2: 非線形読書(目次 ➔ 結論 ➔ 該当章)の<br/>構造読書プロセスの徹底"]
+    Act3["打ち手3: 重要な10%に絞り込む<br/>「80/20の法則」スキミングの適用"]
+    Act4["打ち手4: 読書直後にOKFメタデータ形式で<br/>Obsidianノート(要約・アクション)を即作成"]
+
+    %% 接続
+    Main --> Sub1
+    Main --> Sub2
+    Main --> Sub3
+
+    Sub1 --> Insight1
+    Sub1 --> Insight2
+    Sub2 --> Insight3
+    Sub3 --> Insight4
+
+    Insight1 --> Act1
+    Insight2 --> Act2
+    Insight3 --> Act3
+    Insight4 --> Act4
+
+    %% スタイル定義
+    style Main fill:#be123c,stroke:#fda4af,color:#fff,stroke-width:2px
+    style Sub1 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Sub2 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Sub3 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Insight1 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight2 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight3 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight4 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Act1 fill:#15803d,stroke:#86efac,color:#fff
+    style Act2 fill:#15803d,stroke:#86efac,color:#fff
+    style Act3 fill:#15803d,stroke:#86efac,color:#fff
+    style Act4 fill:#15803d,stroke:#86efac,color:#fff
+        </pre>
+      </div>
+    </div>
+
+    <!-- 要約テーブル -->
+    <div class="card">
+      <h2>🔍 課題・知恵・具体的な解決アクション一覧</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>区分</th>
+            <th>サブイシュー（論点）</th>
+            <th>抽出された知恵・インサイト</th>
+            <th>読書高速化のための具体的アクション</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-core">目的設定</span></td>
+            <td>1. 読書目的・問いの未設定</td>
+            <td>「最初から最後まで全部読む」呪縛が速度を低下させる。必要な答えだけを探す。</td>
+            <td>読書前に「得たい答え」を3つ書き出してから本を開く（問い駆動読書）</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-sub">情報処理</span></td>
+            <td>2. 均一な線形読書</td>
+            <td>重要な20%の箇所と補足の80%を同じスピードで読んでいる。</td>
+            <td>目次 ➔ 終章 ➔ 必要章の順に読む「非線形・構造読書」への切り替え</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-act">定着・メモ</span></td>
+            <td>3. ナレッジコンパイル未確立</td>
+            <td>読了後に要約ノートが残らないため、後で何度も同じ本を見返すハメになる。</td>
+            <td>読了直後にOKF規格（id, category, summary, action）でObsidianに即アタッチ</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      }
+    });
+  </script>
+</body>
+</html>

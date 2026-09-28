@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obsidian Note Issue Tree Analysis - obsidian_1</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-color: #38bdf8;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin: 0 0 8px 0;
+      color: var(--accent-color);
+    }
+    p.subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+    .card h2 {
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #f43f5e;
+      border-left: 4px solid #f43f5e;
+      padding-left: 10px;
+    }
+    .mermaid-container {
+      overflow-x: auto;
+      background: #090d16;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .section-title {
+      color: #38bdf8;
+      border-left-color: #38bdf8 !important;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th {
+      background-color: #0f172a;
+      color: var(--accent-color);
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+    .tag-core { background: #e11d48; color: white; }
+    .tag-sub { background: #0284c7; color: white; }
+    .tag-act { background: #16a34a; color: white; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Obsidian ノート群 横断イシューツリー・分析統合ダッシュボード</h1>
+    <p class="subtitle">対象ディレクトリ: <code>C:\Users\PC_User\Documents\Obsidian\obsidian_1</code> | Karpathy流 ハイブリッド診断 & OKF規格準拠</p>
+  </header>
+
+  <div class="grid">
+    <!-- イシューツリーダイアグラム -->
+    <div class="card">
+      <h2 class="section-title">🌳 インタラクティブ・イシューツリー (Issue Tree)</h2>
+      <div class="mermaid-container">
+        <pre class="mermaid">
+graph TD
+    %% ノード定義
+    Main["メインイシュー:<br/>保管ノート群から成果・解決への打ち手を<br/>速く・広く・簡単に・深く抽出・実行できていない"]
+    
+    Sub1["1. インデックス・検索性の欠損<br/>(速さ・広さの課題)"]
+    Sub2["2. OKF構造化・コンパイル不足<br/>(深さ・精度の課題)"]
+    Sub3["3. アクション＆Inbox連携の滞留<br/>(打ち手・実行の課題)"]
+
+    Insight1["知恵1: 非構造化ノートの分散により<br/>文脈が分断されている"]
+    Insight2["知恵2: メタデータ(OKF形式)未適用により<br/>自動分類が機能していない"]
+    Insight3["知恵3: 抽象的思考(構想)と<br/>具体的タスク(実装)が遊離"]
+    Insight4["知恵4: 「ノート整理」が目的化し<br/>_agent_inboxへのレポート出力・検証が欠落"]
+
+    Act1["打ち手1: フロントマター(OKF規格: id, type, category, summary, tags)の標準化"]
+    Act2["打ち手2: 全体俯瞰用イシューツリーの<br/>定期自動生成・可視化HTMLパッチ"]
+    Act3["打ち手3: Karpathy流 8つの視点に基づく<br/>思考プロンプト適用"]
+    Act4["打ち手4: obsidian-organizerサブエージェントによる<br/>_agent_inbox自動同期＆検証テスト実行"]
+
+    %% 接続
+    Main --> Sub1
+    Main --> Sub2
+    Main --> Sub3
+
+    Sub1 --> Insight1
+    Sub1 --> Insight2
+    Sub2 --> Insight3
+    Sub3 --> Insight4
+
+    Insight1 --> Act1
+    Insight2 --> Act2
+    Insight3 --> Act3
+    Insight4 --> Act4
+
+    %% スタイル定義
+    style Main fill:#be123c,stroke:#fda4af,color:#fff,stroke-width:2px
+    style Sub1 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Sub2 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Sub3 fill:#1d4ed8,stroke:#93c5fd,color:#fff
+    style Insight1 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight2 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight3 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Insight4 fill:#0f766e,stroke:#99f6e4,color:#fff
+    style Act1 fill:#15803d,stroke:#86efac,color:#fff
+    style Act2 fill:#15803d,stroke:#86efac,color:#fff
+    style Act3 fill:#15803d,stroke:#86efac,color:#fff
+    style Act4 fill:#15803d,stroke:#86efac,color:#fff
+        </pre>
+      </div>
+    </div>
+
+    <!-- 思考フレームワーク・要約テーブル -->
+    <div class="card">
+      <h2>🔍 イシュー・知恵・打ち手のMECE分解一覧</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>区分</th>
+            <th>論点 / サブイシュー</th>
+            <th>抽出された知恵・インサイト</th>
+            <th>具体策（アクション）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-core">速さ・広さ</span></td>
+            <td>1. インデックス・検索性の欠損</td>
+            <td>フリーフォーマット文脈の散在により必要情報へアクセスするスピードが落ちる。</td>
+            <td>OKF標準メタデータ（id, type, title, category, summary, tags）の自動付与</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-sub">深く・簡単に</span></td>
+            <td>2. OKF構造化・コンパイル不足</td>
+            <td>Idea（抽象）が具体的コード・解決ロジックに十分コンパイルされていない。</td>
+            <td>「よっちゃん流ハイブリッド診断」とKarpathy流「8つの視点」の自動適用</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-act">実行力</span></td>
+            <td>3. アクション＆Inbox連携の滞留</td>
+            <td>ノート作成のみで完了し、解決策が実制作やテストへ反映されない。</td>
+            <td>obsidian-organizerを活用した `_agent_inbox` へのレポート出力と自動整理</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      }
+    });
+  </script>
+</body>
+</html>

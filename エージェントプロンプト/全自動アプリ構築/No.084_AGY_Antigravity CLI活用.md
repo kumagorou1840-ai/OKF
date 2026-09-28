@@ -1,0 +1,8 @@
+﻿# No.84 AGY/Antigravity CLI活用
+
+- **種別**: 単体活用
+- **対象スキル**: `writing-plans`
+- **指示文プロンプト原本**:
+> 【単体活用 No.84】AGY/Antigravity CLI活用 のスキルをピンポイントで呼び出し、爆速かつ確実に完遂します。
+
+
