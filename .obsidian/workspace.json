@@ -704,9 +704,19 @@
               "icon": "network",
               "title": "2Hop Links"
             }
+          },
+          {
+            "id": "a91e38f4fd7bb802",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
         ],
-        "currentTab": 3
+        "currentTab": 7
       }
     ],
     "direction": "horizontal",
@@ -741,7 +751,7 @@
       "tasknotes:新しいタスクを作成": false
     }
   },
-  "active": "b252a619d8c184a8",
+  "active": "e10b7860f9c0acdf",
   "lastOpenFiles": [
     "01_Notes/AI_company/2026-06-05-03_最新AIニュース調査手順.md",
     "01_Notes/AI_company/2026-06-05-02_JSONクレンジング実装マニュアル.md",
