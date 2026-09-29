@@ -347,12 +347,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Notes/AI_company/2026-06-05-03_最新AIニュース調査手順.md",
+                "file": "01_Notes/AI Agent.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-06-05-03_最新AIニュース調査手順"
+              "title": "AI Agent"
             }
           },
           {
@@ -572,7 +572,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#各業務の詳細ナレッジ・個別ルール",
+                "query": "-- aliases",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -603,11 +603,12 @@
               "title": "Notebook Navigator"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
-    "width": 315.5
+    "width": 213.5
   },
   "right": {
     "id": "791f6db081133277",
@@ -671,8 +672,8 @@
             "state": {
               "type": "review-queue-list-view",
               "state": {},
-              "icon": "SpacedRepIcon",
-              "title": "ノートレビューのキュー"
+              "icon": "lucide-ghost",
+              "title": "review-queue-list-view"
             }
           },
           {
@@ -716,11 +717,12 @@
             }
           }
         ],
-        "currentTab": 7
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 236.5
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -751,8 +753,10 @@
       "tasknotes:新しいタスクを作成": false
     }
   },
-  "active": "e10b7860f9c0acdf",
+  "active": "b1d5f9197356c365",
   "lastOpenFiles": [
+    "01_Notes/Notes/markdown記法.md",
+    "01_Notes/AI Agent.md",
     "01_Notes/AI_company/2026-06-05-03_最新AIニュース調査手順.md",
     "01_Notes/AI_company/2026-06-05-02_JSONクレンジング実装マニュアル.md",
     "01_Notes/AI_company/2026-06-05-01_ハイブリッド診断手順.md",
@@ -787,8 +791,6 @@
     "エージェントプロンプト/セカンドブレイン/No.133_プロジェクト履歴・意思決定ログ.md",
     "copilot/memory/MEMORY.md",
     "copilot/copilot-conversations/agent__fileCUsersPC_UserForgemaster_evaluation_cockpit.htmlを読み込むこと@20260924_075941.md",
-    "copilot/copilot-conversations/agent__2._Antigravity_コックピットポータル開発_設計ルール・仕@20260925_201123.md",
-    "copilot/copilot-conversations/agent__1._大家実務（店子対応・物件維持）_店子向け案内テン@20260925_200423.md",
     "Pasted image 20260912155609.png",
     "Pasted image 20260912170711.png",
     "Pasted image 20260912162423.png",
