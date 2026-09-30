@@ -572,7 +572,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "-- aliases",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -603,8 +603,7 @@
               "title": "Notebook Navigator"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
