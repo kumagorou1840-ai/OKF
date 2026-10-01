@@ -347,12 +347,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Notes/AI Agent.md",
+                "file": "youtube/思考/【Hermes Agent】いま世界が熱狂しているOpenClaw超え_の自己改善型のAIエージェント。.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "AI Agent"
+              "title": "【Hermes Agent】いま世界が熱狂しているOpenClaw超え_の自己改善型のAIエージェント。"
             }
           },
           {
@@ -752,8 +752,12 @@
       "tasknotes:新しいタスクを作成": false
     }
   },
-  "active": "b252a619d8c184a8",
+  "active": "e3e0ac49f19db2a1",
   "lastOpenFiles": [
+    "youtube/思考/【もうプロンプトは書くな！】 Loop Engineering 徹底解説.md",
+    "youtube/思考/Google OKF + RAG_ The Ultimate AI Agent Architecture.md",
+    "youtube/猫/All business design documents for Claude are available for free! This includes those for finance, office work, and resea.md",
+    "エージェントプロンプト/セカンドブレイン/No.121_学術論文ナレッジ同期.md",
     "01_Notes/AI Agent.md",
     "01_Notes/Notes/markdown記法.md",
     "01_Notes/AI_company/2026-06-05-03_最新AIニュース調査手順.md",
@@ -786,10 +790,6 @@
     "Tasksプラグイン.md",
     "リンクを作成.md",
     "03_Tasks/Antigravity_Master_Evaluation_Cockpit.md",
-    "03_Tasks/2026-07-19_08-05_tasks.md",
-    "エージェントプロンプト/セカンドブレイン/No.133_プロジェクト履歴・意思決定ログ.md",
-    "copilot/memory/MEMORY.md",
-    "copilot/copilot-conversations/agent__fileCUsersPC_UserForgemaster_evaluation_cockpit.htmlを読み込むこと@20260924_075941.md",
     "Pasted image 20260912155609.png",
     "Pasted image 20260912170711.png",
     "Pasted image 20260912162423.png",
