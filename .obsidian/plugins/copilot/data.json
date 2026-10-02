@@ -1544,6 +1544,15 @@
       },
       "configuredModelId": "f6484829-f5d7-462f-b22b-18c8421bd221",
       "configuredAt": 1790591259950
+    },
+    {
+      "providerId": "f2f4da33-1653-4b69-991b-b088522b34e6",
+      "info": {
+        "id": "opencode/fledge-alpha-free",
+        "displayName": "OpenCode Zen/Fledge Alpha Free"
+      },
+      "configuredModelId": "c8ba0812-1a96-4374-bc3b-8c5a24ff17de",
+      "configuredAt": 1790887270528
     }
   ],
   "backends": {
@@ -1589,25 +1598,6 @@
         },
         "limits": {
           "context": 1048576
-        }
-      },
-      {
-        "id": "kimi-k2.6",
-        "displayName": "Kimi K2.6",
-        "description": "Good for long-running reasoning tasks.",
-        "toolCall": true,
-        "reasoning": true,
-        "reasoningEfforts": [],
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "limits": {
-          "context": 262144
         }
       },
       {

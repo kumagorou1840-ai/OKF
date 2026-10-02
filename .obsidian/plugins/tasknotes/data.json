@@ -493,5 +493,6 @@
     "isRunning": false,
     "timeRemaining": 1500
   },
-  "lastPomodoroDate": "2026-09-27"
+  "lastPomodoroDate": "2026-09-27",
+  "lastNotifiedReleaseVersion": "4.13.8"
 }
