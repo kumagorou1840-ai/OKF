@@ -796,6 +796,7 @@
   },
   "active": "b252a619d8c184a8",
   "lastOpenFiles": [
+    "02_Diaries/Clippings",
     "02_Diaries/2026-10-10(土).md",
     "02_Diaries/2026-09-18(金).md",
     "Templates/madr-template.md",
@@ -824,7 +825,6 @@
     "AIを使って考える/開発/6W3H・プランナー（アイデア具体化AI）.md",
     "AIを使って考える/アイデア/たたき台メーカー.md",
     "01_Sources/ベイズ最適化_理論と実装.md",
-    "01_Sources/エージェント推論フレームワーク_サーベイ.md",
     "TaskNotes/Views/relationships.base",
     "TaskNotes/Views/pomodoro-stats.base",
     "TaskNotes/Views/agenda-default.base",
