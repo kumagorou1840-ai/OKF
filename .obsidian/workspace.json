@@ -389,12 +389,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "01_Notes/2026-10-07_テスト.md",
+                "file": "02_Diaries/2026-10-10(土).md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "2026-10-07_テスト"
+              "title": "2026-10-10(土)"
             }
           },
           {
@@ -794,8 +794,18 @@
       "tasknotes:新しいタスクを作成": false
     }
   },
-  "active": "b252a619d8c184a8",
+  "active": "01930a61ca38f6ee",
   "lastOpenFiles": [
+    "02_Diaries/2026-09-18(金).md",
+    "Templates/madr-template.md",
+    "08_ADR/README.md",
+    "08_ADR/ADR一覧.md",
+    "08_ADR/0001-テスト決定.md",
+    "08_ADR",
+    "02_Diaries/2026-10-10(土).md",
+    "youtube/Obsidian/AIを9割使いこなせていません【skill-creator_Claude】.md",
+    "02_Diaries/2026-09-24(木).md",
+    "02_Diaries/2026-09-02(水）.md",
     "01_Notes/2026-10-07_テスト.md",
     "Templates/テンプレート作成・運用手順書.md",
     "copilot/memory/ai-Antigravityコックピットポータル 実装スニペット.md",
@@ -815,15 +825,6 @@
     "AIを使って考える/アイデア/たたき台メーカー.md",
     "01_Sources/ベイズ最適化_理論と実装.md",
     "01_Sources/エージェント推論フレームワーク_サーベイ.md",
-    "無題のファイル 2.md",
-    "無題のファイル.md",
-    "02_Diaries/2026-09-18(金).md",
-    "02_Diaries/2026-09-24(木).md",
-    "youtube/思考/【Hermes Agent】いま世界が熱狂しているOpenClaw超え_の自己改善型のAIエージェント。.md",
-    "youtube/思考/【もうプロンプトは書くな！】 Loop Engineering 徹底解説.md",
-    "youtube/思考/Google OKF + RAG_ The Ultimate AI Agent Architecture.md",
-    "youtube/猫/All business design documents for Claude are available for free! This includes those for finance, office work, and resea.md",
-    "エージェントプロンプト/セカンドブレイン/No.121_学術論文ナレッジ同期.md",
     "TaskNotes/Views/relationships.base",
     "TaskNotes/Views/pomodoro-stats.base",
     "TaskNotes/Views/agenda-default.base",
@@ -831,7 +832,6 @@
     "TaskNotes/Views/tasks-default.base",
     "TaskNotes/Views/kanban-default.base",
     "TaskNotes/Views/mini-calendar-default.base",
-    "TaskNotes/Views",
     "Pasted image 20260912155609.png",
     "Pasted image 20260912170711.png",
     "Pasted image 20260912162423.png",
