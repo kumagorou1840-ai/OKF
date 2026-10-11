@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "test.md",
+                "file": "Notes/DriveSync双方向同期マニュアル.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "test"
+              "title": "DriveSync双方向同期マニュアル"
             }
           }
         ]
@@ -175,6 +175,7 @@
   },
   "active": "89558805af941fd2",
   "lastOpenFiles": [
-    "test.md"
+    "test.md",
+    "Notes/DriveSync双方向同期マニュアル.md"
   ]
 }
