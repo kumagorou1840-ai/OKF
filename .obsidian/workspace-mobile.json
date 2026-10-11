@@ -1,0 +1,227 @@
+{
+  "main": {
+    "id": "d113640f21493587",
+    "type": "split",
+    "children": [
+      {
+        "id": "4ccd17ad7c13dba4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c570e93ead6a98e2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "無題のファイル.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "無題のファイル"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "b44911beb2363bf9",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "600328334d6de13f",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-folder-closed",
+          "title": "ファイルエクスプローラ"
+        }
+      },
+      {
+        "id": "1b34902a62d2543f",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "検索"
+        }
+      },
+      {
+        "id": "5f2982007959b3bc",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "タグ"
+        }
+      },
+      {
+        "id": "f30303e3f80e4171",
+        "type": "leaf",
+        "state": {
+          "type": "all-properties",
+          "state": {
+            "sortOrder": "frequency",
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-archive",
+          "title": "すべてのプロパティ"
+        }
+      },
+      {
+        "id": "f2d9aa9976b3385c",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-bookmark",
+          "title": "ブックマーク"
+        }
+      }
+    ],
+    "currentTab": 3
+  },
+  "right": {
+    "id": "a1d0a1cfc3cb4501",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "4ce44adbbe79c2eb",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "無題のファイル.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "バックリンク"
+        }
+      },
+      {
+        "id": "637554d1b5b65688",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "無題のファイル.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "lucide-ghost",
+          "title": "outgoing-link"
+        }
+      },
+      {
+        "id": "b24192e03a6ae778",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "無題のファイル.md",
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-ghost",
+          "title": "outline"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "random-note:ランダムノートを開く": false,
+      "workspaces:ワークスペースレイアウトを管理": false,
+      "switcher:クイックスイッチャーを開く": false,
+      "graph:グラフビューを開く": false,
+      "daily-notes:今日のデイリーノートを開く": false,
+      "templates:テンプレートを挿入": false,
+      "command-palette:コマンドパレットを開く": false,
+      "bases:新規ベースを作成": false
+    }
+  },
+  "active": "f30303e3f80e4171",
+  "lastOpenFiles": [
+    "無題のフォルダ",
+    "02_Diaries/2026-10-10(土).md",
+    "無題のファイル.md",
+    "01_Notes/AI_company/2026-06-05-01_ハイブリッド診断手順.md",
+    "学び/action",
+    "学び",
+    "無題のフォルダ 1",
+    "無題のフォルダ 2",
+    "無題のフォルダ 3",
+    "発想のたたき台メーカー（隙のあるアイデア生成器）.txt",
+    "群_1.ipynb.md",
+    "無題のファイル.canvas",
+    "無題のファイル 2.md",
+    "今日のタスク.md",
+    "タスク一覧.md",
+    "仕組み/資源配分/images/資源配分_2026-07-13/sankey.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/donut_weight.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/mixed.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/radar.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/diff.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/donut_actual.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/bubble.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13/bar.png",
+    "仕組み/資源配分/images/2026-07-13_1251/sankey.png",
+    "仕組み/資源配分/images/2026-07-13_1251/mixed.png",
+    "仕組み/資源配分/images/資源配分_2026-07-13",
+    "仕組み/資源配分/images/2026-07-13_1251",
+    "仕組み/目標達成法/images/2026-07-13_1404",
+    "仕組み/優先順位/images/2026-07-12_2201",
+    "仕組み/資源配分/資源配分_2026-07-13.md",
+    "仕組み/資源配分/2026-07-13_1251.md",
+    "仕組み/目標達成法/2026-07-13_1404.md",
+    "仕組み/可否決定法/2026-07-12_1712.md",
+    "仕組み/優先順位/2026-07-12_2201.md",
+    "リンクを作成.md",
+    "ベイズ最適化.md",
+    "エージェント推論フレームワーク比較サーベイ.md",
+    "ようこそ.md",
+    "エージェントプロンプト/段階的実装計画/20260911_No81_段階的実装計画策定_writing-plans.md",
+    "エージェントプロンプト/構想・UIデザイン/staff_manual.md",
+    "エージェントプロンプト/構想・UIデザイン/work.md",
+    "エージェントプロンプト/構想・UIデザイン/test.md",
+    "エージェントプロンプト/構想・UIデザイン/realestate_simulation_workflow.md",
+    "エージェントプロンプト/構想・UIデザイン/reading_analysis.md",
+    "エージェントプロンプト/構想・UIデザイン/order_system_design.md",
+    "エージェントプロンプト/構想・UIデザイン/prompts_summary.md",
+    "エージェントプロンプト/構想・UIデザイン/dev_team_consensus.md"
+  ]
+}
