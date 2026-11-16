@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow_file_write": true,
+    "allow_file_delete": false,
+    "allow_shell_commands": true,
+    "forbidden_commands": ["rm", "sudo", "curl", "wget", "shutil.rmtree"],
+    "require_approval_for": [
+      "file_delete",
+      "network_request",
+      "external_process_spawn"
+    ],
+    "workspace_boundary": "./sandbox_workspace",
+    "max_file_size_kb": 1024
+  }
+}
+
+
+
+

@@ -1,0 +1,33 @@
+[
+  {
+    "contract_id": "C-2026-101",
+    "property_name": "メゾン札幌北",
+    "room_number": "101",
+    "tenant_name": "鈴木 一郎",
+    "current_rent": 50000,
+    "new_rent": 50000,
+    "renewal_date": "2026-12-01",
+    "contact": "090-1111-2222",
+    "memo": "据え置き更新"
+  },
+  {
+    "contract_id": "C-2026-102",
+    "property_name": "メゾン札幌北",
+    "room_number": "202",
+    "tenant_name": "高橋 花子",
+    "current_rent": 55000,
+    "new_rent": 58000,
+    "renewal_date": "2026-12-01",
+    "contact": "090-3333-4444"
+  },
+  {
+    "contract_id": "C-2026-103",
+    "property_name": "コーポ大通東",
+    "room_number": "305",
+    "tenant_name": "伊藤 健太",
+    "current_rent": 60000,
+    "new_rent": 68000,
+    "renewal_date": "2026-12-15",
+    "contact": "090-5555-6666"
+  }
+]

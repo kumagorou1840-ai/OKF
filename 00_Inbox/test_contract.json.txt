@@ -1,0 +1,11 @@
+{
+  "contract_id": "C-2026-999",
+  "property_name": "メゾン札幌北",
+  "room_number": "505",
+  "tenant_name": "佐藤 健太",
+  "current_rent": 60000,
+  "new_rent": 65000,
+  "renewal_date": "2026-12-15",
+  "contact": "090-9999-8888",
+  "memo": "特になし"
+}

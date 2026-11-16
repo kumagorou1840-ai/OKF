@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP ✕ Skills 代表的連携 100選 オーケストレーター</title>
+  <!-- Lucide Icons & Google Fonts -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-purple: #c084fc;
+      --accent-green: #4ade80;
+      --accent-amber: #fbbf24;
+      --accent-pink: #f472b6;
+      --accent-indigo: #818cf8;
+      --border-color: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .header {
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      margin-top: 4px;
+    }
+
+    .btn-portal {
+      flex: none !important;
+      background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+      color: #fff !important;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+
+    .btn-portal:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5), 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    /* 検索 & フィルターバー */
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 280px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px 12px 42px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 18px;
+    }
+
+    .category-filter {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .chip {
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .chip.active, .chip:hover {
+      background: var(--accent-cyan);
+      color: #0f172a;
+      border-color: var(--accent-cyan);
+    }
+
+    /* カードグリッド */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 12px 25px -8px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.12);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .card-cat {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    .card-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .badge-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .badge-brain {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(192, 132, 252, 0.12);
+      color: var(--accent-purple);
+      border: 1px solid rgba(192, 132, 252, 0.25);
+      padding: 5px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-hand {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      background: rgba(74, 222, 128, 0.12);
+      color: var(--accent-green);
+      border: 1px solid rgba(74, 222, 128, 0.25);
+      padding: 5px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-cyan);
+      color: #0f172a;
+    }
+
+    .btn-primary:hover {
+      background-color: #7dd3fc;
+    }
+
+    /* トースト */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent-green);
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 14px 24px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 2000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .diagram-workbench {
+      margin: 28px 0;
+      border: 1px solid #64748b;
+      border-top: 4px solid #fbbf24;
+      background: #111827;
+      padding: 20px;
+    }
+
+    .diagram-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .diagram-heading h2 { font-size: 18px; color: #fbbf24; }
+    .diagram-heading p, .diagram-help { color: #d1d5db; font-size: 13px; line-height: 1.6; }
+
+    .diagram-prompt, .diagram-editor, .diagram-preview {
+      border: 1px solid #64748b;
+      background: #0b1220;
+      padding: 14px;
+      margin-top: 12px;
+    }
+
+    .diagram-prompt label, .diagram-editor label {
+      display: block;
+      color: #f8fafc;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .diagram-workbench textarea {
+      display: block;
+      width: 100%;
+      border: 1px solid #64748b;
+      border-radius: 4px;
+      background: #030712;
+      color: #f8fafc;
+      padding: 12px;
+      font: 13px/1.55 'JetBrains Mono', monospace;
+      resize: vertical;
+    }
+
+    #problemInput { min-height: 84px; }
+    #diagramCode { min-height: 250px; tab-size: 2; }
+
+    .diagram-toolbar, .diagram-actions, .diagram-mode {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .diagram-toolbar { justify-content: space-between; margin: 12px 0 8px; }
+    .diagram-mode button, .diagram-action {
+      min-height: 38px;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      padding: 8px 12px;
+      background: #1f2937;
+      color: #f8fafc;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .diagram-mode button[aria-pressed="true"] { background: #fbbf24; color: #111827; border-color: #fbbf24; }
+    .diagram-action.primary { background: #38bdf8; color: #082f49; border-color: #38bdf8; }
+    .diagram-action:hover, .diagram-mode button:hover { outline: 2px solid #f8fafc; outline-offset: 1px; }
+
+    .diagram-preview {
+      min-height: 260px;
+      overflow: auto;
+      background-color: #fff;
+      background-image: radial-gradient(#cbd5e1 0.7px, transparent 0.7px);
+      background-size: 16px 16px;
+    }
+
+    .diagram-preview svg { display: block; max-width: none; height: auto; margin: 0 auto; }
+    .diagram-preview .mermaid-error { color: #991b1b; font: 14px/1.5 'JetBrains Mono', monospace; white-space: pre-wrap; }
+    .diagram-status { min-height: 22px; margin-top: 8px; color: #d1d5db; font-size: 12px; }
+
+    @media (max-width: 640px) {
+      body { padding: 14px; }
+      .diagram-workbench { padding: 14px; }
+      .diagram-heading { flex-direction: column; }
+      .diagram-toolbar { align-items: flex-start; flex-direction: column; }
+      .diagram-actions { width: 100%; }
+      .diagram-actions button { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+<!-- COCKPIT RETURN HEADER -->
+<div style="background: linear-gradient(90deg, #1e1b4b 0%, #312e81 100%); padding: 10px 20px; border-bottom: 2px solid #6366f1; display: flex; align-items: center; justify-content: space-between; font-family: sans-serif; position: sticky; top: 0; z-index: 999999;">
+  <div style="color: #ffffff; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 8px;">
+    <span>🎛️ Antigravity 統合アプリケーション</span>
+  </div>
+  <a href="http://localhost:8501" target="_self" style="background: #4f46e5; color: #ffffff; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: bold; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+    🔙 コックピットポータルに戻る
+  </a>
+</div>
+<!-- END COCKPIT RETURN HEADER -->
+
+
+  <div class="header">
+    <div>
+      <h1><i data-lucide="zap"></i> MCP ✕ Skills 代表的連携 100選 オーケストレーター</h1>
+      <p class="subtitle">【頭脳: Skills】 ✕ 【手足: MCP コネクター】 が全自動連動する厳選 100 パターン統合Webアプリ</p>
+    </div>
+    <a href="http://localhost:8501" class="btn btn-portal" title="コックピットポータルに戻る">
+      <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i> コックピットポータルに戻る
+    </a>
+  </div>
+
+  <!-- 検索 & フィルター -->
+  <div class="controls">
+    <div class="search-box">
+      <i data-lucide="search" class="search-icon"></i>
+      <input type="text" id="searchInput" placeholder="連携パターン、Skill、MCP名、キーワードで検索..." oninput="filterCards()">
+    </div>
+    <div class="category-filter" id="categoryFilter">
+      <button class="chip active" onclick="setCategory('ALL')">全 100 選表示</button>
+      <button class="chip" onclick="setCategory('データ・分析')">データ・分析</button>
+      <button class="chip" onclick="setCategory('自動開発・デバッグ')">自動開発・デバッグ</button>
+      <button class="chip" onclick="setCategory('ナレッジ・同期')">ナレッジ・同期</button>
+      <button class="chip" onclick="setCategory('セールス・業務')">セールス・業務</button>
+      <button class="chip" onclick="setCategory('企画・設計・診断')">企画・設計・診断</button>
+      <button class="chip" onclick="setCategory('法務・ドキュメント')">法務・ドキュメント</button>
+      <button class="chip" onclick="setCategory('完全体統合')">完全体統合</button>
+    </div>
+  </div>
+
+  <section class="diagram-workbench" aria-labelledby="diagramTitle">
+    <div class="diagram-heading">
+      <div>
+        <h2 id="diagramTitle">問題を図にする | Mermaid ワークベンチ</h2>
+        <p>要件から図コードを作る指示文をコピーし、生成されたMermaidコードを編集・描画できます。描画はブラウザー内で行います。</p>
+      </div>
+    </div>
+
+    <div class="diagram-prompt">
+      <label for="problemInput">図にしたい要件・複雑な問題</label>
+      <textarea id="problemInput" placeholder="例: 顧客は複数の注文を持ち、注文には複数の商品が含まれる。注文ごとに配送状況を記録する。"></textarea>
+      <div class="diagram-actions" style="margin-top: 10px;">
+        <button class="diagram-action" type="button" onclick="copyDiagramPrompt()">図コード生成の指示文をコピー</button>
+      </div>
+    </div>
+
+    <div class="diagram-toolbar">
+      <div class="diagram-mode" role="group" aria-label="図の種類">
+        <button type="button" data-diagram-mode="er" aria-pressed="true" onclick="selectDiagramMode('er')">クローフット ER 図</button>
+        <button type="button" data-diagram-mode="sequence" aria-pressed="false" onclick="selectDiagramMode('sequence')">シーケンス図</button>
+      </div>
+      <div class="diagram-actions">
+        <button class="diagram-action primary" type="button" onclick="renderDiagram()">描画</button>
+        <button class="diagram-action" type="button" onclick="copyDiagramCode()">コードをコピー</button>
+        <button class="diagram-action" type="button" onclick="downloadDiagramSvg()">SVGを保存</button>
+      </div>
+    </div>
+
+    <div class="diagram-editor">
+      <label for="diagramCode">Mermaid コード</label>
+      <textarea id="diagramCode" spellcheck="false" aria-describedby="diagramHelp"></textarea>
+      <p class="diagram-help" id="diagramHelp">AIが生成したコードは、```mermaid の囲みを含めて貼り付けても描画できます。</p>
+    </div>
+    <div class="diagram-preview" id="diagramPreview" aria-label="図のプレビュー" aria-live="polite"></div>
+    <p class="diagram-status" id="diagramStatus" role="status">Mermaid の読み込みを待っています。</p>
+  </section>
+
+  <!-- 100選カードグリッド -->
+  <div class="grid" id="cardsGrid"></div>
+
+  <div class="toast" id="toast">📋 指示文プロンプトをコピーしました！OKF画面に遷移します...</div>
+
+  <script>
+    const MCP_100_USECASES = [
+      // [1] データ・分析
+      { id: 1, cat: "データ・分析", title: "SQLite DB自動クエリ ✕ 数理最適化", skill: "ml-plotly-dash-helper", mcp: "mcp_server / query_sqlite_db", desc: "スキルが最適化数式を計算し、MCP経由でローカルSQLite DBへ在庫・売上データを直接自動保存・抽出する。", prompt: "ローカルの ml-plotly-dash-helper スキルと mcp_server(query_sqlite_db) を連携させて、SQLiteデータの数理最適化を実行して" },
+      { id: 2, cat: "データ・分析", title: "適正在庫需要予測 ✕ 自動発注アラート", skill: "ml-plotly-dash-helper", mcp: "inventory_mcp / check_reorder_point", desc: "目標サービス率98%の安全在庫量と自動発注点(ROP)を数理計算し、過剰と品切れを同時防衛。", prompt: "ml-plotly-dash-helper と inventory_mcp を連携させて安全在庫量と最適発注点(ROP)の自動計算を実行して" },
+      { id: 3, cat: "データ・分析", title: "多変量重回帰分析 ✕ BIダッシュボード構築", skill: "ml-plotly-dash-helper", mcp: "bi_dashboard_mcp / generate_plotly_app", desc: "重回帰分析による最重要影響要因の特定と、Plotlyによる動的インタラクティブWebUIを生成。", prompt: "ml-plotly-dash-helper と bi_dashboard_mcp を連携させて多変量重回帰分析ダッシュボードを作成して" },
+      { id: 4, cat: "データ・分析", title: "モンテカルロシミュレーション ✕ リスク算定", skill: "ml-plotly-dash-helper", mcp: "risk_simulator_mcp / run_monte_carlo", desc: "15,000回の確率試行によりITプロジェクトの遅延リスクと予算超越確率を統計算定。", prompt: "ml-plotly-dash-helper と risk_simulator_mcp を連携させてモンテカルロリスクシミュレーションを実行して" },
+      { id: 5, cat: "データ・分析", title: "八百屋在庫トレーサビリティ ✕ AppSheet連携", skill: "executing-plans", mcp: "appsheet_mcp / sync_inventory_lot", desc: "お買い物トレースPROの仕入・販売ロット追跡とMILP最適化をAppSheetモバイルアプリへ直接同期。", prompt: "executing-plans と appsheet_mcp を連携させてお買い物トレースデータの同期を実行して" },
+      { id: 6, cat: "データ・分析", title: "Polis特許・学術ディープリサーチ", skill: "hermes", mcp: "polis_orchestrator / fetch_paper_db", desc: "Hermesスキルが論文・特許データを取り込み、MCP経由で引用ID付きの学術レポートを全自動生成する。", prompt: "hermes スキルと polis_orchestrator MCP を連携させて、最新のAIマルチエージェント動向の引用付き学術レポートを作成して" },
+      { id: 7, cat: "データ・分析", title: "売上時系列予測 ✕ CSV自動更新", skill: "ml-plotly-dash-helper", mcp: "csv_mcp / update_revenue_forecast", desc: "ARIMA/Prophet等の時系列手法により、過去データから売上の自動予測を行いCSVを更新。", prompt: "ml-plotly-dash-helper スキルと csv_mcp を連携させて、時系列分析による売上予測とCSVの自動更新を行って" },
+      { id: 8, cat: "データ・分析", title: "A/Bテスト効果検定 ✕ 統計レポート出力", skill: "ml-plotly-dash-helper", mcp: "stats_mcp / run_t_test", desc: "2つのUIバリエーションの成約率差分を有意確率(p値)で検定し、統計結果表を出力する。", prompt: "ml-plotly-dash-helper スキルと stats_mcp を連携させて、UIのA/Bテストの有意差(p値)検定と統計レポート出力を行って" },
+      { id: 9, cat: "データ・分析", title: "顧客セグメンテーション ✕ クラスター可視化", skill: "ml-plotly-dash-helper", mcp: "cluster_mcp / plot_kmeans", desc: "購買データをクラスタリングし、ペルソナごとのプロットをブラウザ上で2D/3D動的描画。", prompt: "ml-plotly-dash-helper スキルと cluster_mcp を連携させて、顧客データのK-Meansクラスタリングと結果の可視化を行って" },
+      { id: 10, cat: "データ・分析", title: "ポートフォリオ最適化 ✕ 金融データ分析", skill: "ml-plotly-dash-helper", mcp: "stock_mcp / optimize_portfolio", desc: "シャープ・レシオが最大となる資産配分比率を数理計算し、効率的フロンティアを可視化。", prompt: "ml-plotly-dash-helper スキルと stock_mcp を連携させて、シャープ・レシオ最大化となるポートフォリオ配分比率を計算して" },
+      { id: 11, cat: "データ・分析", title: "設備稼働率異常検知 ✕ 時系列プロット", skill: "ml-plotly-dash-helper", mcp: "iot_mcp / detect_anomalies", desc: "ローカルセンサーデータのZスコアを監視し、3シグマを超える閾値逸脱を自動検知してグラフ化。", prompt: "ml-plotly-dash-helper スキルと iot_mcp を連携させて、ローカルセンサーデータのZスコア異常検知とグラフプロットを行って" },
+      { id: 12, cat: "データ・分析", title: "広告効果分析 ✕ パネルROI可視化", skill: "ml-plotly-dash-helper", mcp: "ad_mcp / calc_roi_funnel", desc: "各チャネルの広告流入から成約までのファネル遷移率とROI（費用対効果）を自動分析する。", prompt: "ml-plotly-dash-helper スキルと ad_mcp を連携させて、広告チャネルのファネル遷移率とROIの自動分析を実行して" },
+      { id: 13, cat: "データ・分析", title: "アンケートセンチメント分析 ✕ WordCloud生成", skill: "ml-plotly-dash-helper", mcp: "text_mcp / generate_wordcloud", desc: "自由記述アンケートからポジ・ネガを極性判定し、高頻度キーワードを視覚的なワードクラウドにする。", prompt: "ml-plotly-dash-helper スキルと text_mcp を連携させて、アンケートの感情分析とワードクラウド画像生成を行って" },
+      { id: 14, cat: "データ・分析", title: "不動産価格予測 ✕ 地図データPlotly描画", skill: "ml-plotly-dash-helper", mcp: "geo_mcp / map_real_estate", desc: "駅からの距離や築年数による投資利回りを推計し、地図上へカラーグラデーションでマッピング。", prompt: "ml-plotly-dash-helper スキルと geo_mcp を連携させて、投資利回りの予測と地図上へのプロット描画を実行して" },
+      { id: 15, cat: "データ・分析", title: "最適配送ルート算出 ✕ 距離行列計算", skill: "ml-plotly-dash-helper", mcp: "route_mcp / calculate_vrp", desc: "複数配送先への巡回ルート最適化(VRP)を計算し、時間枠(TimeWindow)制約を満たす最短路を特定。", prompt: "ml-plotly-dash-helper スキルと route_mcp を連携させて、時間枠制約つき配送ルート最適化(VRP)の計算を行って" },
+
+      // [2] 自動開発・デバッグ
+      { id: 16, cat: "自動開発・デバッグ", title: "並列サブエージェント自動タスク配分", skill: "subagent-driven-development", mcp: "forge_mcp_agent / spawn_task", desc: "スキルが計画書の依存関係を解析し、MCP経由で裏側のバックグラウンドエージェントを並列同時起動する。", prompt: "subagent-driven-development スキルと forge_mcp_agent を連携させて、開発タスクを並列サブエージェントで自動実行して" },
+      { id: 17, cat: "自動開発・デバッグ", title: "自動デバッグ ✕ 失敗テスト自動修復", skill: "systematic-debugging", mcp: "auto_debugger / run_pytest", desc: "スキルがログから根本原因を突き止め、MCP経由でテストを実行し、一文字も無駄なく外科的修正を行う。", prompt: "systematic-debugging スキルと auto_debugger MCP を連携させて、このエラーの根本原因特定とテスト自動修復を実行して" },
+      { id: 18, cat: "自動開発・デバッグ", title: "GitHub PR自動作成 ✕ コード査読", skill: "requesting-code-review", mcp: "github_mcp / create_pull_request", desc: "検証に合格した修正コードを、MCP経由でGitHubへ自動コミットしPull Requestを提出する。", prompt: "requesting-code-review スキルと github_mcp を連携させて、修正コードの品質査読とGitHub PR作成を実行して" },
+      { id: 19, cat: "自動開発・デバッグ", title: "Git未プッシュコミット自律検出 ✕ GitHub同期", skill: "finishing-a-development-branch", mcp: "git_mcp / sync_unpushed_commits", desc: "ローカルブランチの未同期コミットを自動検出し、GitHubリモートリポジトリへ全自動安全同期。", prompt: "finishing-a-development-branch と git_mcp を連携させて未同期コミットの自律検出とGitHub同期を実行して" },
+      { id: 20, cat: "自動開発・デバッグ", title: "5大エンティティ注文管理 ✕ SQLite正規化", skill: "test-driven-development", mcp: "sqlite_mcp / migrate_5_entities", desc: "顧客・社員・商品・注文・注文詳細 of 5リレーションをSQLite正規化テーブルとして自動構築。", prompt: "test-driven-development と sqlite_mcp を連携させて5大エンティティSQLiteテーブル構築を実行して" },
+      { id: 21, cat: "自動開発・デバッグ", title: "時系列3シグマ異常検知 ✕ Slack即時通知", skill: "systematic-debugging", mcp: "slack_mcp / post_anomaly_alert", desc: "アクセス急減やシステム異常数値をZスコア/3シグマ法で早期発見し、即座にSlackへ通知。", prompt: "systematic-debugging と slack_mcp を連携させて時系列異常検知アラートを送信して" },
+      { id: 22, cat: "自動開発・デバッグ", title: "自動コード整形 ✕ Prettier実行", skill: "test-driven-development", mcp: "formatter_mcp / run_prettier", desc: "変更箇所に対してPrettierやRuffを自動実行し、コードスタイル違反を自律的に解消。", prompt: "test-driven-development スキルと formatter_mcp を連携させて、Prettierによるコードスタイルの自動整形を行って" },
+      { id: 23, cat: "自動開発・デバッグ", title: "APIスキーマ検証 ✕ OpenAPI自動生成", skill: "json-to-pydantic", mcp: "api_validator_mcp / generate_swagger", desc: "JSON構造からPydanticモデルを作成し、自動的にOpenAPI(Swagger)定義ファイルを書き出す。", prompt: "json-to-pydantic スキルと api_validator_mcp を連携させて、JSONデータからのPydanticモデル定義とOpenAPI仕様書の自動生成を行って" },
+      { id: 24, cat: "自動開発・デバッグ", title: "テストカバレッジ測定 ✕ 改善コード自動提示", skill: "test-driven-development", mcp: "coverage_mcp / check_coverage", desc: "テストカバー率の低いモジュールを検出し、境界値テストケースを追加生成してテストファイルを修正する。", prompt: "test-driven-development スキルと coverage_mcp を連携させて、テストカバレッジの測定と境界値テストコードの自律追加を行って" },
+      { id: 25, cat: "自動開発・デバッグ", title: "依存関係セキュリティ監査 ✕ 自動パッチ適用", skill: "verification-before-completion", mcp: "npm_audit_mcp / patch_vulnerability", desc: "npm audit などの脆弱性をチェックし、安全にアップグレード可能なライブラリを自動パッチ。", prompt: "verification-before-completion スキルと npm_audit_mcp を連携させて、依存関係のセキュリティ監査と脆弱性自動パッチを実行して" },
+      { id: 26, cat: "自動開発・デバッグ", title: "ドキュメント自動更新 ✕ ソースコード解析", skill: "writing-skills", mcp: "doc_generator_mcp / update_readme", desc: "新規追加されたクラス・関数を静的解析し、READMEやドキュメントを常に最新化する。", prompt: "writing-skills スキルと doc_generator_mcp を連携させて、新規ソースコードの解析とREADMEドキュメントの自動更新を行って" },
+      { id: 27, cat: "自動開発・デバッグ", title: "Dockerビルドエラー自動修復", skill: "systematic-debugging", mcp: "docker_mcp / rebuild_container", desc: "コンテナ起動時のエラーログを解釈し、Dockerfileやパッケージ依存関係を自動修正して再ビルド。", prompt: "systematic-debugging スキルと docker_mcp を連携させて、Dockerビルドエラーのログ解析とDockerfileの自動修復を行って" },
+      { id: 28, cat: "自動開発・デバッグ", title: "環境変数競合自動診断", skill: "using-superpowers", mcp: "env_mcp / audit_env_variables", desc: "開発環境、検証環境における .env のミスマッチや欠損している環境変数を一括検出する。", prompt: "using-superpowers スキルと env_mcp を連携させて、各環境の .env ファイルの整合性監査と環境変数漏れチェックを行って" },
+      { id: 29, cat: "自動開発・デバッグ", title: "SQLマイグレーション自動検証", skill: "database-schema-validator", mcp: "db_migration_mcp / validate_sql", desc: "DDLのスキーマ定義を構文解析し、予約語使用や命名規則違反、外部キー制約漏れがないかチェック。", prompt: "database-schema-validator スキルと db_migration_mcp を連携させて、SQL定義の検証と命名規則・制約違反チェックを実行して" },
+      { id: 30, cat: "自動開発・デバッグ", title: "コミットログ自動要約 ✕ Git自動コミット", skill: "git-commit-formatter", mcp: "git_mcp / auto_commit", desc: "Gitの差分（git diff）からConventional Commits仕様に準拠したコミットメッセージを作成し自動コミット。", prompt: "git-commit-formatter スキルと git_mcp を連携させて、現在の差分に基づいた適切なコミットメッセージの自動生成とコミットを実行して" },
+
+      // [3] ナレッジ・同期
+      { id: 31, cat: "ナレッジ・同期", title: "Obsidian Vault リアルタイムナレッジ同期", skill: "brainstorming", mcp: "obsidian_sync / append_to_vault", desc: "よっちゃんと対話したWebアプリの構想やプロンプトを、MCP経由でObsidianノートへリアルタイム直接書き込む。", prompt: "brainstorming スキルと obsidian_sync MCP を連携させて、対話した新アプリの構想を Obsidian Vault へ自動同期保存して" },
+      { id: 32, cat: "ナレッジ・同期", title: "発想技法スプレッドシート自動探索", skill: "brainstorming", mcp: "spreadsheet_mcp / read_sheets", desc: "スプレッドシート上の発想技法をMCP経由で読み込み、Gemini APIと組み合わせて新アイデアを連続生成する。", prompt: "brainstorming スキルと spreadsheet_mcp を連携させて、スプレッドシートの発想技法データを自動ロードしてアイデアを出して" },
+      { id: 33, cat: "ナレッジ・同期", title: "PlantUML/Mermaid図面自動可視化", skill: "plantuml_non_uml_diagrams", mcp: "diagram_mcp / render_svg", desc: "1対多・多対多のリレーションシップをクローフットER図やシーケンス図コード化し、ブラウザで高コントラスト描画。", prompt: "plantuml_non_uml_diagrams スキルと diagram_mcp を連携させてデータベースER図のHTML可視化を作成して" },
+      { id: 34, cat: "ナレッジ・同期", title: "KaTeX LaTeX数式 ✕ PNG一括レンダリング", skill: "antigravity-guide", mcp: "latex_mcp / render_katex_png", desc: "100選数式プリセットや17カテゴリパレットからリアルタイム数式描画を行い、高画質PNGとして保存。", prompt: "antigravity-guide と latex_mcp を連携させてKaTeX数式の高画質PNGレンダリングを実行して" },
+      { id: 35, cat: "ナレッジ・同期", title: "読書メモイシュー化 ✕ GitHub Issues発行", skill: "writing-plans", mcp: "github_mcp / create_issue", desc: "ビジネス書・技術書の要約ノートから具体的なアクションプランを抽出し、GitHub Issueへ直接登録。", prompt: "writing-plans と github_mcp を連携させて読書メモからのタスクIssue自動発行を実行して" },
+      { id: 36, cat: "ナレッジ・同期", title: "OKF AIブレイン ✕ 知識グラフVector検索", skill: "antigravity-guide", mcp: "vector_db_mcp / query_knowledge_graph", desc: "過去の会話履歴・ナレッジノートをVector DB化し、セマンティック（意味論的）超高速検索を実現。", prompt: "antigravity-guide と vector_db_mcp を連携させてOKF知識グラフの高速検索を実行して" },
+      { id: 37, cat: "ナレッジ・同期", title: "全18分野540選AIアプローチ自動探索", skill: "antigravity-guide", mcp: "skills_registry_mcp / search_540_skills", desc: "全18ドメイン540個の実践アプローチから、現在の業務に最適なAI手法を即座に絞り込み提示。", prompt: "antigravity-guide と skills_registry_mcp を連携させて540選スキルアプローチから最適手法を検索して" },
+      { id: 38, cat: "ナレッジ・同期", title: "200選スキルバイブル ✕ モーダル連動検索", skill: "using-superpowers", mcp: "skills_explorer_mcp / open_usecase_modal", desc: "単体100選・複合100選の活用カードをリアルタイム検索し、ワンタップコピー＆モーダル表示。", prompt: "using-superpowers と skills_explorer_mcp を連携させて200選バイブルの活用モーダルを開いて" },
+      { id: 39, cat: "ナレッジ・同期", title: "Notionナレッジ同期 ✕ 複数タブ一括保存", skill: "using-superpowers", mcp: "notion_mcp / sync_page", desc: "開発メモや進捗ログを、MCP経由で社内共通Notionデータベースへ定期パッチ送信。", prompt: "using-superpowers スキルと notion_mcp を連携させて、現在の開発ログを Notion データベースへ自動同期して" },
+      { id: 40, cat: "ナレッジ・同期", title: "技術トレンド要約 ✕ Google検索結果蓄積", skill: "using-superpowers", mcp: "web_search_mcp / save_tech_trends", desc: "特定キーワードの最新Google検索結果（上位10件）を抽出し、要約付きリストとして蓄積保存。", prompt: "using-superpowers スキルと web_search_mcp を連携させて、特定技術トレンドの検索結果を要約してデータベースに蓄積して" },
+      { id: 41, cat: "ナレッジ・同期", title: "日次メモ自動カテゴリ分類 ✕ Obsidian整理", skill: "brainstorming", mcp: "obsidian_mcp / sort_notes", desc: "乱雑に書いたインボックス内のメモを、AIがトピック分析してフォルダ分け・タグ付け整理する。", prompt: "brainstorming スキルと obsidian_mcp を連携させて、インボックス内メモのトピック分類と自動整理を行って" },
+      { id: 42, cat: "ナレッジ・同期", title: "スキルマニュアル自動更新", skill: "writing-skills", mcp: "file_mcp / write_markdown", desc: "新規スキル追加時にマニュアルファイルを自動走査し、目次と相互リンクをインクリメンタル更新。", prompt: "writing-skills スキルと file_mcp を連携させて、新規スキルに対するマニュアルのマークダウン自動更新を行って" },
+      { id: 43, cat: "ナレッジ・同期", title: "ローカル文書Vector検索 ✕ PDF自動テキスト抽出", skill: "antigravity-guide", mcp: "pdf_extractor_mcp / extract_text", desc: "指定フォルダ内のPDFファイルを自動抽出しテキスト化、セマンティック検索できるようにDBインデックス。", prompt: "antigravity-guide スキルと pdf_extractor_mcp を連携させて、PDFファイルの自動テキスト抽出とVectorインデックス化を行って" },
+      { id: 44, cat: "ナレッジ・同期", title: "用語定義集 ✕ スプレッドシート自動同期", skill: "using-superpowers", mcp: "spreadsheet_mcp / append_glossary", desc: "仕様書内に登場する新規用語を自動抽出し、スプレッドシートの「用語集」シートへ追加する。", prompt: "using-superpowers スキルと spreadsheet_mcp を連携させて、テキスト内の新規用語抽出とスプレッドシート用語集への追記を行って" },
+      { id: 45, cat: "ナレッジ・同期", title: "日記感情分析 ✕ 月次レポートObsidian自動出力", skill: "brainstorming", mcp: "obsidian_mcp / append_diary_summary", desc: "日次のライフログの感情極性を分析し、モチベーション推移と月次ハイライトのグラフを出力。", prompt: "brainstorming スキルと obsidian_mcp を連携させて、今月の日記の感情分析と月次サマリーレポートの自動出力を行って" },
+
+      // [4] セールス・業務
+      { id: 46, cat: "セールス・業務", title: "CRM商談フェーズ自動更新", skill: "sales-call-summary", mcp: "crm_connector / update_deal_stage", desc: "商談メモからMCP経由でCRMの商談フェーズ（Stage）を即座に更新し、タスクを自動登録する。", prompt: "sales-call-summary スキルと crm_connector MCP を連携させて、本日の商談メモからCRMのDeal Stage更新とメール下書きを作成して" },
+      { id: 47, cat: "セールス・業務", title: "競合インテリジェンス自動クロール", skill: "sales-competitive-intelligence", mcp: "web_browser_mcp / fetch_competitor_site", desc: "競合他社の最新WebサイトをMCP経由で自動解析し、機能・価格比較表を瞬時に作成する。", prompt: "sales-competitive-intelligence スキルと web_browser_mcp を連携させて競合価格比較表を作成して" },
+      { id: 48, cat: "セールス・業務", title: "感情連動CSトリアージ ✕ 一次回答自動下書き", skill: "systematic-debugging", mcp: "cs_support_mcp / triage_ticket", desc: "激怒チケットのスコアを算出し、スコア100の時に優先度P1最高昇格＋一次謝罪メールを自動下書き。", prompt: "systematic-debugging と cs_support_mcp を連携させて激怒チケットの最高優先度引き上げと返信下書きを作成して" },
+      { id: 49, cat: "セールス・業務", title: "商談事前準備 ✕ 企業プロファイリング", skill: "sales-call-prep", mcp: "account_research_mcp / profile_company", desc: "商談相手企業のニュース、業績、担当者属性をMCPで自動検索し、質問・アジェンダシートを出力。", prompt: "sales-call-prep と account_research_mcp を連携させて商談事前準備シートを作成して" },
+      { id: 50, cat: "セールス・業務", title: "日次セールス・技術ブリーフィング配信", skill: "sales-daily-briefing", mcp: "email_mcp / send_daily_brief", desc: "毎朝の最重要優先タスク、パイプライン数値、最新AIトレンドを要約し朝刊レポートとして整理配信。", prompt: "sales-daily-briefing スキルと email_mcp を連携させて日次AI・技術朝刊レポートを作成して" },
+      { id: 51, cat: "セールス・業務", title: "パイプライン予測 ✕ 売上予測値自動入力", skill: "sales-forecast", mcp: "salesforce_mcp / predict_pipeline", desc: "営業活動量と過去の成約データから、期末の成約予測金額を算出して商談システムへ上書き。", prompt: "sales-forecast スキルと salesforce_mcp を連携させて、パイプライン予測値の算出と売上予測データの自動更新を実行して" },
+      { id: 52, cat: "セールス・業務", title: "商談音声文字起こし ✕ CS向け要約作成", skill: "sales-call-summary", mcp: "whisper_mcp / transcribe_audio", desc: "商談の音声データからWhisperで文字起こしを行い、顧客の要望と課題の要約を自動生成する。", prompt: "sales-call-summary スキルと whisper_mcp を連携させて、商談音声のテキスト化と顧客課題要約の自動作成を行って" },
+      { id: 53, cat: "セールス・業務", title: "アプローチメール自動作成 ✕ 送信下書き", skill: "sales-draft-outreach", mcp: "outlook_mcp / save_draft", desc: "企業インテリジェンス情報をパーソナライズに反映させた新規開拓メールを自動作成しOutlookに下書き保存。", prompt: "sales-draft-outreach スキルと outlook_mcp を連携させて、企業向けのアプローチメール作成と送信下書きの保存を行って" },
+      { id: 54, cat: "セールス・業務", title: "提案書自動作成 ✕ Google Docs同期", skill: "sales-create-an-asset", mcp: "gdocs_mcp / create_presentation_draft", desc: "商談ヒアリング結果に基づき、導入メリットとロードマップを含んだ提案書のドラフトを自動生成。", prompt: "sales-create-an-asset スキルと gdocs_mcp を連携させて、ヒアリング内容からの提案書自動生成と Google Docs への保存を行って" },
+      { id: 55, cat: "セールス・業務", title: "ターゲット企業抽出 ✕ LinkedInプロファイル調査", skill: "sales-account-research", mcp: "linkedin_mcp / fetch_profile", desc: "自社のIdeal Customer Profileに合致する役職の担当者をLinkedInから探し、アプローチ情報を整理。", prompt: "sales-account-research スキルと linkedin_mcp を連携させて、ターゲット企業および役職担当者のLinkedInプロファイル調査を行って" },
+      { id: 56, cat: "セールス・業務", title: "クレーム初期対応 ✕ お詫びクーポン自動発行", skill: "sales-call-summary", mcp: "billing_mcp / issue_coupon", desc: "配送遅延や不具合の申告に対し、顧客ランクに応じた金銭的補償（割引クーポンコード）を即時発行・送付。", prompt: "sales-call-summary スキルと billing_mcp を連携させて、顧客のクレーム内容に基づく割引クーポンの自動発行と通知下書きを作成して" },
+      { id: 57, cat: "セールス・業務", title: "代理店契約更新 ✕ カレンダー自動ブロック", skill: "sales-pipeline-review", mcp: "google_calendar_mcp / create_event", desc: "契約終了日の90日前に、更新交渉のためのカレンダーブロックとタスク割り当てを自律実行。", prompt: "sales-pipeline-review スキルと google_calendar_mcp を連携させて、代理店契約更新に向けたタスク作成とカレンダーの予定調整を実行して" },
+      { id: 58, cat: "セールス・業務", title: "請求ステータス自動照合 ✕ Slack催促通知", skill: "sales-forecast", mcp: "stripe_mcp / get_unpaid_invoices", desc: "期日超過の未払い請求データをStripeから抽出し、担当営業へSlackで自動回収指示をアラート。", prompt: "sales-forecast スキルと stripe_mcp を連携させて、未回収請求の自動検出と担当営業への Slack 催促通知を送信して" },
+      { id: 59, cat: "セールス・業務", title: "問い合わせFAQ自動マッチング ✕ 回答提示", skill: "sales-call-summary", mcp: "faq_mcp / query_faq_db", desc: "顧客から届いた新規問い合わせに対して、FAQナレッジDBから類似の過去回答を動的に引っ張る。", prompt: "sales-call-summary スキルと faq_mcp を連携させて、新規問い合わせに対応するFAQの類似検索と回答案提示を実行して" },
+      { id: 60, cat: "セールス・業務", title: "テレアポトークスクリプト自動最適化", skill: "sales-draft-outreach", mcp: "a_b_test_mcp / update_script", desc: "テレアポのコール結果（受付突破率、アポ獲得率）の統計を元に、効果的な文言へスクリプトを更新。", prompt: "sales-draft-outreach スキルと a_b_test_mcp を連携させて、架電統計に基づいたテレアポトークスクリプトの最適化・自動更新を行って" },
+
+      // [5] 企画・設計・診断
+      { id: 61, cat: "企画・設計・診断", title: "Karpathy流ハイブリッド診断 ✕ Obsidian自動保存", skill: "verification-before-completion", mcp: "obsidian_mcp / write_hybrid_report", desc: "Karpathy 8つの視点 × 核・質・特・欠 × 方・移・拡・新 による多角的システム評価を行いObsidianへ保存。", prompt: "verification-before-completion スキルと obsidian_mcp を連携させて、Karpathy流ハイブリッド診断結果の作成とObsidian保存を実行して" },
+      { id: 62, cat: "企画・設計・診断", title: "システム要求 ✕ Mermaidシステム構成図自動生成", skill: "brainstorming", mcp: "diagram_mcp / generate_architecture", desc: "箇条書きのアーキテクチャ要件から、コンポーネント間のデータフローとMermaid図コードを自動レンダリング。", prompt: "brainstorming スキルと diagram_mcp を連携させて、システム要求仕様からのMermaidシステム構成図の自動レンダリングを実行して" },
+      { id: 63, cat: "企画・設計・診断", title: "ペルソナ分析 ✕ 要件定義書ドラフト作成", skill: "brainstorming", mcp: "gdocs_mcp / create_doc", desc: "ターゲット顧客ペルソナの悩み・行動から、プロダクトが必要とする要件定義書のドラフトを自動で起票。", prompt: "brainstorming スキルと gdocs_mcp を連携させて、ペルソナ行動分析に基づく要件定義書の自動起票と Google Docs 保存を行って" },
+      { id: 64, cat: "企画・設計・診断", title: "新規Webアプリ起動バッチ自動生成 ✕ ポータル自動登録", skill: "writing-plans", mcp: "portal_mcp / update_portal_config", desc: "新アプリの仕様をもとに自動的に起動用バッチファイルを作成し、portal_config.json に追加してポータルを更新。", prompt: "writing-plans スキルと portal_mcp を連携させて、新規アプリの起動用バッチファイル作成とポータルへの自動登録を実行して" },
+      { id: 65, cat: "企画・設計・診断", title: "ビジネスモデルキャンバス自動作成 ✕ PDF保存", skill: "brainstorming", mcp: "pdf_mcp / render_canvas_pdf", desc: "新事業・製品アイデアから、9つのフレームワークを自動整理し、印刷用PDFとしてエクスポート。", prompt: "brainstorming スキルと pdf_mcp を連携させて、事業計画案からビジネスモデルキャンバスの自動生成とPDFエクスポートを行って" },
+      { id: 66, cat: "企画・設計・診断", title: "ドメイン分析 ✕ ER図PlantUML自動作成", skill: "brainstorming", mcp: "diagram_mcp / render_plantuml", desc: "業務フローからデータエンティティの関係性を分析し、PlantUMLによる正規化されたER図を自動構築。", prompt: "brainstorming スキルと diagram_mcp を連携させて、ドメイン業務分析に基づくPlantUML-ER図の自動レンダリングを実行して" },
+      { id: 67, cat: "企画・設計・診断", title: "UXカスタマージャーニーマップ自動構成", skill: "brainstorming", mcp: "miro_mcp / create_sticky_notes", desc: "顧客体験のプロセスに応じたユーザー心理・タッチポイント・課題を、ホワイトボード上にカード化して構造配置。", prompt: "brainstorming スキルと miro_mcp を連携させて、UXジャーニーマップの自動定義と Miro ボードへの付箋自動マッピングを行って" },
+      { id: 68, cat: "企画・設計・診断", title: "技術選定トレードオフ比較シート自動出力", skill: "brainstorming", mcp: "spreadsheet_mcp / generate_comparison", desc: "ライブラリ・フレームワーク選定におけるコスト・学習コスト・保守性を比較する表を自動生成。", prompt: "brainstorming スキルと spreadsheet_mcp を連携させて、技術選定のトレードオフ比較スプレッドシートを自動出力して" },
+      { id: 69, cat: "企画・設計・診断", title: "プロダクトロードマップ自動設計 ✕ Ganttチャート可視化", skill: "writing-plans", mcp: "gantt_mcp / draw_gantt", desc: "タスクの依存関係と工数見積もりを計算し、タイムラインに沿ったガントチャート図を自動生成。", prompt: "writing-plans スキルと gantt_mcp を連携させて、プロダクトのロードマップ設計とガントチャート図の自動生成を行って" },
+      { id: 70, cat: "企画・設計・診断", title: "リファクタリング前診断 ✕ 結合度分析", skill: "verification-before-completion", mcp: "code_analyzer_mcp / calculate_metrics", desc: "ソースコードの循環的複雑度やクラス間結合度を算出し、リファクタリング対象のファイルを自動選定。", prompt: "verification-before-completion スキルと code_analyzer_mcp を連携させて、リファクタリング診断と複雑度・結合度メトリクス分析を実行して" },
+      { id: 71, cat: "企画・設計・診断", title: "API設計ファースト ✕ Mockサーバー自動構築", skill: "test-driven-development", mcp: "mock_server_mcp / deploy_mock", desc: "APIインターフェース仕様（Swagger等）から、ダミーレスポンスを返すローカルMockサーバーを自律デプロイ。", prompt: "test-driven-development スキルと mock_server_mcp を連携させて、API仕様定義からのローカルMockサーバー自律デプロイを行って" },
+      { id: 72, cat: "企画・設計・診断", title: "クラウドインフラ構成 ✕ Terraform自動生成", skill: "writing-plans", mcp: "terraform_mcp / generate_tf", desc: "Webシステムの負荷構成に合わせたVPC、EC2、RDSなどの最適なTerraform定義ファイルを自動生成。", prompt: "writing-plans スキルと terraform_mcp を連携させて、インフラ要件に適合する Terraform 設定ファイルの自動生成を実行して" },
+      { id: 73, cat: "企画・設計・診断", title: "競合プロダクト機能差分自動マッピング", skill: "brainstorming", mcp: "web_browser_mcp / map_features", desc: "ライバル製品の機能一覧をネット検索等から要約し、自社製品との差別化マッピングシートを出力。", prompt: "brainstorming スキルと web_browser_mcp を連携させて、競合機能の自動クロールと差別化マッピングシートの作成を行って" },
+      { id: 74, cat: "企画・設計・診断", title: "セキュリティ要件診断 ✕ ガイドライン照合", skill: "verification-before-completion", mcp: "security_mcp / audit_policy", desc: "実装のセキュリティ設定がOWASP Top 10や社内コンプライアンス要件を満たしているか静的診断。", prompt: "verification-before-completion スキルと security_mcp を連携させて、OWASPガイドライン照合によるセキュリティ静的診断を行って" },
+      { id: 75, cat: "企画・設計・診断", title: "ユーザビリティ評価 ✕ 改善案自動カード化", skill: "brainstorming", mcp: "trello_mcp / create_trello_cards", desc: "UIデザインの不満点や操作しづらい箇所を評価し、具体的なUIUX改善タスクをカンバンボードに自動発行。", prompt: "brainstorming スキルと trello_mcp を連携させて、UIUXの使いやすさ自己評価と改善案の Trello 自動カード登録を実行して" },
+
+      // [6] 法務・ドキュメント
+      { id: 76, cat: "法務・ドキュメント", title: "土地賃貸借模擬裁判 ✕ 内容証明自動作成", skill: "writing-plans", mcp: "legal_mcp / draft_legal_notice", desc: "勝訴確率85%の論理に基づき、模擬裁判ログおよび法的根拠を伴う内容証明書面を生成。", prompt: "writing-plans と legal_mcp を連携させて土地賃貸借に関する内容証明文書を作成して" },
+      { id: 77, cat: "法務・ドキュメント", title: "秘密保持契約(NDA) ✕ リスク条項自動検出", skill: "using-superpowers", mcp: "legal_analyzer_mcp / extract_risk", desc: "NDA内の「秘密情報の定義」「損害賠償」「知的財産権」などの不利な条件を検出して代案提示。", prompt: "using-superpowers スキルと legal_analyzer_mcp を連携させて、NDA契約書案のリスク条項自動検出と修正案の提示を行って" },
+      { id: 78, cat: "法務・ドキュメント", title: "個人情報保護方針(Privacy Policy) ✕ 改正法チェック", skill: "using-superpowers", mcp: "compliance_mcp / audit_privacy", desc: "現行のプライバシーポリシーが最新の個人情報保護法改正やGDPR要件に合致しているか自動適合診断。", prompt: "using-superpowers スキルと compliance_mcp を連携させて、プライバシーポリシーの改正法・GDPR適合度監査を実行して" },
+      { id: 79, cat: "法務・ドキュメント", title: "ソフトウェア利用規約 ✕ 知財リスク分析", skill: "executing-plans", mcp: "legal_mcp / audit_tos", desc: "SaaS等の利用規約案における「ユーザーコンテンツ of 著作権帰属」「免責範囲」のリスクレベルを格付け。", prompt: "executing-plans スキルと legal_mcp を連携させて、ソフトウェア利用規約における知財帰属および免責リスク分析を行って" },
+      { id: 80, cat: "法務・ドキュメント", title: "雇用契約書 ✕ 労働基準法適合診断", skill: "using-superpowers", mcp: "labor_law_mcp / audit_contract", desc: "労働条件通知書や雇用契約書の「残業代割増」「有給休暇」「試用期間」に労基法違反がないか監査。", prompt: "using-superpowers スキルと labor_law_mcp を連携させて、雇用契約書の労働基準法への適合性監査を実行して" },
+      { id: 81, cat: "法務・ドキュメント", title: "業務委託契約書(準委任) ✕ 成果物帰属判定", skill: "executing-plans", mcp: "legal_mcp / check_ip_clause", desc: "開発会社と委託者間の業務委託契約書を検査し、プログラム著作権の帰属が明記されているか判定。", prompt: "executing-plans スキルと legal_mcp を連携させて、業務委託契約書の知的財産権・成果物帰属条項をチェックして" },
+      { id: 82, cat: "法務・ドキュメント", title: "反社会的勢力チェック ✕ 登記データ照合", skill: "sales-account-research", mcp: "compliance_db_mcp / check_blacklist", desc: "取引先企業の商号・代表者名から反社会勢力関与の疑いや行政処分歴を自動スクリーニング。", prompt: "sales-account-research スキルと compliance_db_mcp を連携させて、新規取引先企業の反社会チェックおよび登記照合を実行して" },
+      { id: 83, cat: "法務・ドキュメント", title: "社内コンプライアンス規程 ✕ 法的整合性チェック", skill: "using-superpowers", mcp: "obsidian_mcp / save_compliance_doc", desc: "新しく制定するコンプライアンスポリシーが関連業界法（金融、製造等）と矛盾していないか一括確認。", prompt: "using-superpowers スキルと obsidian_mcp を連携させて、社内コンプライアンス規程の整合性チェックとObsidian保存を行って" },
+      { id: 84, cat: "法務・ドキュメント", title: "下請法適合性自動診断", skill: "using-superpowers", mcp: "subcontract_mcp / check_payment_terms", desc: "発注書と支払条件（支払期日、値引き額）が下請法で定められた「親事業者の義務・禁止事項」に違反しないか監査。", prompt: "using-superpowers スキルと subcontract_mcp を連携させて、発注書・支払条件の下請法遵守状況を自動監査して" },
+      { id: 85, cat: "法務・ドキュメント", title: "商標登録可能性 ✕ 特許庁DB自動検索", skill: "brainstorming", mcp: "trademark_mcp / search_trademarks", desc: "新しいサービス名・ロゴ候補と同一、または類似する登録商標が既に存在しないか簡易検索。", prompt: "brainstorming スキルと trademark_mcp を連携させて、特許庁DBを対象とした新規サービス名の類似商標簡易検索を行って" },
+      { id: 86, cat: "法務・ドキュメント", title: "著作権侵害リスク診断 ✕ 類似コンテンツ検索", skill: "using-superpowers", mcp: "web_search_mcp / search_similar_content", desc: "自社のマーケティング文章や画像、ソースコードが他者のパブリッシュデータに酷似していないかウェブ検索。", prompt: "using-superpowers スキルと web_search_mcp を連携させて、自社コンテンツと類似するネット上の情報・著作権侵害リスクを監査して" },
+      { id: 87, cat: "法務・ドキュメント", title: "取引基本契約 ✕ 免責条項リスク監査", skill: "executing-plans", mcp: "legal_mcp / check_liability", desc: "継続的取引契約書における「損害賠償額の上限設定（直近1年間の支払額等）」が妥当な範囲内か診断。", prompt: "executing-plans スキルと legal_mcp を連携させて、取引基本契約書の損害賠償・免責条項の法的妥当性を診断して" },
+      { id: 88, cat: "法務・ドキュメント", title: "特定商取引法に基づく表記 ✕ 必須項目網羅率監査", skill: "using-superpowers", mcp: "site_checker_mcp / check_tokushoho", desc: "ECサイト内の特商法表記ページを解析し、返品条件や運送料、販売事業者情報などの漏れを自動監査。", prompt: "using-superpowers スキルと site_checker_mcp を連携させて、ECサイト特商法ページの必須項目網羅率監査を実行して" },
+      { id: 89, cat: "法務・ドキュメント", title: "法的意見書(リーガルオピニオン)自動ドラフト作成", skill: "writing-plans", mcp: "legal_mcp / draft_opinion", desc: "過去の重要判例と会社法、民法等の条文に照らし合わせて、特定ビジネスモデルの違法性評価書をドラフト。", prompt: "writing-plans スキルと legal_mcp を連携させて、新規ビジネスモデルに対するリーガルオピニオンの自動下書き作成を行って" },
+      { id: 90, cat: "法務・ドキュメント", title: "開示情報(IR) ✕ 金融商品取引法適合診断", skill: "executing-plans", mcp: "ir_mcp / audit_disclosure", desc: "投資家向け公開IR資料、プレスリリースにインサイダー情報漏洩や虚偽記載がないか規制要件に照らして自己チェック。", prompt: "executing-plans スキルと ir_mcp を連携させて、開示IR資料の金融商品取引法・インサイダー規制適合性診断を実行して" },
+
+      // [7] 完全体統合
+      { id: 91, cat: "完全体統合", title: "統合知性OS 8大要素オーケストレーション", skill: "Ultimate Knowledge", mcp: "all_mcp_servers / unified_dispatch", desc: "LaTeX, Mermaid, Python, SQLite, Obsidian, NotebookLM, OKF, Hermes の全手足をMCPで束ね、よっちゃんの指示で全自動実行する。", prompt: "全8大要素 (LaTeX, Mermaid, Python, SQLite, Obsidian, NotebookLM, OKF, Hermes) をMCP連携させて、プロジェクトの全タスクを完全自動実行して" },
+      { id: 92, cat: "完全体統合", title: "2階層マルチエージェント ✕ ホットリロード", skill: "dispatching-parallel-agents", mcp: "hot_reload_mcp / reload_python_module", desc: "秘書エージェントと専門家エージェントの意思決定ログを元に、Pythonコードを動的ホットリロード。", prompt: "dispatching-parallel-agents と hot_reload_mcp を連携させてマルチエージェント意思決定コードをリロードして" },
+      { id: 93, cat: "完全体統合", title: "GCPリソース全自動プロビジョニング ✕ 構成確認", skill: "always-verify-gcp", mcp: "gcp_mcp / apply_infra_plan", desc: "GCP上のインフラ構築（GKE、Cloud SQL等）を公式ドキュメントでコマンド事前検証しながら自動構築・起動。", prompt: "always-verify-gcp スキルと gcp_mcp を連携させて、検証済みインフラ構成案のGCPへの全自動プロビジョニングを実行して" },
+      { id: 94, cat: "完全体統合", title: "自動デプロイ ✕ E2Eテスト自動実行＆失敗修復", skill: "verification-before-completion", mcp: "ci_cd_mcp / run_e2e_tests", desc: "コード変更検知時に自動でビルド＆E2Eテストを実行し、テスト失敗時はAIがデバッガを呼んでコード修復し再提出する。", prompt: "verification-before-completion スキルと ci_cd_mcp を連携させて、E2Eテスト自動実行および失敗時の自己修復デプロイを実行して" },
+      { id: 95, cat: "完全体統合", title: "顧客感情CSトリアージ ✕ GitHub自動Issue登録", skill: "subagent-driven-development", mcp: "all_mcp_servers / triage_and_escalate", desc: "顧客から怒りのメールを検出すると、自動で緊急バグチケットを切るとともに、Slackでオンコール担当者をアラート。", prompt: "subagent-driven-development スキルと all_mcp_servers を連携させて、怒り判定顧客メールのトリアージと緊急GitHub Issue登録を行って" },
+      { id: 96, cat: "完全体統合", title: "AIセールス道場 ✕ 営業ログ自動Obsidian蓄積", skill: "sales-daily-briefing", mcp: "obsidian_mcp / save_sales_dojo_logs", desc: "営業道場アプリで行われたAIロープレ対話結果と評価スコアを自動抽出・Obsidian営業フォルダに記録同期。", prompt: "sales-daily-briefing スキルと obsidian_mcp を連携させて、営業道場アプリのロープレ対話スコアの自動Obsidian同期を実行して" },
+      { id: 97, cat: "完全体統合", title: "マルチクラウド構成自動検証 ✕ コスト最適化", skill: "Ultimate Knowledge", mcp: "cloud_mcp / run_cost_optimization", desc: "AWSとGCPの両環境における未使用インスタンス、リザーブド自動化を走査し、月額コストの削減推奨プランを自律適用。", prompt: "Ultimate Knowledge スキルと cloud_mcp を連携させて、マルチクラウド構成の自動スキャンとコスト削減プランの自律適用を行って" },
+      { id: 98, cat: "完全体統合", title: "データベース物理設計 ✕ 200万件テストデータ生成", skill: "test-driven-development", mcp: "db_load_mcp / seed_large_data", desc: "スキーマ定義を基に、インデックス性能テスト用のランダムモックデータ200万件をテーブルに超高速バルクインサート。", prompt: "test-driven-development スキルと db_load_mcp を連携させて、データベース設計に基づいたテストデータ200万件の超高速バルク登録を実行して" },
+      { id: 99, cat: "完全体統合", title: "フルスタックWebアプリ自動構築 ✕ ホットリロード検証", skill: "Ultimate Knowledge", mcp: "web_builder_mcp / hot_reload_web_app", desc: "Next.jsのコンポーネントコード変更と同時に開発サーバーをホットリロードし、Playwrightテストで動作検証を完遂。", prompt: "Ultimate Knowledge スキルと web_builder_mcp を連携させて、WebアプリコードのホットリロードとE2Eテスト検証を自動完遂して" },
+      { id: 100, cat: "完全体統合", title: "Karpathy流ハイブリッド自己診断 ✕ 次世代ベクトル方向性決定", skill: "Ultimate Knowledge", mcp: "all_mcp_servers / generate_hybrid_diagnosis", desc: "100選動作結果と全ログをもとに、現在のシステム全体の「核・質・特・欠」自己診断を行い、次の進化方向（方・移・拡・新）をレポーティング。", prompt: "Ultimate Knowledge スキルと all_mcp_servers を連携させて、システム全体のハイブリッド診断と進化方向レポートの自動生成を実行して" }
+    ];
+
+    let currentCategory = 'ALL';
+    let currentDiagramMode = 'er';
+    let diagramRenderCount = 0;
+
+    const diagramSamples = {
+      er: `erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_ITEM : contains
+    PRODUCT ||--o{ ORDER_ITEM : appears_in
+    ORDER ||--o{ SHIPMENT : ships_as
+
+    CUSTOMER {
+        int customer_id PK
+        string name
+    }
+    ORDER {
+        int order_id PK
+        int customer_id FK
+        date ordered_at
+    }
+    ORDER_ITEM {
+        int order_id PK, FK
+        int product_id PK, FK
+        int quantity
+    }
+    PRODUCT {
+        int product_id PK
+        string name
+    }
+    SHIPMENT {
+        int shipment_id PK
+        int order_id FK
+        string status
+    }`,
+      sequence: `sequenceDiagram
+    actor 顧客
+    participant 画面 as 注文画面
+    participant API as 注文API
+    participant DB as データベース
+    participant 配送 as 配送サービス
+
+    顧客->>画面: 商品を注文
+    画面->>API: 注文内容を送信
+    API->>DB: 在庫と顧客情報を確認
+    DB-->>API: 確認結果
+    alt 在庫あり
+        API->>DB: 注文・明細を登録
+        API->>配送: 配送を依頼
+        配送-->>API: 配送番号
+        API-->>画面: 注文確定
+    else 在庫なし
+        API-->>画面: 在庫不足を通知
+    end
+    画面-->>顧客: 結果を表示`
+    };
+
+    function selectDiagramMode(mode) {
+      currentDiagramMode = mode;
+      document.querySelectorAll('[data-diagram-mode]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.diagramMode === mode));
+      });
+      document.getElementById('diagramCode').value = diagramSamples[mode];
+      renderDiagram();
+    }
+
+    function getDiagramCode() {
+      return document.getElementById('diagramCode').value
+        .replace(/^\s*```(?:mermaid)?\s*/i, '')
+        .replace(/\s*```\s*$/, '')
+        .trim();
+    }
+
+    async function renderDiagram() {
+      const preview = document.getElementById('diagramPreview');
+      const status = document.getElementById('diagramStatus');
+      if (!window.mermaid) {
+        status.textContent = 'Mermaidを読み込めません。インターネット接続を確認してください。';
+        return;
+      }
+
+      const code = getDiagramCode();
+      if (!code) {
+        preview.replaceChildren();
+        status.textContent = 'Mermaidコードを入力してください。';
+        return;
+      }
+
+      status.textContent = '描画中...';
+      try {
+        const result = await mermaid.render(`diagram-${++diagramRenderCount}`, code);
+        preview.innerHTML = result.svg;
+        result.bindFunctions?.(preview);
+        status.textContent = '描画しました。エンティティ間の多対多は中間テーブルで表現できます。';
+      } catch (error) {
+        preview.replaceChildren();
+        const message = document.createElement('pre');
+        message.className = 'mermaid-error';
+        message.textContent = error?.message || String(error);
+        preview.appendChild(message);
+        status.textContent = '構文エラーがあります。Mermaidコードを確認してください。';
+      }
+    }
+
+    async function copyDiagramPrompt() {
+      const requirement = document.getElementById('problemInput').value.trim();
+      if (!requirement) {
+        document.getElementById('diagramStatus').textContent = '先に要件・問題を入力してください。';
+        return;
+      }
+      const diagramType = currentDiagramMode === 'er' ? 'クローフット記法のER図' : 'シーケンス図';
+      const prompt = `次の要件を分析し、${diagramType}をMermaidコードで作成してください。\n` +
+        '曖昧な点は仮定として明記し、コードだけを ```mermaid のコードフェンスで囲んで出力してください。' +
+        (currentDiagramMode === 'er'
+          ? ' 1対多・多対多を正確に表し、多対多は必要に応じて中間エンティティで解消し、PK/FKも記載してください。'
+          : ' 登場者、メッセージ、応答、条件分岐を読みやすく表してください。') +
+        `\n\n要件:\n${requirement}`;
+      await navigator.clipboard.writeText(prompt);
+      document.getElementById('diagramStatus').textContent = '図コード生成の指示文をコピーしました。AIの回答をコード欄に貼り付けてください。';
+    }
+
+    async function copyDiagramCode() {
+      await navigator.clipboard.writeText(getDiagramCode());
+      document.getElementById('diagramStatus').textContent = 'Mermaidコードをコピーしました。';
+    }
+
+    function downloadDiagramSvg() {
+      const svg = document.querySelector('#diagramPreview svg');
+      if (!svg) {
+        document.getElementById('diagramStatus').textContent = '先に図を描画してください。';
+        return;
+      }
+      const blob = new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `mermaid-${currentDiagramMode}.svg`;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    }
+
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+      const searchVal = document.getElementById('searchInput').value.toLowerCase();
+      grid.innerHTML = '';
+
+      const filtered = MCP_100_USECASES.filter(item => {
+        const matchesCat = (currentCategory === 'ALL' || item.cat === currentCategory);
+        const matchesSearch = item.title.toLowerCase().includes(searchVal) ||
+                              item.skill.toLowerCase().includes(searchVal) ||
+                              item.mcp.toLowerCase().includes(searchVal) ||
+                              item.desc.toLowerCase().includes(searchVal);
+        return matchesCat && matchesSearch;
+      });
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        // カテゴリごとに配色を変更してプレミアム感を出す
+        let catColorStyle = '';
+        if (item.cat === '企画・設計・診断') {
+          catColorStyle = 'color: var(--accent-pink); background: rgba(244, 114, 182, 0.12);';
+        } else if (item.cat === '法務・ドキュメント') {
+          catColorStyle = 'color: var(--accent-indigo); background: rgba(129, 140, 248, 0.12);';
+        } else if (item.cat === 'データ・分析') {
+          catColorStyle = 'color: var(--accent-cyan); background: rgba(56, 189, 248, 0.12);';
+        } else if (item.cat === '自動開発・デバッグ') {
+          catColorStyle = 'color: var(--accent-green); background: rgba(74, 222, 128, 0.12);';
+        } else if (item.cat === 'ナレッジ・同期') {
+          catColorStyle = 'color: var(--accent-purple); background: rgba(192, 132, 252, 0.12);';
+        } else if (item.cat === 'セールス・業務') {
+          catColorStyle = 'color: var(--accent-amber); background: rgba(251, 191, 36, 0.12);';
+        } else {
+          // 完全体統合
+          catColorStyle = 'color: #f472b6; background: rgba(244, 114, 182, 0.12);';
+        }
+
+        card.innerHTML = `
+          <div class="card-header-row">
+            <span class="card-num">No.${item.id}</span>
+            <span class="card-cat" style="${catColorStyle}">${item.cat}</span>
+          </div>
+          <div class="card-title">${item.title}</div>
+          <div class="badge-container">
+            <div class="badge-brain"><i data-lucide="brain" style="width: 14px"></i> 【頭脳】 ${item.skill}</div>
+            <div class="badge-hand"><i data-lucide="plug" style="width: 14px"></i> 【手足】 ${item.mcp}</div>
+          </div>
+          <div class="card-desc">${item.desc}</div>
+          <div class="card-actions">
+            <button class="btn btn-primary" onclick="copyPrompt(\`${item.prompt}\`)">
+              <i data-lucide="copy" style="width: 14px"></i> 指示文をコピー
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      lucide.createIcons();
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.chip').forEach(btn => {
+        if(btn.textContent.includes(cat) || (cat === 'ALL' && btn.textContent.includes('全 100 選'))) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      renderCards();
+    }
+
+    function filterCards() {
+      renderCards();
+    }
+
+    function copyPrompt(promptText) {
+      navigator.clipboard.writeText(promptText).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => {
+          window.location.href = 'index.html?prompt=' + encodeURIComponent(promptText);
+        }, 500);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCards();
+      document.getElementById('diagramCode').value = diagramSamples.er;
+      if (window.mermaid) {
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'strict',
+          theme: 'base',
+          themeVariables: {
+            background: '#ffffff',
+            primaryColor: '#ffffff',
+            primaryTextColor: '#111827',
+            primaryBorderColor: '#111827',
+            lineColor: '#111827',
+            secondaryColor: '#dbeafe',
+            tertiaryColor: '#fef3c7',
+            mainBkg: '#ffffff',
+            nodeBorder: '#111827',
+            clusterBkg: '#f3f4f6',
+            clusterBorder: '#111827',
+            titleColor: '#111827',
+            edgeLabelBackground: '#ffffff',
+            actorBkg: '#ffffff',
+            actorBorder: '#111827',
+            actorTextColor: '#111827',
+            signalColor: '#111827',
+            signalTextColor: '#111827',
+            labelBoxBkgColor: '#ffffff',
+            labelBoxBorderColor: '#111827',
+            labelTextColor: '#111827',
+            noteBkgColor: '#fef3c7',
+            noteTextColor: '#111827',
+            noteBorderColor: '#111827'
+          }
+        });
+      }
+      renderDiagram();
+    });
+  </script>
+</body>
+</html>

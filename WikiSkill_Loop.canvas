@@ -1,0 +1,15 @@
+{
+	"nodes":[
+		{"id":"group_layers","type":"group","x":-40,"y":-60,"width":760,"height":620,"label":"WikiSkill 3層アーキテクチャ & 循環ループ"},
+		{"id":"node_inference","type":"text","text":"### 1. Inference Agent\n- **役割**: スキルを用いてタスク実行\n- **読込**: `skills/`\n- **書込**: `raw/`（実行トレース）","x":0,"y":0,"width":280,"height":130,"color":"4"},
+		{"id":"node_maintainer","type":"text","text":"### 2. Wiki Maintainer\n- **役割**: トレースの根本原因分析\n- **読込**: `raw/`\n- **書込**: `wiki/patterns/`, `wiki/logs.md`","x":380,"y":0,"width":300,"height":130,"color":"5"},
+		{"id":"node_proposer","type":"text","text":"### 3. Skill Proposer\n- **役割**: ReActによるスキル改善案の作成\n- **読込**: `wiki/`, `raw/`, 既存の `skills/`\n- **出力**: スキル更新候補（Candidate）","x":380,"y":240,"width":300,"height":140,"color":"3"},
+		{"id":"node_gating","type":"text","text":"### 4. Gating & Rollback\n- **役割**: 検証セットで評価\n- **成功**: `skills/` を正式更新\n- **失敗**: スキルを巻き戻し、差分を `wiki/skill-impact.md` に蓄積","x":0,"y":240,"width":280,"height":160,"color":"1"}
+	],
+	"edges":[
+		{"id":"edge_1_to_2","fromNode":"node_inference","fromSide":"right","toNode":"node_maintainer","toSide":"left","label":"実行ログ (raw/)"},
+		{"id":"edge_2_to_3","fromNode":"node_maintainer","fromSide":"bottom","toNode":"node_proposer","toSide":"top","label":"蓄積知識 (wiki/)"},
+		{"id":"edge_3_to_4","fromNode":"node_proposer","fromSide":"left","toNode":"node_gating","toSide":"right","label":"スキル更新候補"},
+		{"id":"edge_4_to_1","fromNode":"node_gating","fromSide":"top","toNode":"node_inference","toSide":"bottom","label":"有効スキル (skills/)"}
+	]
+}

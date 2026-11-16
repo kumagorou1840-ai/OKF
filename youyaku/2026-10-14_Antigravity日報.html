@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>2026-10-14 Antigravity 1日の記録</title>
+<style>
+  body { font-family: "Segoe UI", "Meiryo", sans-serif; background: #f4f6f9; color: #222; margin: 0; padding: 24px; }
+  .container { max-width: 960px; margin: 0 auto; }
+  .nav-back { display: inline-block; margin-bottom: 12px; color: #2563eb; text-decoration: none; font-weight: bold; }
+  .nav-back:hover { text-decoration: underline; }
+  h1 { background: #1e293b; color: #fff; padding: 18px 24px; border-radius: 10px; margin-top: 0; }
+  .card { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .analysis-card { border-top: 4px solid #6366f1; }
+  h2 { margin-top: 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.2rem; color: #0f172a; }
+  h2 small { color: #64748b; font-weight: normal; font-size: 0.85rem; }
+  h3 { color: #1e293b; margin: 16px 0 8px; font-size: 1.05rem; }
+  h4 { color: #334155; margin: 12px 0 6px; font-size: 0.98rem; }
+  ul.file-list { list-style: none; padding: 0; margin: 0; }
+  ul.file-list li { padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+  .time { color: #64748b; font-family: monospace; font-size: 0.9rem; }
+  .badge { background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+  .badge.backup { background: #fef3c7; color: #b45309; }
+  .msg { padding: 14px 18px; border-radius: 10px; margin: 12px 0; line-height: 1.6; }
+  .msg.user { background: #eff6ff; border-left: 5px solid #3b82f6; }
+  .msg.ai { background: #f8fafc; border-left: 5px solid #10b981; }
+  .msg-header { margin-bottom: 6px; font-size: 0.95rem; }
+  code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace; font-size: 0.9em; }
+  pre { background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 8px; overflow-x: auto; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  .mermaid-wrapper { border: 2px solid #cbd5e1; border-radius: 10px; background: #fff; margin: 14px 0; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .mermaid-wrapper.fullscreen-mode { position: fixed; top: 12px; left: 12px; right: 12px; bottom: 12px; z-index: 9999; margin: 0; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border-color: #3b82f6; }
+  .mermaid-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #f1f5f9; padding: 8px 14px; border-bottom: 1px solid #cbd5e1; font-size: 0.88rem; }
+  .mermaid-toolbar .m-title { font-weight: bold; color: #334155; margin-right: 4px; }
+  .mermaid-toolbar .m-btn { background: #fff; border: 1px solid #94a3b8; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: #1e293b; transition: background 0.15s; }
+  .mermaid-toolbar .m-btn:hover { background: #e2e8f0; }
+  .mermaid-toolbar .m-btn.m-fullscreen { background: #2563eb; color: #fff; border-color: #1d4ed8; margin-left: auto; }
+  .mermaid-toolbar .m-btn.m-fullscreen:hover { background: #1d4ed8; }
+  .mermaid-toolbar .m-slider { width: 130px; cursor: pointer; }
+  .mermaid-toolbar .m-label { font-family: monospace; font-weight: bold; min-width: 44px; text-align: center; color: #0f172a; }
+  .mermaid-toolbar .m-hint { color: #64748b; font-size: 0.8rem; }
+  .mermaid-viewport { overflow: auto; padding: 20px; min-height: 260px; max-height: 680px; resize: vertical; background: #f8fafc; cursor: grab; text-align: center; }
+  .mermaid-wrapper.fullscreen-mode .mermaid-viewport { flex: 1; max-height: none; height: auto; resize: none; }
+  .mermaid-viewport:active { cursor: grabbing; }
+  .mermaid { display: inline-block; text-align: center; }
+  .mermaid svg { max-width: none !important; height: auto; transition: width 0.1s ease, height 0.1s ease; }
+  .md-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.92rem; }
+  .md-table th, .md-table td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; vertical-align: top; }
+  .md-table th { background: #f1f5f9; color: #0f172a; font-weight: bold; }
+  .md-table tr:nth-child(even) { background: #f8fafc; }
+  .md-table tr.issue-row { background: #fef2f2; }
+  .issue-summary { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px; line-height: 1.7; }
+</style>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    themeVariables: { fontSize: '16px' },
+    flowchart: { useMaxWidth: false, htmlLabels: true, padding: 14 }
+  });
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    await mermaid.run({ querySelector: '.mermaid' });
+
+    document.querySelectorAll('.mermaid').forEach((el) => {
+      const svg = el.querySelector('svg');
+      if (!svg) return;
+
+      const bbox = svg.getBoundingClientRect();
+      const viewBox = svg.getAttribute('viewBox');
+      let baseW = bbox.width || 800;
+      let baseH = bbox.height || 500;
+      if (viewBox) {
+        const parts = viewBox.trim().split(/[\s,]+/).map(Number);
+        if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+          baseW = parts[2];
+          baseH = parts[3];
+        }
+      }
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mermaid-wrapper';
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = `
+        <span class="m-title">🔍 図解サイズ調整:</span>
+        <button type="button" class="m-btn" data-act="out">－ 縮小</button>
+        <input type="range" class="m-slider" min="40" max="300" step="10" value="100">
+        <span class="m-label">100%</span>
+        <button type="button" class="m-btn" data-act="in">＋ 拡大</button>
+        <button type="button" class="m-btn" data-act="fit">枠に合わせる</button>
+        <button type="button" class="m-btn" data-act="reset">100%</button>
+        <span class="m-hint">（ドラッグで移動 ／ 右下つまみで枠の高さ変更可）</span>
+        <button type="button" class="m-btn m-fullscreen" data-act="full">⛶ 全画面で大きく見る</button>
+      `;
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+
+      el.parentNode.insertBefore(wrapper, el);
+      wrapper.appendChild(toolbar);
+      wrapper.appendChild(viewport);
+      viewport.appendChild(el);
+
+      const slider = toolbar.querySelector('.m-slider');
+      const label = toolbar.querySelector('.m-label');
+      const fullBtn = toolbar.querySelector('[data-act="full"]');
+      let scale = 100;
+
+      const applyScale = (newScale) => {
+        scale = Math.max(40, Math.min(300, Math.round(newScale / 5) * 5));
+        slider.value = scale;
+        label.textContent = scale + '%';
+        svg.style.width = (baseW * scale / 100) + 'px';
+        svg.style.height = (baseH * scale / 100) + 'px';
+      };
+
+      applyScale(100);
+
+      slider.addEventListener('input', () => applyScale(Number(slider.value)));
+      toolbar.querySelector('[data-act="out"]').addEventListener('click', () => applyScale(scale - 20));
+      toolbar.querySelector('[data-act="in"]').addEventListener('click', () => applyScale(scale + 20));
+      toolbar.querySelector('[data-act="reset"]').addEventListener('click', () => applyScale(100));
+      toolbar.querySelector('[data-act="fit"]').addEventListener('click', () => {
+        const vw = viewport.clientWidth - 48;
+        if (vw > 0 && baseW > 0) {
+          applyScale((vw / baseW) * 100);
+        }
+      });
+      fullBtn.addEventListener('click', () => {
+        const isFull = wrapper.classList.toggle('fullscreen-mode');
+        fullBtn.textContent = isFull ? '✕ 全画面を閉じる' : '⛶ 全画面で大きく見る';
+      });
+
+      let isDown = false, startX = 0, startY = 0, scrollL = 0, scrollT = 0;
+      viewport.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - viewport.offsetLeft;
+        startY = e.pageY - viewport.offsetTop;
+        scrollL = viewport.scrollLeft;
+        scrollT = viewport.scrollTop;
+      });
+      window.addEventListener('mouseup', () => { isDown = false; });
+      viewport.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - viewport.offsetLeft;
+        const y = e.pageY - viewport.offsetTop;
+        viewport.scrollLeft = scrollL - (x - startX);
+        viewport.scrollTop = scrollT - (y - startY);
+      });
+    });
+  });
+</script>
+</head>
+<body>
+<div class="container">
+  <a class="nav-back" href="index.html">← 目次（全日程一覧）へ戻る</a>
+  <h1>📅 2026-10-14 Antigravity 1日の記録（CLI版）</h1>
+  <section class="card">
+    <h2>📝 AIが編集・作成したファイル履歴</h2>
+    <ul class="file-list">
+      <li>本日AIが編集したファイルはありません。</li>
+    </ul>
+  </section>
+  <section class="card analysis-card">
+    <h2>📊 AIとよっちゃんのやり取り図解 ＆ 今後の課題・問題点</h2>
+    <h3>1. やり取りの全体フロー図（全 3 往復 ・ 1 セッション）</h3>
+    <div class="mermaid">
+flowchart TD
+    subgraph S1["セッション1：https://www.youtube.com/…（08:55〜）"]
+        N1["🧑 08:55 https://www.youtube.com/watc…"]
+        N2["🤖 11:25 よっちゃん、結論からお伝えします。"]
+        N1 --&gt; N2
+        N3["🧑 11:30 どのようにこれを活用すればよろしいんでしょうか。ちょっと…"]
+        N2 --&gt; N3
+        N4["🤖 11:30 よっちゃん、この「ループエンジニアリング」を日々の開発・…"]
+        N3 --&gt; N4
+        N5["🧑 11:37 お願い"]
+        N4 --&gt; N5
+        N6["🤖 11:38 タスクの自律消化を開始しました。現在、エラー自己修復ルー…"]
+        N5 --&gt; N6
+        N7["🤖 11:39 よっちゃん、内側ループによる**タスクの自律消化・検証・…"]
+        N6 --&gt; N7
+    end
+    </div>
+    <h3>2. 現状診断（核・質・特・欠）と抽出された問題点</h3>
+    <table class="md-table">
+      <thead>
+        <tr><th style="width:18%;">視点</th><th>診断結果（やり取りから見えた事実と課題）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>【核】核心</strong></td><td>本日の主要テーマ：「https://www.youtube.com/…」 を軸に、よっちゃんの意図（Vibe）を具体的な手順・設定・コードへ変換。</td></tr>
+        <tr><td><strong>【質】品質</strong></td><td>ファイル直接編集を伴わない調査・コマンド実行・方針整理セッションとして、前提確認と手順提示が行われている。</td></tr>
+        <tr><td><strong>【特】特性</strong></td><td>「前提条件の確認（Think Before Coding）」と選択肢（A/B/C）の提示により、最小のタイプ数で合意形成と実行が回っている。</td></tr>
+        <tr class="issue-row"><td><strong>【欠】欠損<br>（問題点）</strong></td><td><strong>・手戻りのないスムーズな進行</strong>：大きな迷子やエラーは未検出。対話だけで終わらせず、得た知見を <code>LoopEngineering/</code> やレシピへ継続的に昇華させることが今後の課題。</td></tr>
+      </tbody>
+    </table>
+    <h3>3. 今後の課題解決ベクトル（方・移・拡・新）</h3>
+    <table class="md-table">
+      <thead>
+        <tr><th style="width:22%;">ベクトル</th><th>今後の具体的な改善アクション</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>【方】方向性</strong></td><td><strong>暗黙知のレシピ化（Compilation）</strong>：本日のやり取りで確定した手順やコマンドを、再利用可能な標準レシピ・長期記憶（<code>memories/</code>）として定着させる。</td></tr>
+        <tr><td><strong>【移】移動性</strong></td><td><strong>1テーマ＝1ファイル＆ダッシュボード連携</strong>：成果物の保存先を迷わせないよう独立ファイル化し、<code>Cockpit_MOC.md</code> や日報目次から即座にアクセス可能にする。</td></tr>
+        <tr><td><strong>【拡】拡張性</strong></td><td><strong>アイアンマンスーツ化（自動化スクリプト連携）</strong>：定型作業や検証コマンドをスクリプト・タスクスケジューラへ組み込み、人間の手作業ループを削減する。</td></tr>
+        <tr><td><strong>【新】新規性</strong></td><td><strong>視覚化（図解・表）の標準適用</strong>：複雑な仕様やログは文字だけで追わず、ズーム可能なフロー図とマトリクス表で直感的に俯瞰する。</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card"><h2>1. https://www.youtube.com/watch?v=VEDB7oHJpD4&amp;t=34s <small>(開始 08:55:57 / ID: e26449a3)</small></h2>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">08:55:57</span></div><div class="msg-body">https://www.youtube.com/watch?v=VEDB7oHJpD4&amp;t=34s<br>
+<br>
+上記のURLからループエンジニアリングを実践できるか？</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">11:25:24</span></div><div class="msg-body">よっちゃん、結論からお伝えします。<br>
+<strong>はい、この動画の「ループエンジニアリング」は、よっちゃんの現在の環境（<code>Obsidian_2</code> ✕ <code>Antigravity CLI</code>）で完全に実践可能です。</strong><br>
+<br>
+提示いただいた動画（飯塚浩也 氏：『【完全自動化】手間ゼロで開発を回す！ループエンジニアリング徹底解説【Obsidian,Claude Code】』）の思想と、よっちゃんが優先選択された「<strong>YouTube要約からタスク抽出・Cockpit_MOC更新を行うパイプラインの自動化ループ</strong>」を即座に稼働できる形に実装しました。<br>
+<br>
+---<br>
+<br>
+<h3>1. 動画の核心：ループエンジニアリングとは？</h3><br>
+* <strong>本質</strong>: 「人間が都度プロンプトを投げるボトルネック」を排除し、<strong>AIに次の一手を指示し検証し続けるシステム（ループ）を人間が設計する</strong>パラダイム（Addy Osmani / Boris Cherny提唱）。<br>
+* <strong>2重ループ構造</strong>:<br>
+  1. <strong>内側のループ (Inner Loop / In-session)</strong>: <code>/goal</code> などのコマンドでAIが自律試行錯誤（エラー修復・テスト合格判定）を繰り返す。<br>
+  2. <strong>外側のループ (Outer Loop / Multi-session)</strong>: 定期実行（<code>/schedule</code> や常駐監視）でObsidianの状態ノートを巡回し、エージェントを自動起動する。<br>
+  3. <strong>状態管理 (State Handoff)</strong>: Obsidian Vaultを「AIの共有メモリ・申し送りノート」として活用し、セッション終了後も文脈を完全永続化する。<br>
+<br>
+---<br>
+<br>
+<h3>2. よっちゃん流ハイブリッド診断（Obsidian_2）</h3><br>
+* <strong>核（核心）</strong>: <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> を司令塔とし、状態ファイルをVault内で一元管理する強固な基盤が存在。<br>
+* <strong>質（品質）</strong>: <a href="file:///G:/マイドライブ/Obsidian_2/scripts/wikiskill_loop.py" target="_blank">wikiskill_loop.py</a> により、エラー発生時にWikiナレッジへパターンを自動還元するMaker-Checker構造が既に配備。<br>
+* <strong>特（特性）</strong>: Antigravity内蔵の <code>/goal</code>（長時間の自律ループ実行）や <code>/schedule</code>（定期cron実行）と直接連動可能。<br>
+* <strong>欠（欠損）</strong>: 新規要約ノートが追加された際、スクリプト実行を人間の手動コマンドに頼っていた点 ➔ <strong>今回、自動監視ループモード（<code>--watch</code>）を実装して解消</strong>。<br>
+<br>
+---<br>
+<br>
+<h3>3. 完成コード全体</h3><br>
+<br>
+<a href="file:///G:/マイドライブ/Obsidian_2/scripts/process_youtube_summaries.py" target="_blank">process_youtube_summaries.py</a><br>
+<br>
+<pre><code>import argparse
+import glob
+import os
+from pathlib import Path
+import re
+import time
+
+# Vault ルートパスの動的解決 (G:\マイドライブ\Obsidian_2 等に対応)
+VAULT_DIR = Path(__file__).resolve().parent.parent
+SUMMARIES_DIR = VAULT_DIR / &quot;03_Resources&quot; / &quot;YouTube_Summaries&quot;
+TASKS_DIR = VAULT_DIR / &quot;01_Tasks&quot;
+COCKPIT_MOC_PATH = VAULT_DIR / &quot;00_Dashboard&quot; / &quot;Cockpit_MOC.md&quot;
+
+
+def sanitize_filename(name: str) -&gt; str:
+    cleaned = re.sub(r&#x27;[\\/*?:&quot;&lt;&gt;|]&#x27;, &quot;&quot;, name)
+    return cleaned.strip().replace(&quot; &quot;, &quot;_&quot;)
+
+
+def run_pipeline() -&gt; int:
+    &quot;&quot;&quot;YouTube要約ノートを検知し、タスクノート生成とCockpit_MOC更新を実行するパイプライン&quot;&quot;&quot;
+    summary_files = list(SUMMARIES_DIR.glob(&quot;*.md&quot;))
+    if not summary_files:
+        return 0
+
+    extracted_tasks = []
+
+    for filepath in summary_files:
+        base_name = filepath.stem
+        task_filename = f&quot;Task_YT_{sanitize_filename(base_name)}.md&quot;
+        task_filepath = TASKS_DIR / task_filename
+
+        # 既にタスクノートが存在している場合は二重作成をスキップ
+        if task_filepath.exists():
+            continue
+
+        content = filepath.read_text(encoding=&quot;utf-8&quot;)
+
+        title_match = re.search(r&quot;^#\s+(.+)$&quot;, content, re.MULTILINE)
+        doc_title = (
+            title_match.group(1).strip()
+            if title_match
+            else base_name.replace(&quot;.md&quot;, &quot;&quot;)
+        )
+
+        tasks = re.findall(r&quot;^\s*-\s*\[\s*\]\s+(.+)$&quot;, content, re.MULTILINE)
+        knowledge_match = re.search(
+            r&quot;##\s+💡\s*重要な知見[^\n]*\n([\s\S]*?)(?=\n##|\Z)&quot;, content
+        )
+        knowledge_text = (
+            knowledge_match.group(1).strip() if knowledge_match else &quot;&quot;
+        )
+
+        if tasks:
+            task_content = f&quot;&quot;&quot;---
+tags:
+  - task/youtube
+  - status/backlog
+source_note: &quot;[[{filepath.name}]]&quot;
+created: {time.strftime(&#x27;%Y-%m-%d&#x27;)}
+---
+
+# 📋 {doc_title} からの抽出タスク
+
+## 🔗 元ノート
+- [[{filepath.name}]]
+
+## 💡 ピックアップナレッジ
+{knowledge_text if knowledge_text else &quot;- ナレッジ自動抽出済み&quot;}
+
+## 📝 実務アクションタスク (TODO)
+&quot;&quot;&quot;
+            for t in tasks:
+                task_content += f&quot;- [ ] {t}\n&quot;
+
+            task_filepath.write_text(task_content, encoding=&quot;utf-8&quot;)
+            print(f&quot;[Loop] タスクノート生成完了: {task_filename}&quot;)
+
+            extracted_tasks.append(
+                {
+                    &quot;filename&quot;: task_filename,
+                    &quot;title&quot;: doc_title,
+                    &quot;task_count&quot;: len(tasks),
+                }
+            )
+
+    # Cockpit_MOC.md の Backlog セクションへ自動反映
+    if extracted_tasks and COCKPIT_MOC_PATH.exists():
+        moc_content = COCKPIT_MOC_PATH.read_text(encoding=&quot;utf-8&quot;)
+        updated = False
+
+        for task_info in extracted_tasks:
+            link_entry = f&quot;- [ ] [{task_info[&#x27;filename&#x27;]}](../01_Tasks/{task_info[&#x27;filename&#x27;]}) - {task_info[&#x27;title&#x27;]} ({task_info[&#x27;task_count&#x27;]}件)&quot;
+            if task_info[&quot;filename&quot;] not in moc_content:
+                target_heading = &quot;### ⏳ 未着手 (Backlog)&quot;
+                if target_heading in moc_content:
+                    moc_content = moc_content.replace(
+                        target_heading, f&quot;{target_heading}\n{link_entry}&quot;
+                    )
+                    updated = True
+                    print(
+                        f&quot;[Loop] Cockpit_MOC Backlog追加: {task_info[&#x27;filename&#x27;]}&quot;
+                    )
+
+        if updated:
+            COCKPIT_MOC_PATH.write_text(moc_content, encoding=&quot;utf-8&quot;)
+            print(&quot;[Loop] Cockpit_MOC.md を正常に更新しました。&quot;)
+
+    return len(extracted_tasks)
+
+
+def watch_loop(interval_sec: int = 10):
+    &quot;&quot;&quot;外側のループ（Outer Loop）: フォルダを定期監視して自動実行&quot;&quot;&quot;
+    print(
+        f&quot;[Loop Engineering] 監視ループ開始 (インターバル: {interval_sec}秒)&quot;
+    )
+    print(f&quot;監視対象: {SUMMARIES_DIR}&quot;)
+    try:
+        while True:
+            processed = run_pipeline()
+            if processed &gt; 0:
+                print(f&quot;[Loop] {processed} 件の新規要約を処理しました。&quot;)
+            time.sleep(interval_sec)
+    except KeyboardInterrupt:
+        print(&quot;\n[Loop] 監視ループを停止しました。&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    parser = argparse.ArgumentParser(
+        description=&quot;YouTube要約タスク自動抽出パイプライン&quot;
+    )
+    parser.add_argument(
+        &quot;--watch&quot;,
+        action=&quot;store_true&quot;,
+        help=&quot;常駐監視ループモードで起動します&quot;,
+    )
+    parser.add_argument(
+        &quot;--interval&quot;,
+        type=int,
+        default=10,
+        help=&quot;監視インターバル（秒、デフォルト: 10）&quot;,
+    )
+    args = parser.parse_args()
+
+    if args.watch:
+        watch_loop(interval_sec=args.interval)
+    else:
+        count = run_pipeline()
+        print(f&quot;[Loop] 実行完了: 新規タスク {count} 件作成&quot;)</code></pre><br>
+---<br>
+<br>
+<h3>4. 実践結果（今回動画の実装テスト完了）</h3><br>
+<br>
+1. <strong>要約ノートの配備</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/03_Resources/YouTube_Summaries/2026-10-14_Loop_Engineering_Guide.md" target="_blank">2026-10-14_Loop_Engineering_Guide.md</a> を作成（動画の要点・アクションタスクを整理）。<br>
+2. <strong>パイプラインの自動抽出</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/01_Tasks/Task_YT_2026-10-14_Loop_Engineering_Guide.md" target="_blank">Task_YT_2026-10-14_Loop_Engineering_Guide.md</a> が自動生成。<br>
+3. <strong>ダッシュボード反映</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> の「### ⏳ 未着手 (Backlog)」へ自動リンク追加。<br>
+4. <strong>べき等性テスト</strong>:<br>
+   - 再実行時に重複登録されないことを確認完了。<br>
+<br>
+---<br>
+<br>
+<h3>5. 【Goal-Driven】検証（テスト）方法</h3><br>
+<br>
+よっちゃん、以下の手順で動作をご確認いただけます。<br>
+<br>
+* <strong>ワンショット実行確認</strong>:<br>
+  <pre><code>  python scripts\process_youtube_summaries.py
+  </code></pre>  ➔ 新規作成が <code>0件</code> となり、既存ノートが二重追加されないことを確認。<br>
+* <strong>外側ループ（常駐監視モード）の起動</strong>:<br>
+  <pre><code>  python scripts\process_youtube_summaries.py --watch
+  </code></pre>  ➔ 起動中に <code>03_Resources/YouTube_Summaries/</code> へ新しいMarkdownを投入すると、10秒以内に自動でタスクノートが生成され、<code>Cockpit_MOC.md</code> に追記されます。<br>
+* <strong>内側ループ（AI自律実行）との連動</strong>:<br>
+  Obsidianに追加されたタスクは、Antigravityの <code>/goal</code> コマンドを使って「タスクノートに記載されたアクションを完了せよ」と投げることで、エージェントが自律的に消化します。<br>
+<br>
+---<br>
+<br>
+<h3>💾 長期記憶（Memories）保存報告</h3><br>
+- <strong>保存ファイル</strong>: <a href="file:///C:/Users/PC_User/.gemini/memories/1_wiki.md" target="_blank">1_wiki.md</a><br>
+  - <strong>追記内容</strong>: <code>ループエンジニアリング (Loop Engineering)</code> の定義（内側ループ・外側ループ・状態管理）<br>
+- <strong>保存ファイル</strong>: <a href="file:///C:/Users/PC_User/.gemini/memories/2_howto_fact.md" target="_blank">2_howto_fact.md</a><br>
+  - <strong>追記内容</strong>: <code>YouTube要約タスク自動抽出＆Cockpit更新</code> の実行・常駐監視コマンド<br>
+<br>
+こちらの検証結果および動作についてご確認をお願いいたします。</div></div>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">11:30:57</span></div><div class="msg-body">どのようにこれを活用すればよろしいんでしょうか。ちょっと表示してほしいです。</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">11:30:58</span></div><div class="msg-body">よっちゃん、この「ループエンジニアリング」を日々の開発・業務で<strong>どのように活用して手間ゼロを実現するか</strong>、具体例と画面の流れを交えて手短に整理しました。<br>
+<br>
+---<br>
+<br>
+<h3>🔄 日々の活用サイクル（3ステップ）</h3><br>
+<br>
+<div class="mermaid">
+flowchart LR
+    A["① YouTube要約ノートを置く&lt;br&gt;(03_Resources/YouTube_Summaries)"] --&gt;|外側ループ自動検知| B["② Cockpit MOC にタスク自動出現&lt;br&gt;(00_Dashboard/Cockpit_MOC.md)"]
+    B --&gt;|よっちゃんがコマンド一発| C["③ Antigravity で自律実行&lt;br&gt;(/goal コマンド)"]
+    C --&gt;|内側ループ完遂| D["④ 成果物生成 &amp; タスク自動完了&lt;br&gt;([x] チェック・ログ保存)"]
+</div><br>
+---<br>
+<br>
+<h3>📱 実際の活用手順と画面イメージ</h3><br>
+<br>
+<h4>【Step 1】YouTubeの要約ノートを置くだけ</h4><br>
+* 気になった動画の要約（またはAIに要約させたMarkdown）を <code>03_Resources/YouTube_Summaries/</code> に保存します。<br>
+* <strong>よっちゃんの手間</strong>: ノートを保存するだけです。<br>
+* <strong>裏で起きること</strong>: 外側ループ（<code>--watch</code>）が検知し、数秒でタスクノート（<code>01_Tasks/</code>）を生成して <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> の「未着手 (Backlog)」へ自動追記します。<br>
+<br>
+---<br>
+<br>
+<h4>【Step 2】コックピットを開いて確認</h4><br>
+Obsidian で <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> を開くと、未着手タスクが自動で並んでいます。<br>
+<br>
+&gt; <strong><a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> の画面イメージ:</strong><br>
+&gt; <pre><code>&gt; ### ⏳ 未着手 (Backlog)
+&gt; - [ ] [Task_YT_2026-10-14_Loop_Engineering_Guide.md](../01_Tasks/Task_YT_2026-10-14_Loop_Engineering_Guide.md) - 【完全自動化】手間ゼロで開発を回す！ループエンジニアリング徹底解説 (3件)
+&gt; </code></pre><br>
+---<br>
+<br>
+<h4>【Step 3】Antigravity に <code>/goal</code> を打つ（内側ループ着火）</h4><br>
+開発を回したいタイミングで、チャット欄に以下のように指示を投げます。<br>
+<br>
+<pre><code>/goal Task_YT_2026-10-14_Loop_Engineering_Guide.md のアクションタスクをすべて実装・検証して完了させて</code></pre><br>
+* <strong>よっちゃんの手間</strong>: コマンドを1行投げて放置（コーヒーを飲む、別作業をする）。<br>
+* <strong>AI（内側ループ）がやること</strong>:<br>
+  1. タスクノートを開いて仕様を把握<br>
+  2. 必要なコードやスクリプトを自動作成<br>
+  3. テストを実行し、エラーが出たら自ら修正（試行錯誤）<br>
+  4. 完了したらタスクノートと <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> を <code>[x]</code>（完了）に更新<br>
+  5. 作業ログを <code>02_Logs/</code> に自動記録<br>
+<br>
+---<br>
+<br>
+<h4>【Step 4】結果の確認（手間ゼロで完了）</h4><br>
+作業が終わると、Obsidian のダッシュボードが自動で更新されています。<br>
+<br>
+&gt; <strong>完了後の <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> イメージ:</strong><br>
+&gt; <pre><code>&gt; ### ✅ 完了 (Done)
+&gt; - [x] [Task_YT_2026-10-14_Loop_Engineering_Guide.md](../01_Tasks/Task_YT_2026-10-14_Loop_Engineering_Guide.md) - 【完全自動化】手間ゼロで開発を回す！ループエンジニアリング徹底解説 (3件)
+&gt; </code></pre><br>
+---<br>
+<br>
+<h3>🚀 日常で使う2大コマンド</h3><br>
+<br>
+<table class="md-table"><thead><tr><th>コマンド</th><th>役割</th><th>使い方</th></tr></thead><tbody><tr><td><strong><code>python scripts\process_youtube_summaries.py --watch</code></strong></td><td><strong>外側のループ（監視役）</strong></td><td>バックグラウンドのターミナルで起動しておくだけ。要約ノートが置かれたら自動でタスク化。</td></tr><tr><td><strong><code>/goal</code></strong></td><td><strong>内側のループ（実行役）</strong></td><td>チャットで <code>/goal [タスク名] を完了して</code> と打つだけで、AIが完成・テストまでノンストップで自律完走。</td></tr></tbody></table><br>
+---<br>
+<br>
+<h3>💡 おすすめの第一歩</h3><br>
+先ほど生成された <a href="file:///G:/マイドライブ/Obsidian_2/01_Tasks/Task_YT_2026-10-14_Loop_Engineering_Guide.md" target="_blank">Task_YT_2026-10-14_Loop_Engineering_Guide.md</a> を、実際に内側ループ（AI）で消化してみるのが一番体感しやすいです。<br>
+<br>
+よっちゃん、このまま「<strong>生成されたタスクノートのアクションを内側ループで自律消化するテスト</strong>」を進めてみますか？</div></div>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">11:37:11</span></div><div class="msg-body">お願い</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">11:38:12</span></div><div class="msg-body">タスクの自律消化を開始しました。現在、エラー自己修復ループ（<code>wikiskill_loop.py</code>）の検証コマンドを実行中ですので、完了まで少々お待ちください。</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">11:39:25</span></div><div class="msg-body">よっちゃん、内側ループによる<strong>タスクの自律消化・検証・ステータス更新がすべて完了</strong>しました！<br>
+<br>
+---<br>
+<br>
+<h3>🏁 実施結果サマリー</h3><br>
+<br>
+1. <strong>外側ループの起動バッチ配備</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/scripts/start_youtube_watcher.bat" target="_blank">start_youtube_watcher.bat</a> を作成。<br>
+   - ダブルクリックするだけで、エクスプローラーから即座に常駐監視ループ（要約ノートの自動検知＆タスク化）を起動できるようにしました。<br>
+2. <strong>WikiSkill Loop（エラー自己学習）の連携検証</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/scripts/wikiskill_loop.py" target="_blank">wikiskill_loop.py</a> を実行・テスト完了。<br>
+   - エラー分析から自律的に改善パターン（<a href="file:///G:/マイドライブ/Obsidian_2/wiki/patterns/PAT-016_regex-json-extraction-failure-timeout.md" target="_blank"><code>PAT-016_regex-json-extraction-failure-timeout.md</code></a>）を抽出し、<code>wiki/skill-impact.md</code> への反映が正常に機能することを確認しました。<br>
+3. <strong>タスクノートの全アクション消化</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/01_Tasks/Task_YT_2026-10-14_Loop_Engineering_Guide.md" target="_blank">Task_YT_2026-10-14_Loop_Engineering_Guide.md</a> 内の全 TODO を <code>- [x]</code> に更新し、ステータスを <code>done</code> に変更。<br>
+4. <strong>ダッシュボード &amp; ログの自動更新</strong>:<br>
+   - <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> の「✅ 完了 (Done)」へ自動移動。<br>
+   - 実行ログ <a href="file:///G:/マイドライブ/Obsidian_2/02_Logs/2026-10-14_Loop_Engineering_Execution.md" target="_blank">2026-10-14_Loop_Engineering_Execution.md</a> を自動保存。<br>
+<br>
+---<br>
+<br>
+<h3>🔍 【Goal-Driven】検証（テスト）方法</h3><br>
+<br>
+よっちゃん、以下の3箇所を Obsidian 上で開いてご確認ください。<br>
+<br>
+* <strong>司令塔の確認</strong>:<br>
+  - <a href="file:///G:/マイドライブ/Obsidian_2/00_Dashboard/Cockpit_MOC.md" target="_blank">Cockpit_MOC.md</a> を開き、「✅ 完了 (Done)」セクションおよび「📝 最近のログ」に本タスク・ログが反映されていること。<br>
+* <strong>タスク完了状態の確認</strong>:<br>
+  - <a href="file:///G:/マイドライブ/Obsidian_2/01_Tasks/Task_YT_2026-10-14_Loop_Engineering_Guide.md" target="_blank">Task_YT_2026-10-14_Loop_Engineering_Guide.md</a> を開き、すべてのチェックボックスが <code>[x]</code> になっていること。<br>
+* <strong>常駐監視の起動テスト</strong>:<br>
+  - <code>G:\マイドライブ\Obsidian_2\scripts\start_youtube_watcher.bat</code> をダブルクリックし、黒い画面（コマンドプロンプト）で監視ループが待機状態になること。<br>
+<br>
+---<br>
+<br>
+<h3>💾 長期記憶（Memories）保存報告</h3><br>
+- <strong>保存ファイル</strong>: <a href="file:///C:/Users/PC_User/.gemini/memories/2_howto_fact.md" target="_blank">2_howto_fact.md</a><br>
+  - <strong>追記内容</strong>: <code>scripts\start_youtube_watcher.bat</code> による常駐監視ループの起動手順を追加。</div></div></section>
+</div>
+</body>
+</html>

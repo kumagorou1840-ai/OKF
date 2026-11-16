@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>2026-11-08 Antigravity 1日の記録</title>
+<style>
+  body { font-family: "Segoe UI", "Meiryo", sans-serif; background: #f4f6f9; color: #222; margin: 0; padding: 24px; }
+  .container { max-width: 960px; margin: 0 auto; }
+  .nav-back { display: inline-block; margin-bottom: 12px; color: #2563eb; text-decoration: none; font-weight: bold; }
+  .nav-back:hover { text-decoration: underline; }
+  h1 { background: #1e293b; color: #fff; padding: 18px 24px; border-radius: 10px; margin-top: 0; }
+  .card { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .analysis-card { border-top: 4px solid #6366f1; }
+  h2 { margin-top: 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.2rem; color: #0f172a; }
+  h2 small { color: #64748b; font-weight: normal; font-size: 0.85rem; }
+  h3 { color: #1e293b; margin: 16px 0 8px; font-size: 1.05rem; }
+  h4 { color: #334155; margin: 12px 0 6px; font-size: 0.98rem; }
+  ul.file-list { list-style: none; padding: 0; margin: 0; }
+  ul.file-list li { padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+  .time { color: #64748b; font-family: monospace; font-size: 0.9rem; }
+  .badge { background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+  .badge.backup { background: #fef3c7; color: #b45309; }
+  .msg { padding: 14px 18px; border-radius: 10px; margin: 12px 0; line-height: 1.6; }
+  .msg.user { background: #eff6ff; border-left: 5px solid #3b82f6; }
+  .msg.ai { background: #f8fafc; border-left: 5px solid #10b981; }
+  .msg-header { margin-bottom: 6px; font-size: 0.95rem; }
+  code { background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace; font-size: 0.9em; }
+  pre { background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 8px; overflow-x: auto; }
+  pre code { background: transparent; color: inherit; padding: 0; }
+  .mermaid-wrapper { border: 2px solid #cbd5e1; border-radius: 10px; background: #fff; margin: 14px 0; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .mermaid-wrapper.fullscreen-mode { position: fixed; top: 12px; left: 12px; right: 12px; bottom: 12px; z-index: 9999; margin: 0; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border-color: #3b82f6; }
+  .mermaid-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #f1f5f9; padding: 8px 14px; border-bottom: 1px solid #cbd5e1; font-size: 0.88rem; }
+  .mermaid-toolbar .m-title { font-weight: bold; color: #334155; margin-right: 4px; }
+  .mermaid-toolbar .m-btn { background: #fff; border: 1px solid #94a3b8; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: #1e293b; transition: background 0.15s; }
+  .mermaid-toolbar .m-btn:hover { background: #e2e8f0; }
+  .mermaid-toolbar .m-btn.m-fullscreen { background: #2563eb; color: #fff; border-color: #1d4ed8; margin-left: auto; }
+  .mermaid-toolbar .m-btn.m-fullscreen:hover { background: #1d4ed8; }
+  .mermaid-toolbar .m-slider { width: 130px; cursor: pointer; }
+  .mermaid-toolbar .m-label { font-family: monospace; font-weight: bold; min-width: 44px; text-align: center; color: #0f172a; }
+  .mermaid-toolbar .m-hint { color: #64748b; font-size: 0.8rem; }
+  .mermaid-viewport { overflow: auto; padding: 20px; min-height: 260px; max-height: 680px; resize: vertical; background: #f8fafc; cursor: grab; text-align: center; }
+  .mermaid-wrapper.fullscreen-mode .mermaid-viewport { flex: 1; max-height: none; height: auto; resize: none; }
+  .mermaid-viewport:active { cursor: grabbing; }
+  .mermaid { display: inline-block; text-align: center; }
+  .mermaid svg { max-width: none !important; height: auto; transition: width 0.1s ease, height 0.1s ease; }
+  .md-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.92rem; }
+  .md-table th, .md-table td { border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; vertical-align: top; }
+  .md-table th { background: #f1f5f9; color: #0f172a; font-weight: bold; }
+  .md-table tr:nth-child(even) { background: #f8fafc; }
+  .md-table tr.issue-row { background: #fef2f2; }
+  .issue-summary { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px; line-height: 1.7; }
+</style>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    themeVariables: { fontSize: '16px' },
+    flowchart: { useMaxWidth: false, htmlLabels: true, padding: 14 }
+  });
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    await mermaid.run({ querySelector: '.mermaid' });
+
+    document.querySelectorAll('.mermaid').forEach((el) => {
+      const svg = el.querySelector('svg');
+      if (!svg) return;
+
+      const bbox = svg.getBoundingClientRect();
+      const viewBox = svg.getAttribute('viewBox');
+      let baseW = bbox.width || 800;
+      let baseH = bbox.height || 500;
+      if (viewBox) {
+        const parts = viewBox.trim().split(/[\s,]+/).map(Number);
+        if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {
+          baseW = parts[2];
+          baseH = parts[3];
+        }
+      }
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'mermaid-wrapper';
+
+      const toolbar = document.createElement('div');
+      toolbar.className = 'mermaid-toolbar';
+      toolbar.innerHTML = `
+        <span class="m-title">🔍 図解サイズ調整:</span>
+        <button type="button" class="m-btn" data-act="out">－ 縮小</button>
+        <input type="range" class="m-slider" min="40" max="300" step="10" value="100">
+        <span class="m-label">100%</span>
+        <button type="button" class="m-btn" data-act="in">＋ 拡大</button>
+        <button type="button" class="m-btn" data-act="fit">枠に合わせる</button>
+        <button type="button" class="m-btn" data-act="reset">100%</button>
+        <span class="m-hint">（ドラッグで移動 ／ 右下つまみで枠の高さ変更可）</span>
+        <button type="button" class="m-btn m-fullscreen" data-act="full">⛶ 全画面で大きく見る</button>
+      `;
+
+      const viewport = document.createElement('div');
+      viewport.className = 'mermaid-viewport';
+
+      el.parentNode.insertBefore(wrapper, el);
+      wrapper.appendChild(toolbar);
+      wrapper.appendChild(viewport);
+      viewport.appendChild(el);
+
+      const slider = toolbar.querySelector('.m-slider');
+      const label = toolbar.querySelector('.m-label');
+      const fullBtn = toolbar.querySelector('[data-act="full"]');
+      let scale = 100;
+
+      const applyScale = (newScale) => {
+        scale = Math.max(40, Math.min(300, Math.round(newScale / 5) * 5));
+        slider.value = scale;
+        label.textContent = scale + '%';
+        svg.style.width = (baseW * scale / 100) + 'px';
+        svg.style.height = (baseH * scale / 100) + 'px';
+      };
+
+      applyScale(100);
+
+      slider.addEventListener('input', () => applyScale(Number(slider.value)));
+      toolbar.querySelector('[data-act="out"]').addEventListener('click', () => applyScale(scale - 20));
+      toolbar.querySelector('[data-act="in"]').addEventListener('click', () => applyScale(scale + 20));
+      toolbar.querySelector('[data-act="reset"]').addEventListener('click', () => applyScale(100));
+      toolbar.querySelector('[data-act="fit"]').addEventListener('click', () => {
+        const vw = viewport.clientWidth - 48;
+        if (vw > 0 && baseW > 0) {
+          applyScale((vw / baseW) * 100);
+        }
+      });
+      fullBtn.addEventListener('click', () => {
+        const isFull = wrapper.classList.toggle('fullscreen-mode');
+        fullBtn.textContent = isFull ? '✕ 全画面を閉じる' : '⛶ 全画面で大きく見る';
+      });
+
+      let isDown = false, startX = 0, startY = 0, scrollL = 0, scrollT = 0;
+      viewport.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - viewport.offsetLeft;
+        startY = e.pageY - viewport.offsetTop;
+        scrollL = viewport.scrollLeft;
+        scrollT = viewport.scrollTop;
+      });
+      window.addEventListener('mouseup', () => { isDown = false; });
+      viewport.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - viewport.offsetLeft;
+        const y = e.pageY - viewport.offsetTop;
+        viewport.scrollLeft = scrollL - (x - startX);
+        viewport.scrollTop = scrollT - (y - startY);
+      });
+    });
+  });
+</script>
+</head>
+<body>
+<div class="container">
+  <a class="nav-back" href="index.html">← 目次（全日程一覧）へ戻る</a>
+  <h1>📅 2026-11-08 Antigravity 1日の記録（CLI版）</h1>
+  <section class="card">
+    <h2>📝 AIが編集・作成したファイル履歴</h2>
+    <ul class="file-list">
+      <li><span class="time">15:17:30</span> <span class="badge">新規作成/上書き</span> <code>G:\マイドライブ\Obsidian_2\00_Inbox\contracts_202611.json</code></li>
+    </ul>
+  </section>
+  <section class="card analysis-card">
+    <h2>📊 AIとよっちゃんのやり取り図解 ＆ 今後の課題・問題点</h2>
+    <h3>1. やり取りの全体フロー図（全 4 往復 ・ 1 セッション）</h3>
+    <div class="mermaid">
+flowchart TD
+    subgraph S1["セッション1：Move-Item ’G:/マイドライブ/Obs…（15:13〜）"]
+        N1["🧑 15:13 Move-Item ’G:/マイドライブ/Obsidia…"]
+        N2["🤖 15:16 よっちゃん、指定いただいた ’Move-Item’ コマ…"]
+        N1 --&gt; N2
+        N3["🧑 15:17 ok"]
+        N2 --&gt; N3
+        N4["🤖 15:18 よっちゃん、（contracts_202611.json…"]
+        N3 --&gt; N4
+        N5["🧑 15:20 ok"]
+        N4 --&gt; N5
+        N6["🤖 15:20 よっちゃん、ご確認ありがとうございます！"]
+        N5 --&gt; N6
+        N7["🧑 15:21 結局何がどうなったのですか？具体的かつ詳細に表示して。"]
+        N6 --&gt; N7
+        N8["🤖 15:27 よっちゃん、現在の状況と「何がどう変わったのか」「なぜま…"]
+        N7 --&gt; N8
+    end
+    </div>
+    <h3>2. 現状診断（核・質・特・欠）と抽出された問題点</h3>
+    <table class="md-table">
+      <thead>
+        <tr><th style="width:18%;">視点</th><th>診断結果（やり取りから見えた事実と課題）</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>【核】核心</strong></td><td>本日の主要テーマ：「Move-Item ’G:/マイドライブ/Obs…」 を軸に、よっちゃんの意図（Vibe）を具体的な手順・設定・コードへ変換。</td></tr>
+        <tr><td><strong>【質】品質</strong></td><td>計 1 回のファイル操作により、<code>contracts_202611.json</code> への具体的な成果物反映・記録が完了している。</td></tr>
+        <tr><td><strong>【特】特性</strong></td><td>「前提条件の確認（Think Before Coding）」と選択肢（A/B/C）の提示により、最小のタイプ数で合意形成と実行が回っている。</td></tr>
+        <tr class="issue-row"><td><strong>【欠】欠損<br>（問題点）</strong></td><td><strong>・手戻りのないスムーズな進行</strong>：大きな迷子やエラーは未検出。対話だけで終わらせず、得た知見を <code>LoopEngineering/</code> やレシピへ継続的に昇華させることが今後の課題。</td></tr>
+      </tbody>
+    </table>
+    <h3>3. 今後の課題解決ベクトル（方・移・拡・新）</h3>
+    <table class="md-table">
+      <thead>
+        <tr><th style="width:22%;">ベクトル</th><th>今後の具体的な改善アクション</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>【方】方向性</strong></td><td><strong>暗黙知のレシピ化（Compilation）</strong>：本日のやり取りで確定した手順やコマンドを、再利用可能な標準レシピ・長期記憶（<code>memories/</code>）として定着させる。</td></tr>
+        <tr><td><strong>【移】移動性</strong></td><td><strong>1テーマ＝1ファイル＆ダッシュボード連携</strong>：成果物の保存先を迷わせないよう独立ファイル化し、<code>Cockpit_MOC.md</code> や日報目次から即座にアクセス可能にする。</td></tr>
+        <tr><td><strong>【拡】拡張性</strong></td><td><strong>アイアンマンスーツ化（自動化スクリプト連携）</strong>：定型作業や検証コマンドをスクリプト・タスクスケジューラへ組み込み、人間の手作業ループを削減する。</td></tr>
+        <tr><td><strong>【新】新規性</strong></td><td><strong>視覚化（図解・表）の標準適用</strong>：複雑な仕様やログは文字だけで追わず、ズーム可能なフロー図とマトリクス表で直感的に俯瞰する。</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <section class="card"><h2>1. Move-Item &quot;G:\マイドライブ\Obsidian_2\00_Inbox\processed <small>(開始 15:13:50 / ID: d63827ca)</small></h2>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">15:13:50</span></div><div class="msg-body">Move-Item &quot;G:\マイドライブ\Obsidian_2\00_Inbox\processed\*.json&quot; &quot;G:\マイドライブ\Obsidian_2\00_Inbox\contracts_202611.json&quot;</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">15:16:37</span></div><div class="msg-body">よっちゃん、指定いただいた <code>Move-Item</code> コマンドの対象フォルダを確認したところ、以下の状態となっていました。<br>
+<br>
+<h3>現状の確認結果</h3><br>
+- <code>G:\マイドライブ\Obsidian_2\00_Inbox\processed\</code> 内に <strong><code>.json</code> ファイルが存在しない（空の状態）</strong> ため、そのまま <code>Move-Item</code> を実行しても移動対象がありません。<br>
+- <code>G:\マイドライブ\Obsidian_2\00_Inbox\contracts_202611.json</code> はすでに存在しますが、<strong>ファイルサイズが <code>0</code> バイト（空ファイル）</strong> になっています。<br>
+- なお、<a href="file:///G:/マイドライブ/Obsidian_2/.obsidian/Contracts_MOC.md#L1-L37" target="_blank">Contracts_MOC.md</a> 内に、3件の契約テストデータ（<code>C-2026-101</code>〜<code>103</code>）を <code>contracts_202611.json</code> へ書き込むスクリプトが記録されています。<br>
+<br>
+<h3>実行前の前提条件の確認（Think Before Coding）</h3><br>
+- 空になっている <a href="file:///G:/マイドライブ/Obsidian_2/00_Inbox/contracts_202611.json" target="_blank">contracts_202611.json</a> に対して、<a href="file:///G:/マイドライブ/Obsidian_2/.obsidian/Contracts_MOC.md#L4-L36" target="_blank">Contracts_MOC.md</a> に記載されている3件のテスト用JSONデータを再書き込み（復元）する形でよろしいでしょうか？（それとも別の場所にあるJSONファイルを移動しますか？）</div></div>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">15:17:30</span></div><div class="msg-body">ok</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">15:18:07</span></div><div class="msg-body">よっちゃん、<a href="file:///G:/マイドライブ/Obsidian_2/00_Inbox/contracts_202611.json" target="_blank">contracts_202611.json</a> へのテスト用JSONデータの復元が完了しました。<br>
+<br>
+<h3>書き込んだ完成データ全体</h3><br>
+<pre><code>[
+  {
+    &quot;contract_id&quot;: &quot;C-2026-101&quot;,
+    &quot;property_name&quot;: &quot;メゾン札幌北&quot;,
+    &quot;room_number&quot;: &quot;101&quot;,
+    &quot;tenant_name&quot;: &quot;鈴木 一郎&quot;,
+    &quot;current_rent&quot;: 50000,
+    &quot;new_rent&quot;: 50000,
+    &quot;renewal_date&quot;: &quot;2026-12-01&quot;,
+    &quot;contact&quot;: &quot;090-1111-2222&quot;,
+    &quot;memo&quot;: &quot;据え置き更新&quot;
+  },
+  {
+    &quot;contract_id&quot;: &quot;C-2026-102&quot;,
+    &quot;property_name&quot;: &quot;メゾン札幌北&quot;,
+    &quot;room_number&quot;: &quot;202&quot;,
+    &quot;tenant_name&quot;: &quot;高橋 花子&quot;,
+    &quot;current_rent&quot;: 55000,
+    &quot;new_rent&quot;: 58000,
+    &quot;renewal_date&quot;: &quot;2026-12-01&quot;,
+    &quot;contact&quot;: &quot;090-3333-4444&quot;
+  },
+  {
+    &quot;contract_id&quot;: &quot;C-2026-103&quot;,
+    &quot;property_name&quot;: &quot;コーポ大通東&quot;,
+    &quot;room_number&quot;: &quot;305&quot;,
+    &quot;tenant_name&quot;: &quot;伊藤 健太&quot;,
+    &quot;current_rent&quot;: 60000,
+    &quot;new_rent&quot;: 68000,
+    &quot;renewal_date&quot;: &quot;2026-12-15&quot;,
+    &quot;contact&quot;: &quot;090-5555-6666&quot;
+  }
+]</code></pre><br>
+<h3>検証（テスト）方法（Goal-Driven）</h3><br>
+- <strong>JSON内容・構文の確認（PowerShell）</strong>:<br>
+  <pre><code>  Get-Content &quot;G:\マイドライブ\Obsidian_2\00_Inbox\contracts_202611.json&quot; -Encoding UTF8 | ConvertFrom-Json
+  </code></pre>- <strong>ループ実行による動作確認</strong>:<br>
+  <code>inner_loop_runner.py</code> がある作業ディレクトリにて以下を実行し、<code>00_Inbox\contracts_202611.json</code> が正常に読み込まれて処理されるかご確認ください。<br>
+  <pre><code>  python .\inner_loop_runner.py
+  </code></pre><br>
+問題なく動作するか、よっちゃんの環境でご確認をお願いします！</div></div>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">15:20:42</span></div><div class="msg-body">ok</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">15:20:58</span></div><div class="msg-body">よっちゃん、ご確認ありがとうございます！<br>
+<br>
+- <a href="file:///G:/マイドライブ/Obsidian_2/00_Inbox/contracts_202611.json" target="_blank">contracts_202611.json</a>（823バイト）が <code>00_Inbox</code> に正常に配置されていることを確認しました。<br>
+- 引き続き、追加の指示や調整したい箇所があればいつでもお声がけください！</div></div>
+<div class="msg user"><div class="msg-header"><strong>🧑 よっちゃん</strong> <span class="time">15:21:59</span></div><div class="msg-body">結局何がどうなったのですか？具体的かつ詳細に表示して。</div></div>
+<div class="msg ai"><div class="msg-header"><strong>🤖 AI</strong> <span class="time">15:27:23</span></div><div class="msg-body">よっちゃん、現在の状況と「何がどう変わったのか」「なぜまだ処理が動いていないのか」を具体的かつ詳細にご報告します。<br>
+<br>
+---<br>
+<br>
+<h3>1. 今回の作業で「何がどうなったか」（結論）</h3><br>
+<br>
+よっちゃんからご指示いただいた <code>Move-Item</code> コマンドは、「<code>00_Inbox\processed\</code> にある処理済みJSONを <code>00_Inbox\contracts_202611.json</code> に戻す」ためのコマンドでしたが、調査の結果 <strong>まだ一度も処理が走っておらず、<code>processed</code> フォルダが空っぽ</strong> でした。<br>
+<br>
+そこで、以下の通り <strong><code>contracts_202611.json</code> にテストデータを書き込んで使える状態にする処置</strong> を行いました。<br>
+<br>
+<table class="md-table"><thead><tr><th>対象ファイル / フォルダ</th><th>作業前の状態（15:13時点）</th><th>作業後の現在の状態（15:18時点）</th></tr></thead><tbody><tr><td><a href="file:///G:/マイドライブ/Obsidian_2/00_Inbox/contracts_202611.json" target="_blank">00_Inbox/contracts_202611.json</a></td><td><strong>0バイト（中身が完全に空っぽ）</strong></td><td><strong>823バイト（契約データ3件を書き込み済み）</strong>&lt;br&gt;・<code>C-2026-101</code>（メゾン札幌北 101 鈴木一郎）&lt;br&gt;・<code>C-2026-102</code>（メゾン札幌北 202 高橋花子）&lt;br&gt;・<code>C-2026-103</code>（コーポ大通東 305 伊藤健太）</td></tr><tr><td><code>00_Inbox/processed/</code></td><td><strong>空フォルダ（ファイル0件）</strong></td><td><strong>空フォルダのまま</strong>&lt;br&gt;（移動元ファイルがなかったため）</td></tr></tbody></table><br>
+---<br>
+<br>
+<h3>2. なぜそれ以外の変化（契約書作成やMOC更新）が起きていないのか？</h3><br>
+<br>
+現在の <code>G:\マイドライブ\Obsidian_2</code> 全体を調査したところ、以下の <strong>2つの重大な原因</strong> が判明しました。<br>
+<br>
+<h4>① 処理を実行する本体スクリプト <code>inner_loop_runner.py</code> がまだ存在していない</h4><br>
+- <a href="file:///G:/マイドライブ/Obsidian_2/.obsidian/Contracts_MOC.md#L40" target="_blank">Contracts_MOC.md</a> の末尾に <code>python .\inner_loop_runner.py</code> と記載されていますが、<strong><code>G:\マイドライブ\Obsidian_2</code> 内に <code>inner_loop_runner.py</code> というPythonファイル自体がまだ作成・保存されていません。</strong><br>
+- つまり、現在は <strong>「材料となるJSONデータ（<a href="file:///G:/マイドライブ/Obsidian_2/00_Inbox/contracts_202611.json" target="_blank">contracts_202611.json</a>）だけを <code>00_Inbox</code> に置いた状態」</strong> であり、それを読み取って契約ノートを作ったり <code>processed</code> フォルダへ移動させたりするプログラムがまだ存在していません。<br>
+<br>
+<h4>② 本日（14:52〜15:10頃）作成されたフォルダやファイルが別の場所に迷子になっている</h4><br>
+エクスプローラー等でフォルダ・ファイルを作成された際、本来 <code>G:\マイドライブ\Obsidian_2\</code> 直下に作られるべきものが、誤って <code>.venv</code>（Python仮想環境フォルダ）や <code>.obsidian</code>（設定用隠しフォルダ）の中に入ってしまっています。<br>
+<br>
+- <a href="file:///G:/マイドライブ/Obsidian_2/.obsidian/Contracts_MOC.md" target="_blank">G:\マイドライブ\Obsidian_2\.obsidian\Contracts_MOC.md</a>（15:10作成）<br>
+  - 隠しフォルダ <code>.obsidian</code> の中に入っており、さらに中身がMOC（ノート）ではなく「PowerShellのテストデータ作成コマンド」になっています。<br>
+- <code>G:\マイドライブ\Obsidian_2\.venv\01_Contracts\</code>（15:08作成・空フォルダ）<br>
+  - <code>.venv</code> の中に作成されてしまっています。<br>
+- <code>G:\マイドライブ\Obsidian_2\.venv\Logs\Healing\</code>（15:00作成・空フォルダ）<br>
+  - <code>.venv</code> の中に作成されてしまっています。<br>
+- <code>G:\マイドライブ\Obsidian_2\00_Inbox\01_Contracts\</code>（14:57作成・空フォルダ）<br>
+  - <code>00_Inbox</code> の中に作成されてしまっています。<br>
+<br>
+---<br>
+<br>
+<h3>3. 次にどう進めるべきか（ご提案）</h3><br>
+<br>
+もしNotebookLM等で設計した <strong><code>inner_loop_runner.py</code> のコード</strong> をお持ちでしたら、ここに貼り付けていただければ、以下の整理・構築を一括で行えます。<br>
+<br>
+1. <code>G:\マイドライブ\Obsidian_2\</code> 直下の正しいフォルダ構成（<code>01_Contracts</code>、<code>Logs\Healing</code>、<code>00_Dashboard\Contracts_MOC.md</code> など）への整理・移動<br>
+2. <code>inner_loop_runner.py</code> の作成・保存<br>
+3. 実際に <code>python .\inner_loop_runner.py</code> を動かして、<a href="file:///G:/マイドライブ/Obsidian_2/00_Inbox/contracts_202611.json" target="_blank">00_Inbox/contracts_202611.json</a> の3件を自動処理させ、<code>00_Inbox\processed\</code> へ移動させるテストの実行<br>
+<br>
+<code>inner_loop_runner.py</code> のコードや設計内容を共有いただくか、こちらで設計に合わせて <code>inner_loop_runner.py</code> を新規作成するか、どちらで進めましょうか？</div></div></section>
+</div>
+</body>
+</html>
