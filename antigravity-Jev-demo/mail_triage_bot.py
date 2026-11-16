@@ -92,9 +92,11 @@ def route_inquiry(subject: str, body: str) -> tuple[str, str, str]:
             "jev_eval_noise.py",
             """あなたは賃貸住宅の公平で冷静な管理人です。
 - 申告者の不快感やつらさには共感しつつ、調査前のため相手方を一方的に加害者と断定しないこと。
+- なぜ記録や慎重な確認が必要かについて、「申告者様を疑っているのではなく、強い措置（個別注意・契約上の警告）をとる際に相手が言い逃れできない客観的証拠（外堀）を固めるため」という Positive Framing で説明すること。
 - 入居者同士の直接対決は重大な二次トラブルを招くため絶対に禁止し、管理側へ任せるよう伝えること。
-- 「発生日時・音の種類・頻度」の客観的記録（メモ）を依頼すること。
-- 名指しではなく、まずは該当フロア全体への「注意喚起文の配布・掲示」から段階的に対応する方針を提示すること。"""
+- 激しい怒鳴り声や暴行音など事件性・身の危険がある緊急時は直ちに110番通報するよう案内すること。
+- 名指しではなく、まずは該当フロア全体への「注意喚起文の配布・掲示」から段階的に対応する方針を提示すること。
+- メール末尾にコピペ返信用の3項目確認フォーマット（①発生日時・継続時間、②音が響く物理的方向［壁・天井・床］と音種、③事件性・緊急性の有無）を明記すること。"""
         )
 
     # 3. 一般設備修繕・水漏れ判定（デフォルト）
@@ -109,9 +111,13 @@ def route_inquiry(subject: str, body: str) -> tuple[str, str, str]:
     )
 
 
-def determine_lane(verdict: str, domain_score: float, reply_text: str) -> tuple[str, str]:
-    """ドメインJev監査スコアと3層ハイブリッド監査を組み合わせ、3レーンと件名タグを決定"""
+def determine_lane(verdict: str, domain_score: float, reply_text: str, category: str = "") -> tuple[str, str]:
+    """ドメインJev監査スコアと3層ハイブリッド監査を組み合わせ、3レーンと件名タグを決定
+    ※安全弁：騒音・感情クレーム (noise_triage) は火に油を注ぐリスクを防ぐため、PASSでも原則 HUMAN_REVIEW 固定とする。
+    """
     hybrid_rep = run_hybrid_jev_audit(reply_text, fast_fail=False)
+    if category == "noise_triage" and verdict == "PASS":
+        return "HUMAN_REVIEW", "[⚠️要よっちゃん確認]"
     if verdict == "PASS" and domain_score >= 0.90 and hybrid_rep.action_lane == "AUTO_APPROVE":
         return "AUTO_APPROVE", "[✅Jev自動承認済]"
     if verdict == "PASS" and hybrid_rep.action_lane != "AUTO_REJECT":
@@ -158,7 +164,7 @@ def generate_audited_reply_routed(tenant_issue: str, max_retries: int = 3) -> tu
             feedback = eval_result.get("feedback", "")
 
             if verdict == "PASS":
-                action_lane, draft_prefix = determine_lane("PASS", score, current_reply)
+                action_lane, draft_prefix = determine_lane("PASS", score, current_reply, category)
                 print(f"    => ✅ PASS 合格 (Score: {score} / Lane: {action_lane} {draft_prefix})")
                 save_audit_report(tenant_issue, current_reply, category, "PASS", attempt, score, feedback, action_lane, draft_prefix)
                 return current_reply, category, "PASS", action_lane, draft_prefix
@@ -184,7 +190,7 @@ def generate_audited_reply_routed(tenant_issue: str, max_retries: int = 3) -> tu
             raw_fix = raw_fix.split("</think>")[-1]
         current_reply = raw_fix.strip().replace("```text", "").replace("```", "")
 
-    action_lane, draft_prefix = determine_lane("FAIL", score, current_reply)
+    action_lane, draft_prefix = determine_lane("FAIL", score, current_reply, category)
     save_audit_report(tenant_issue, current_reply, category, "FAIL", max_retries, score, feedback, action_lane, draft_prefix)
     return current_reply, category, "FAIL", action_lane, draft_prefix
 
