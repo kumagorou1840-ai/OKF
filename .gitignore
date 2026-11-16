@@ -2,6 +2,7 @@
 .venv/
 __pycache__/
 *.pyc
+.pytest_cache/
 
 # Obsidian
 .obsidian/workspace.json
@@ -13,3 +14,17 @@ __pycache__/
 Thumbs.db
 .vscode/
 .env
+credentials*.json
+
+# Databases & Sensitive Data
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+*.duckdb.wal
+data/*.duckdb*
+
+# Logs
+logs/
+Logs/app.log
+*.log
