@@ -57,6 +57,20 @@ cd C:\Users\PC_User\Documents\Obsidian\obsidian_2\03_Resources\MCP_Skills_Orches
 
 ---
 
+## 📅 日報・作業ログ（youyaku）
+
+<!-- YOUYAKU_DAILY_LOGS_START -->
+- [[2026-11-18_Antigravity日報]]
+- [[2026-11-17_Antigravity日報]]
+- [[2026-11-16_Antigravity日報]]
+- [[2026-11-15_Antigravity日報]]
+- [[2026-11-08_Antigravity日報]]
+- [[2026-11-06_Antigravity日報]]
+- [[2026-11-05_Antigravity日報]]
+<!-- YOUYAKU_DAILY_LOGS_END -->
+
+---
+
 ## ⚙️ 運用ルール & ガイドライン
 
 1. **タスク作成**: 新しい作業を開始する場合は `01_Tasks/` 内にノートを作成し、本ダッシュボードの「タスク一覧」にリンクを追加する。

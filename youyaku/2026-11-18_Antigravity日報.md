@@ -18,10 +18,12 @@ type: daily-report
 - `06:08:47` **部分編集** `C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py`
 - `06:18:32` **部分編集** `C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py`
 - `06:18:32` **部分編集** `C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py`
+- `06:23:07` **部分編集** `C:\Users\PC_User\Obsidian_2\00_Dashboard\Cockpit_MOC.md` → [[Cockpit_MOC]]
+- `06:23:07` **部分編集** `C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py`
 
 ## 📊 AIとよっちゃんのやり取り図解 ＆ 今後の課題・問題点
 
-### 1. やり取りの全体フロー図（全 3 往復 ・ 1 セッション）
+### 1. やり取りの全体フロー図（全 4 往復 ・ 1 セッション）
 
 ```mermaid
 flowchart TD
@@ -37,6 +39,10 @@ flowchart TD
         N4 --> N5
         N6["🧑 06:17 ’C:/Users/PC_User/Obsidian_2…"]
         N5 --> N6
+        N7["🤖 06:20 よっちゃん、’youyaku’ 内の ’.html’ フ…"]
+        N6 --> N7
+        N8["🧑 06:23 ’C:/Users/PC_User/Obsidian_2…"]
+        N7 --> N8
     end
 ```
 
@@ -45,9 +51,9 @@ flowchart TD
 | 視点 | 診断結果（やり取りから見えた事実と課題） |
 | :--- | :--- |
 | **【核】核心** | 本日の主要テーマ：「’C:/Users/PC_User/Obsidi…」 を軸に、よっちゃんの意図（Vibe）を具体的な手順・設定・コードへ変換。 |
-| **【質】品質** | 計 8 回のファイル操作により、`export_daily_antigravity_log.py` への具体的な成果物反映・記録が完了している。 |
+| **【質】品質** | 計 10 回のファイル操作により、`export_daily_antigravity_log.py`, [[Cockpit_MOC]] への具体的な成果物反映・記録が完了している。 |
 | **【特】特性** | 「前提条件の確認（Think Before Coding）」と選択肢（A/B/C）の提示により、最小のタイプ数で合意形成と実行が回っている。 |
-| **【欠】欠損（問題点）** | **表示・動作の微調整要求（1回）**：エラー解消や視認性改善のやり取りが発生。初回実装時の検証（Goal-Drivenテスト）の自動化・強化が課題。 / **複数ファイルへの分散編集（計8回）**：更新箇所が多岐にわたるため、後からの追跡コストを下げる集約ノートの活用が有効。 |
+| **【欠】欠損（問題点）** | **表示・動作の微調整要求（1回）**：エラー解消や視認性改善のやり取りが発生。初回実装時の検証（Goal-Drivenテスト）の自動化・強化が課題。 / **複数ファイルへの分散編集（計10回）**：更新箇所が多岐にわたるため、後からの追跡コストを下げる集約ノートの活用が有効。 |
 
 | ベクトル | 今後の具体的な改善アクション |
 | :--- | :--- |
@@ -150,7 +156,47 @@ Obsidian 上で以下の点をご確認いただけますでしょうか。
 `C:\Users\PC_User\Obsidian_2\youyaku` 内の `.html` ファイル（`index.html` 含む）をすべて削除し、`scripts/export_daily_antigravity_log.py` も今後は Obsidian 用 `.md` 日報のみを出力するように修正してください。完了後、変更差分を確認して GitHub リポジトリ（`kumagorou1840-ai/OKF`）へコミット・プッシュしてください。
 
 ---
+
+#### 🤖 AI（06:20:03）
+
+よっちゃん、`youyaku` 内の `.html` ファイル全削除、`scripts/export_daily_antigravity_log.py` の `.md` 専用化、および GitHub リポジトリ（`kumagorou1840-ai/OKF`）へのコミット・プッシュを完了しました。
+
+### 1. 実施内容
+- **`.html` ファイル全削除**: `C:\Users\PC_User\Obsidian_2\youyaku` 内のすべての `.html`（`index.html` 含む）を削除（残数 `0`）。
+- **スクリプトの `.md` 専用化**: [export_daily_antigravity_log.py](file:///C:/Users/PC_User/Obsidian_2/scripts/export_daily_antigravity_log.py) から HTML 生成関連関数（`generate_html`, `generate_index_html`, `md_to_simple_html` 等 6関数）を削除し、今後は Obsidian 用 `.md` 日報（WikiLink 自動補完・`[[Cockpit_MOC]]` 追記・Mermaid サニタイズ付き）のみを出力するよう統一。
+- **動作検証**:
+  - `python C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py --all` → `Updated 88 Markdown reports (checked 88 dates).`（`.html` 0件 / `.md` 88件）
+  - 単日実行 `python C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py` → 本日分 [2026-11-18_Antigravity日報.md](file:///C:/Users/PC_User/Obsidian_2/youyaku/2026-11-18_Antigravity日報.md) が正常生成。
+
+---
+
+### 2. Git コミット＆プッシュ結果
+- **ブランチ / コミット**: `master` (`b94c1d3`, `7e1a9cc..b94c1d3`)
+- **リモート**: `https://github.com/kumagorou1840-ai/OKF.git`
+- **コミットメッセージ**: `feat(youyaku): switch daily log export to Obsidian Markdown with WikiLink & Mermaid sanitization`
+- **対象**: `179 files changed`（[export_daily_antigravity_log.py](file:///C:/Users/PC_User/Obsidian_2/scripts/export_daily_antigravity_log.py) 更新、`youyaku/*.html` / `index.html` 削除、`youyaku/*.md` 88件追加）
+
+### 3. 検証のお願い
+GitHub リポジトリ（`kumagorou1840-ai/OKF`）上でコミット `b94c1d3` が反映されていること、および Obsidian 側で `youyaku` フォルダ内が `.md` 日報のみになっていることをご確認ください。
+
+---
+
+#### 🧑 よっちゃん（06:23:02）
+
+`C:\Users\PC_User\Obsidian_2\00_Dashboard\Cockpit_MOC.md` を読み込み、既存のレイアウトを崩さない位置に「📅 日報・作業ログ（youyaku）」ナビゲーションセクションを追加してください。
+
+【追加・連携要件】
+1. **Cockpit_MOC.md へのセクション追加**:
+   - `youyaku` フォルダ内の最新7日分の日報（`[[YYYY-MM-DD_Antigravity日報]]` 形式）を新しい順でリスト表示するセクションを追加する（Dataview プラグイン未導入環境でも確実にクリック遷移できるよう、標準の `[[WikiLink]]` リスト形式で出力する）。
+2. **23:50 自動実行との連動（最新7日分の自動更新）**:
+   - `scripts/export_daily_antigravity_log.py` に、`youyaku` の `.md` 出力後に `00_Dashboard/Cockpit_MOC.md` 内の「最新7日分の日報リンクリスト」を自動で最新状態に書き換える処理を組み込む。
+3. **検証と GitHub（OKF）同期**:
+   - `python C:\Users\PC_User\Obsidian_2\scripts\export_daily_antigravity_log.py` を単日テスト実行して `Cockpit_MOC.md` が正しく更新されることを確認し、差分を GitHub リポジトリ（`kumagorou1840-ai/OKF`）へコミット・プッシュする。
+
+---
 ## 🔗 関連ナビゲーション
 - [[Cockpit_MOC]]
 - [[...]]
 - [[ファイル名]]
+- [[YYYY-MM-DD_Antigravity日報]]
+- [[WikiLink]]

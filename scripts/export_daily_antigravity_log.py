@@ -614,6 +614,37 @@ type: daily-report
     return out_file
 
 
+def update_cockpit_moc(limit: int = 7) -> Path | None:
+    """00_Dashboard/Cockpit_MOC.md の最新7日分の日報リンクリストを更新する。"""
+    moc_path = VAULT_DIR / "00_Dashboard" / "Cockpit_MOC.md"
+    if not moc_path.exists():
+        return None
+
+    recent_reports = sorted(OUTPUT_DIR.glob("*_Antigravity日報.md"), reverse=True)[:limit]
+    links_block = "\n".join(f"- [[{rf.stem}]]" for rf in recent_reports)
+    if not links_block:
+        links_block = "- （日報ファイルがありません）"
+
+    start_marker = "<!-- YOUYAKU_DAILY_LOGS_START -->"
+    end_marker = "<!-- YOUYAKU_DAILY_LOGS_END -->"
+    replacement = f"{start_marker}\n{links_block}\n{end_marker}"
+
+    content = moc_path.read_text(encoding="utf-8")
+    pattern = re.compile(
+        rf"{re.escape(start_marker)}.*?{re.escape(end_marker)}",
+        flags=re.DOTALL,
+    )
+    if pattern.search(content):
+        new_content = pattern.sub(replacement, content, count=1)
+    else:
+        section = f"\n\n## 📅 日報・作業ログ（youyaku）\n\n{replacement}\n"
+        new_content = content.rstrip() + section
+
+    if new_content != content:
+        moc_path.write_text(new_content, encoding="utf-8")
+    return moc_path
+
+
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--all":
         existing_reports = sorted(OUTPUT_DIR.glob("*_Antigravity日報.md"))
@@ -627,12 +658,18 @@ if __name__ == "__main__":
             pre = data_map.get(d_str)
             if generate_markdown(d_str, precollected=pre) is not None:
                 updated_md += 1
+        moc_updated = update_cockpit_moc()
         print(f"Updated {updated_md} Markdown reports (checked {len(all_dates)} dates).")
+        if moc_updated:
+            print(f"Updated MOC: {moc_updated}")
     else:
         target_date = sys.argv[1] if len(sys.argv) > 1 else datetime.now(JST).strftime("%Y-%m-%d")
         pre = collect_daily_data(target_date)
         saved_md = generate_markdown(target_date, precollected=pre)
+        moc_updated = update_cockpit_moc()
         if saved_md:
             print(f"Saved Markdown: {saved_md}")
         else:
             print(f"Skipped Markdown (0 conversations): {target_date}")
+        if moc_updated:
+            print(f"Updated MOC: {moc_updated}")
