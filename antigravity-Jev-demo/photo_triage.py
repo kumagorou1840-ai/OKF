@@ -48,7 +48,24 @@ PHOTO_DIAGNOSIS_SYSTEM_PROMPT = """# Role
 - AUTO_REJECT: 画質不良（RETRY_PHOTO）または対応範囲外（OUT_OF_SCOPE）。
 
 # Step 4: 3項目 Exit Ticket 形式
-reply_text 末尾に ①現在の確認状態、②次に試す1アクション、③解決しない場合の連絡導線 を必ず明記すること。"""
+reply_text 末尾に ①現在の確認状態、②次に試す1アクション、③解決しない場合の連絡導線 を必ず明記すること。
+
+# Output Format（以下の全キーを含む厳格なJSONのみ出力）
+{
+  "image_quality_ok": true,
+  "quality_issue": "なし | 暗所 | ピンボケ | 画面反射 | 型番見切れ",
+  "equipment_category": "ブレーカー | 給湯器 | 水抜き栓・元栓 | 配管・水回り | その他 | 不明",
+  "lane": "AUTO_APPROVE | HUMAN_REVIEW | AUTO_REJECT",
+  "rejection_reason": "NONE | RETRY_PHOTO | OUT_OF_SCOPE",
+  "confidence": 0.00,
+  "risk_prob": 0.00,
+  "math_signal": {
+    "urgency_level": 1,
+    "is_winter_freeze_risk": false
+  },
+  "escalation_summary_for_owner": null,
+  "reply_text": "入居者への返信本文（3項目 Exit Ticket 必須）"
+}"""
 
 
 class MathSignal(BaseModel):
@@ -97,23 +114,30 @@ def call_ollama_vision(
     image_bytes: bytes,
     model: str = DEFAULT_VISION_MODEL,
 ) -> str:
-    """ローカル Ollama Vision API を呼び出して JSON テキストを返す"""
+    """ローカル Ollama Vision API (/api/chat, think=False) を呼び出して JSON テキストを返す"""
     b64_img = base64.b64encode(image_bytes).decode("ascii")
     payload = {
         "model": model,
-        "prompt": prompt,
-        "images": [b64_img],
+        "messages": [
+            {
+                "role": "user",
+                "content": prompt,
+                "images": [b64_img],
+            }
+        ],
         "stream": False,
-        "format": "json",
+        "think": False,
+        "format": PhotoDiagnosisResult.model_json_schema(),
+        "options": {"num_predict": 512},
     }
     req = urllib.request.Request(
-        "http://127.0.0.1:11434/api/generate",
+        "http://localhost:11434/api/chat",
         data=json.dumps(payload).encode("utf-8"),
         headers={"Content-Type": "application/json"},
     )
     with urllib.request.urlopen(req, timeout=300) as res:
         data = json.loads(res.read().decode("utf-8"))
-        raw_resp = data.get("response", "{}").strip()
+        raw_resp = data.get("message", {}).get("content", "{}").strip()
         if "</think>" in raw_resp:
             raw_resp = raw_resp.split("</think>")[-1].strip()
         return raw_resp
