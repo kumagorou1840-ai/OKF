@@ -1,6 +1,6 @@
-import html
 import json
 import re
+import shutil
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -8,7 +8,20 @@ from pathlib import Path
 JST = timezone(timedelta(hours=9))
 BRAIN_DIR = Path(r"C:\Users\PC_User\.gemini\antigravity-cli\brain")
 HISTORY_DIR = Path(r"C:\Users\PC_User\.gemini\history")
-OUTPUT_DIR = Path(r"G:\マイドライブ\Obsidian_2\youyaku")
+VAULT_DIR = Path(r"C:\Users\PC_User\Obsidian_2")
+OUTPUT_DIR = VAULT_DIR / "youyaku"
+BACKUP_OUTPUT_DIR = Path(r"G:\マイドライブ\Obsidian_2\youyaku")
+LINK_TARGET_DIRS = ("06_Reports", "07_Ideas", "03_Resources", "youtube")
+_VAULT_NOTE_INDEX_CACHE: list[str] | None = None
+
+
+def _backup_to_gdrive(src_file: Path) -> None:
+    try:
+        if BACKUP_OUTPUT_DIR.parent.exists():
+            BACKUP_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src_file, BACKUP_OUTPUT_DIR / src_file.name)
+    except Exception as e:
+        print(f"Backup copy skipped ({src_file.name}): {e}", file=sys.stderr)
 
 
 def parse_iso_to_jst(iso_str: str) -> datetime:
@@ -29,94 +42,163 @@ def clean_arg_path(raw_path: str) -> str:
     return raw_path.strip('"').replace("\\\\", "\\")
 
 
-def _convert_md_tables(text: str, placeholders: dict) -> str:
-    lines = text.splitlines()
-    out_lines = []
-    i = 0
-    while i < len(lines):
-        if re.match(r"^\s*\|.*\|\s*$", lines[i]):
-            table_lines = []
-            while i < len(lines) and re.match(r"^\s*\|.*\|\s*$", lines[i]):
-                table_lines.append(lines[i].strip())
-                i += 1
-            if len(table_lines) >= 2 and re.match(r"^\|[\s:\-\|]+\|$", table_lines[1]):
-                headers = [c.strip() for c in table_lines[0].strip("|").split("|")]
-                rows = [
-                    [c.strip() for c in row_line.strip("|").split("|")]
-                    for row_line in table_lines[2:]
-                ]
-                th_html = "".join(f"<th>{_inline_md(h)}</th>" for h in headers)
-                trs_html = []
-                for r in rows:
-                    tds = "".join(f"<td>{_inline_md(c)}</td>" for c in r)
-                    trs_html.append(f"<tr>{tds}</tr>")
-                table_html = (
-                    f'<table class="md-table"><thead><tr>{th_html}</tr></thead>'
-                    f'<tbody>{"".join(trs_html)}</tbody></table>'
-                )
-                key = f"__MD_BLOCK_{len(placeholders)}__"
-                placeholders[key] = table_html
-                out_lines.append(key)
-            else:
-                out_lines.extend(table_lines)
-        else:
-            out_lines.append(lines[i])
-            i += 1
-    return "\n".join(out_lines)
+def get_vault_note_index() -> list[str]:
+    """06_Reports / 07_Ideas / 03_Resources / youtube 配下のノート名(拡張子なし)を長い順に返す。"""
+    global _VAULT_NOTE_INDEX_CACHE
+    if _VAULT_NOTE_INDEX_CACHE is not None:
+        return _VAULT_NOTE_INDEX_CACHE
+
+    names: set[str] = set()
+    for d_name in LINK_TARGET_DIRS:
+        target_dir = VAULT_DIR / d_name
+        if not target_dir.exists():
+            continue
+        for md_file in target_dir.rglob("*.md"):
+            stem = md_file.stem.strip()
+            # 誤リンク防止: 短すぎる名前や日付のみのファイル名は除外
+            if len(stem) >= 4 and not re.fullmatch(r"\d{2}-\d{2}-\d{4}", stem):
+                names.add(stem)
+
+    _VAULT_NOTE_INDEX_CACHE = sorted(names, key=len, reverse=True)
+    return _VAULT_NOTE_INDEX_CACHE
 
 
-def _inline_md(escaped_text: str) -> str:
-    s = re.sub(
-        r"\[([^\]]+)\]\(([^)]+)\)",
-        r'<a href="\2" target="_blank">\1</a>',
-        escaped_text,
-    )
-    s = re.sub(r"`([^`\n]+)`", r"<code>\1</code>", s)
-    s = re.sub(r"\*\*([^\*\n]+)\*\*", r"<strong>\1</strong>", s)
-    return s
+def convert_text_to_wikilinks(text: str) -> str:
+    """コードブロック・既存リンク・URLを保護しつつ、Vault内の関連ノート言及を [[ファイル名]] に変換する。"""
+    if not text:
+        return text
 
+    placeholders: dict[str, str] = {}
 
-def md_to_simple_html(text: str) -> str:
-    placeholders = {}
-
-    def replace_code_block(match: re.Match) -> str:
-        lang = (match.group(1) or "").strip().lower()
-        code_raw = match.group(2).strip("\n")
-        first_word = code_raw.lstrip().split()[0] if code_raw.strip() else ""
-        is_mermaid = lang == "mermaid" or first_word in (
-            "flowchart",
-            "graph",
-            "sequenceDiagram",
-            "stateDiagram",
-            "stateDiagram-v2",
-            "classDiagram",
-            "erDiagram",
-            "xychart-beta",
-        )
-        key = f"__MD_BLOCK_{len(placeholders)}__"
-        if is_mermaid:
-            placeholders[key] = f'<div class="mermaid">\n{html.escape(code_raw, quote=False)}\n</div>'
-        else:
-            placeholders[key] = f"<pre><code>{html.escape(code_raw)}</code></pre>"
+    def _stash(match: re.Match) -> str:
+        key = f"\x00WL_PROTECT_{len(placeholders)}\x00"
+        placeholders[key] = match.group(0)
         return key
 
-    processed = re.sub(
-        r"```(\w*)\n(.*?)```",
-        replace_code_block,
-        text,
-        flags=re.DOTALL,
+    # コードブロック、インラインコード、既存WikiLink、Markdownリンク、URLを退避
+    protected = re.sub(r"```.*?```", _stash, text, flags=re.DOTALL)
+    protected = re.sub(r"`[^`\n]+`", _stash, protected)
+    protected = re.sub(r"\[\[[^\]]+\]\]", _stash, protected)
+    protected = re.sub(r"\[[^\]]+\]\([^)]+\)", _stash, protected)
+    protected = re.sub(r"https?://[^\s\)\]>\"']+", _stash, protected)
+
+    # 1) 対象ディレクトリのパス付き言及 (例: 06_Reports/xxx.md) を [[xxx]] に変換
+    dirs_pat = "|".join(re.escape(d) for d in LINK_TARGET_DIRS)
+    protected = re.sub(
+        rf"(?:[A-Za-z]:[\\/][^\s\"'`<>|]*?[\\/])?(?:{dirs_pat})[\\/](?:[^\s\\/'\"`<>|\[\]()]+[\\/])*([^\s\\/'\"`<>|\[\]()]+?)\.md\b",
+        lambda m: f"[[{m.group(1)}]]",
+        protected,
     )
-    escaped = html.escape(processed)
-    escaped = _convert_md_tables(escaped, placeholders)
-    escaped = _inline_md(escaped)
-    escaped = re.sub(r"^#### (.*)$", r"<h4>\1</h4>", escaped, flags=re.MULTILINE)
-    escaped = re.sub(r"^### (.*)$", r"<h3>\1</h3>", escaped, flags=re.MULTILINE)
-    escaped = re.sub(r"^## (.*)$", r"<h2>\1</h2>", escaped, flags=re.MULTILINE)
-    escaped = escaped.replace("\n", "<br>\n")
+
+    # 2) インデックス登録済みノート名（.md付き or 生テキスト）を [[ノート名]] に変換
+    note_names = get_vault_note_index()
+    if note_names:
+        # 既に [[...]] に変換された部分を再退避
+        protected = re.sub(r"\[\[[^\]]+\]\]", _stash, protected)
+        alt_pat = "|".join(re.escape(n) for n in note_names)
+        pattern = re.compile(rf"(?<![A-Za-z0-9_\[])({alt_pat})(?:\.md)?(?![A-Za-z0-9_\]])")
+        protected = pattern.sub(lambda m: f"[[{m.group(1)}]]", protected)
 
     for key, val in placeholders.items():
-        escaped = escaped.replace(f"{key}<br>\n", val).replace(key, val)
-    return escaped
+        protected = protected.replace(key, val)
+    return protected
+
+
+def _format_mermaid_label(raw: str) -> str:
+    """Mermaidラベル文字列を "..." で安全に囲む。"""
+    inner = raw.strip()
+    if len(inner) >= 2 and inner.startswith('"') and inner.endswith('"'):
+        inner = inner[1:-1]
+    inner = inner.replace('"', "’").replace("\r\n", "<br>").replace("\n", "<br>")
+    return f'"{inner}"'
+
+
+def _sanitize_flowchart_line(line: str) -> str:
+    """flowchart/graph の1行を走査し、ノード・分岐ラベルを "..." で囲み、不正矢印を補正する。"""
+    stripped = line.strip()
+    if not stripped or stripped.startswith(("%%", "flowchart ", "graph ", "end", "style ", "classDef ", "class ", "click ", "linkStyle ")):
+        return line
+
+    indent = line[: len(line) - len(line.lstrip())]
+
+    # subgraph ID[ラベル] / subgraph "ラベル" の補正
+    m_sub = re.match(r"^subgraph\s+([A-Za-z0-9_]+)\s*\[(.*)\]\s*$", stripped)
+    if m_sub:
+        return f'{indent}subgraph {m_sub.group(1)}[{_format_mermaid_label(m_sub.group(2))}]'
+
+    # 単独の不正矢印 `->` を `-->` に補正（`<->` や `-->` や `-.->` は維持）
+    s = re.sub(r"(?<![-=.o<x])\s*->\s*(?![>])", " --> ", stripped)
+    # `-->|ラベル|` のエッジラベルを |"..."| に統一
+    s = re.sub(
+        r"(-->|-.->|==>)\|([^|\n]+)\|",
+        lambda m: f"{m.group(1)}|{_format_mermaid_label(m.group(2))}|",
+        s,
+    )
+
+    # ノード形状ごとの括弧を走査して中身を "..." で囲む
+    open_close = [
+        ("[[", "]]"),
+        ("((", "))"),
+        ("([", "])"),
+        ("{{", "}}"),
+        ("[", "]"),
+        ("(", ")"),
+        ("{", "}"),
+    ]
+    out: list[str] = []
+    i = 0
+    n = len(s)
+    while i < n:
+        # 文字列リテラル外の識別子直後の開き括弧を検出
+        if s[i].isalnum() or s[i] == "_":
+            j = i
+            while j < n and (s[j].isalnum() or s[j] == "_"):
+                j += 1
+            ident = s[i:j]
+            matched_pair = None
+            for op, cl in open_close:
+                if s.startswith(op, j):
+                    matched_pair = (op, cl)
+                    break
+            if matched_pair:
+                op, cl = matched_pair
+                k = j + len(op)
+                in_quote = False
+                depth = 1
+                while k < n:
+                    ch = s[k]
+                    if ch == '"' and (k == 0 or s[k - 1] != "\\"):
+                        in_quote = not in_quote
+                    elif not in_quote:
+                        if s.startswith(cl, k):
+                            depth -= 1
+                            if depth == 0:
+                                break
+                        elif s.startswith(op, k):
+                            depth += 1
+                    k += 1
+                if k < n and depth == 0:
+                    raw_label = s[j + len(op) : k]
+                    out.append(f"{ident}{op}{_format_mermaid_label(raw_label)}{cl}")
+                    i = k + len(cl)
+                    continue
+            out.append(ident)
+            i = j
+            continue
+        out.append(s[i])
+        i += 1
+    return indent + "".join(out)
+
+
+def sanitize_mermaid_code(code: str) -> str:
+    """Mermaidコードブロックの構文エラー（未囲みラベル、不正矢印等）を修正する。"""
+    if not code or not code.strip():
+        return code
+    lines = code.splitlines()
+    first_non_empty = next((ln.strip() for ln in lines if ln.strip()), "")
+    if not first_non_empty.startswith(("flowchart", "graph")):
+        return code
+    return "\n".join(_sanitize_flowchart_line(ln) for ln in lines)
 
 
 def _safe_mermaid_text(text: str, max_len: int = 32) -> str:
@@ -144,70 +226,8 @@ def _safe_mermaid_text(text: str, max_len: int = 32) -> str:
     return short
 
 
-def build_analysis_section(target_date_str: str, conversations: list, edited_files: list) -> str:
-    if not conversations:
-        return ""
-
-    if target_date_str == "2026-11-02":
-        mermaid_code = """flowchart TD
-    subgraph P1["フェーズ1：速読5ステップの確立（15:05〜15:15）"]
-        U1["🧑 15:05 本を速く読みたい"] --> A1["🤖 3つの方向性を提案（A:読書術 / B:AI自動化 / C:RSVP）"]
-        A1 --> U2["🧑 15:07 A（紙のビジネス書・技術書）を選択"]
-        U2 --> A2["🤖 抽象⇄具体の『速読5ステップ』を提示"]
-        A2 --> U3["🧑 15:10〜15:14 保存場所の確認＆新規保存を指示"]
-        U3 --> A3["🤖 03_Resources/ に速読ノートを新規保存"]
-    end
-
-    subgraph P2["フェーズ2：LoopEngineering運用と保存場所の改善（15:32〜16:19）"]
-        U4["🧑 15:32 LoopEngineeringをどう使うか？"] --> A4["🤖 4ステップ循環フロー（成果物→FB→レシピ→行動）を解説"]
-        A4 --> U5["🧑 15:38 『図形化・表形式化』の指摘を4ファイルに反映指示"]
-        U5 --> A5["🤖 既存4ファイル（01〜04）の末尾に追記"]
-        A5 --> U6["🧑 15:43〜16:12 ⚠️『どこに保存されたか？』と3回連続で確認"]
-        U6 --> A6["🤖 既存ファイル末尾への追記だと分かりにくい問題が発覚"]
-        A6 --> U7["🧑 16:17 『既存.mdを汚さないよう独立ファイルに』と指示"]
-        U7 --> A7["🤖 既存4ファイルを復元し、LoopEngineering直下に案件別ノートを新規作成"]
-    end
-
-    subgraph P3["フェーズ3：視覚化レシピの深化と横展開（16:24〜17:44）"]
-        U8["🧑 16:24〜16:34 図表化の具体手順・チェックリスト・拡張思考を要望"] --> A8["🤖 4ステップ変換表・5項目チェック・ハイブリッド診断を専用ノートへ追記"]
-        A8 --> U9["🧑 17:44 過去の『入居者向け契約書案』も直下に独立作成を指示"]
-        U9 --> A9["🤖 2026-11-01_入居者向けの契約書案の作成.md として独立統合"]
-    end
-
-    P1 --> P2 --> P3"""
-
-        return f"""  <section class="card analysis-card">
-    <h2>📊 AIとよっちゃんのやり取り図解 ＆ 今後の課題・問題点</h2>
-    <h3>1. やり取りの全体フロー図（全9往復・3フェーズ）</h3>
-    <div class="mermaid">
-{html.escape(mermaid_code, quote=False)}
-    </div>
-    <h3>2. 現状診断（核・質・特・欠）と抽出された問題点</h3>
-    <table class="md-table">
-      <thead>
-        <tr><th style="width:18%;">視点</th><th>診断結果（やり取りから見えた事実と課題）</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>【核】核心</strong></td><td>対話を通じて「個人の気づき」を「再利用可能な標準レシピ（<code>.md</code>）」へコンパイルする循環（Loop Engineering）が機能している。</td></tr>
-        <tr><td><strong>【質】品質</strong></td><td>最終的に「図表変換ルール」「5段階チェックリスト」「案件別1ファイル化」まで昇華され、成果物ノートの完成度は高い。</td></tr>
-        <tr><td><strong>【特】特性</strong></td><td>よっちゃんの短い指示（「A」「1」「お願いします」）から、AIが構造化ドキュメントと長期記憶（<code>2_howto_fact.md</code>）へ即座に同時展開できている。</td></tr>
-        <tr class="issue-row"><td><strong>【欠】欠損<br>（問題点）</strong></td><td><strong>① 保存場所の迷子問題</strong>：15:43〜16:12の間に「どこに保存されたか？」という質問が<strong>3回連続</strong>で発生（複数ファイルへの分散追記により直感的な保存先が見えなくなった）。<br><strong>② HTML日報の図解未描画</strong>：日報内のMermaidコードやMarkdown表がそのまま文字列表示されていた（→ 本アップデートで解決済）。<br><strong>③ 1日の要点俯瞰コスト</strong>：全文ログだけでは「今日何が決まり、何が課題か」を10秒で振り返りにくかった（→ 本サマリー枠で解決済）。</td></tr>
-      </tbody>
-    </table>
-    <h3>3. 今後の課題解決ベクトル（方・移・拡・新）</h3>
-    <table class="md-table">
-      <thead>
-        <tr><th style="width:22%;">ベクトル</th><th>今後の具体的な改善アクション</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>【方】方向性</strong></td><td><strong>1テーマ＝1ファイル原則の徹底</strong>：既存ファイルを汚さず案件ごとに独立した <code>.md</code> を作成し、保存報告時は「メインの1ファイル」を最上部に大きく提示する。</td></tr>
-        <tr><td><strong>【移】移動性</strong></td><td><strong>Cockpitダッシュボード連携</strong>：新規作成したノートが孤立しないよう、<code>00_Dashboard/Cockpit_MOC.md</code> 等からワンクリックで辿れる導線を維持する。</td></tr>
-        <tr><td><strong>【拡】拡張性</strong></td><td><strong>HTML日報での図表自動レンダリング</strong>：<code>mermaid.js</code> とテーブル変換を標準組み込みし、ブラウザ上でフロー図や比較表をそのまま視覚化する。</td></tr>
-        <tr><td><strong>【新】新規性</strong></td><td><strong>日報冒頭での対話フロー＆課題の自動可視化</strong>：毎日の日報HTML最上部に「やり取り図解」と「課題チェック」を自動生成し、10秒で1日を振り返れるようにする。</td></tr>
-      </tbody>
-    </table>
-  </section>"""
-
+def _build_daily_analysis_data(target_date_str: str, conversations: list, edited_files: list) -> dict:
+    """HTML版・Markdown版で共有する日次分析サマリーデータを構築する。"""
     subgraphs = []
     sg_links = []
     step_num = 0
@@ -250,6 +270,7 @@ def build_analysis_section(target_date_str: str, conversations: list, edited_fil
     mermaid_auto = "flowchart TD\n" + "\n\n".join(subgraphs)
     if sg_links:
         mermaid_auto += "\n\n" + "\n".join(sg_links)
+    mermaid_auto = sanitize_mermaid_code(mermaid_auto)
 
     user_turns = sum(1 for c in conversations for m in c["messages"] if m["role"] == "よっちゃん")
     edit_count = len(edited_files)
@@ -258,57 +279,37 @@ def build_analysis_section(target_date_str: str, conversations: list, edited_fil
     if len(conversations) > 4:
         topics_summary += f" ほか計{len(conversations)}件"
 
-    if unique_files:
-        short_files = ", ".join(f"<code>{html.escape(Path(p).name)}</code>" for p in unique_files[:4])
-        if len(unique_files) > 4:
-            short_files += f" ほか計{len(unique_files)}ファイル"
-        qual_text = f"計 {edit_count} 回のファイル操作により、{short_files} への具体的な成果物反映・記録が完了している。"
-    else:
-        qual_text = "ファイル直接編集を伴わない調査・コマンド実行・方針整理セッションとして、前提確認と手順提示が行われている。"
-
-    issue_points = []
+    issues: list[tuple[str, str]] = []
     if location_questions > 0:
-        issue_points.append(f"<strong>・保存場所・対象確認の発生（{location_questions}回）</strong>：ファイルの配置場所や対象に関する再確認が発生しているため、保存時は「1テーマ＝1ファイル」でパスを最上部に明示する必要がある。")
+        issues.append((
+            f"保存場所・対象確認の発生（{location_questions}回）",
+            "ファイルの配置場所や対象に関する再確認が発生しているため、保存時は「1テーマ＝1ファイル」でパスを最上部に明示する必要がある。",
+        ))
     if error_mentions > 0:
-        issue_points.append(f"<strong>・表示・動作の微調整要求（{error_mentions}回）</strong>：エラー解消や視認性改善のやり取りが発生。初回実装時の検証（Goal-Drivenテスト）の自動化・強化が課題。")
+        issues.append((
+            f"表示・動作の微調整要求（{error_mentions}回）",
+            "エラー解消や視認性改善のやり取りが発生。初回実装時の検証（Goal-Drivenテスト）の自動化・強化が課題。",
+        ))
     if edit_count > 6:
-        issue_points.append(f"<strong>・複数ファイルへの分散編集（計{edit_count}回）</strong>：更新箇所が多岐にわたるため、後からの追跡コストを下げる集約ノートの活用が有効。")
-    if not issue_points:
-        issue_points.append("<strong>・手戻りのないスムーズな進行</strong>：大きな迷子やエラーは未検出。対話だけで終わらせず、得た知見を <code>LoopEngineering/</code> やレシピへ継続的に昇華させることが今後の課題。")
+        issues.append((
+            f"複数ファイルへの分散編集（計{edit_count}回）",
+            "更新箇所が多岐にわたるため、後からの追跡コストを下げる集約ノートの活用が有効。",
+        ))
+    if not issues:
+        issues.append((
+            "手戻りのないスムーズな進行",
+            "大きな迷子やエラーは未検出。対話だけで終わらせず、得た知見を `LoopEngineering/` やレシピへ継続的に昇華させることが今後の課題。",
+        ))
 
-    issues_html = "<br>".join(issue_points)
-
-    return f"""  <section class="card analysis-card">
-    <h2>📊 AIとよっちゃんのやり取り図解 ＆ 今後の課題・問題点</h2>
-    <h3>1. やり取りの全体フロー図（全 {user_turns} 往復 ・ {len(conversations)} セッション）</h3>
-    <div class="mermaid">
-{html.escape(mermaid_auto, quote=False)}
-    </div>
-    <h3>2. 現状診断（核・質・特・欠）と抽出された問題点</h3>
-    <table class="md-table">
-      <thead>
-        <tr><th style="width:18%;">視点</th><th>診断結果（やり取りから見えた事実と課題）</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>【核】核心</strong></td><td>本日の主要テーマ：{html.escape(topics_summary)} を軸に、よっちゃんの意図（Vibe）を具体的な手順・設定・コードへ変換。</td></tr>
-        <tr><td><strong>【質】品質</strong></td><td>{qual_text}</td></tr>
-        <tr><td><strong>【特】特性</strong></td><td>「前提条件の確認（Think Before Coding）」と選択肢（A/B/C）の提示により、最小のタイプ数で合意形成と実行が回っている。</td></tr>
-        <tr class="issue-row"><td><strong>【欠】欠損<br>（問題点）</strong></td><td>{issues_html}</td></tr>
-      </tbody>
-    </table>
-    <h3>3. 今後の課題解決ベクトル（方・移・拡・新）</h3>
-    <table class="md-table">
-      <thead>
-        <tr><th style="width:22%;">ベクトル</th><th>今後の具体的な改善アクション</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><strong>【方】方向性</strong></td><td><strong>暗黙知のレシピ化（Compilation）</strong>：本日のやり取りで確定した手順やコマンドを、再利用可能な標準レシピ・長期記憶（<code>memories/</code>）として定着させる。</td></tr>
-        <tr><td><strong>【移】移動性</strong></td><td><strong>1テーマ＝1ファイル＆ダッシュボード連携</strong>：成果物の保存先を迷わせないよう独立ファイル化し、<code>Cockpit_MOC.md</code> や日報目次から即座にアクセス可能にする。</td></tr>
-        <tr><td><strong>【拡】拡張性</strong></td><td><strong>アイアンマンスーツ化（自動化スクリプト連携）</strong>：定型作業や検証コマンドをスクリプト・タスクスケジューラへ組み込み、人間の手作業ループを削減する。</td></tr>
-        <tr><td><strong>【新】新規性</strong></td><td><strong>視覚化（図解・表）の標準適用</strong>：複雑な仕様やログは文字だけで追わず、ズーム可能なフロー図とマトリクス表で直感的に俯瞰する。</td></tr>
-      </tbody>
-    </table>
-  </section>"""
+    return {
+        "mermaid_auto": mermaid_auto,
+        "user_turns": user_turns,
+        "conv_count": len(conversations),
+        "edit_count": edit_count,
+        "unique_files": unique_files,
+        "topics_summary": topics_summary,
+        "issues": issues,
+    }
 
 
 def collect_daily_data(target_date_str: str):
@@ -464,313 +465,174 @@ def collect_all_daily_data(target_dates: set) -> dict:
     return result
 
 
-def generate_html(target_date_str: str, precollected=None) -> Path:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_file = OUTPUT_DIR / f"{target_date_str}_Antigravity日報.html"
+def _format_md_message_body(text: str) -> str:
+    """会話テキスト内のMermaidブロックをサニタイズし、関連ノート言及を [[ファイル名]] に変換する。"""
+    mermaid_keywords = (
+        "flowchart",
+        "graph",
+        "sequenceDiagram",
+        "stateDiagram",
+        "stateDiagram-v2",
+        "classDiagram",
+        "erDiagram",
+        "xychart-beta",
+    )
+    placeholders: dict[str, str] = {}
 
+    def _replace_fence(match: re.Match) -> str:
+        lang = (match.group(1) or "").strip()
+        code_raw = match.group(2).strip("\n")
+        first_word = code_raw.lstrip().split()[0] if code_raw.strip() else ""
+        if lang.lower() == "mermaid" or first_word in mermaid_keywords:
+            safe_code = sanitize_mermaid_code(code_raw)
+            block = f"```mermaid\n{safe_code}\n```"
+        else:
+            block = match.group(0)
+        key = f"\x00MD_FENCE_{len(placeholders)}\x00"
+        placeholders[key] = block
+        return key
+
+    processed = re.sub(r"```(\w*)\n(.*?)```", _replace_fence, text, flags=re.DOTALL)
+    processed = convert_text_to_wikilinks(processed)
+    for key, val in placeholders.items():
+        processed = processed.replace(key, val)
+    return processed
+
+
+def generate_markdown(target_date_str: str, precollected=None) -> Path | None:
+    """Obsidian用の日次Markdownレポートを生成する（WikiLink補完・Mermaid安全化・MOC追記付き）。"""
     if precollected is not None:
         conversations, edited_files, backup_files = precollected
     else:
         conversations, edited_files, backup_files = collect_daily_data(target_date_str)
 
-    file_items_html = []
+    if not conversations:
+        return None
+
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_file = OUTPUT_DIR / f"{target_date_str}_Antigravity日報.md"
+
+    # 1. 編集・作成ファイル履歴
+    file_lines: list[str] = []
     for time_str, tool_name, file_path in edited_files:
         badge = "新規作成/上書き" if tool_name == "write_file" else "部分編集"
-        file_items_html.append(
-            f'<li><span class="time">{time_str}</span> <span class="badge">{badge}</span> <code>{html.escape(file_path)}</code></li>'
-        )
+        p = Path(file_path)
+        link_suffix = f" → [[{p.stem}]]" if p.suffix.lower() == ".md" and "Obsidian_2" in file_path else ""
+        file_lines.append(f"- `{time_str}` **{badge}** `{file_path}`{link_suffix}")
     for time_str, b_path in backup_files:
-        file_items_html.append(
-            f'<li><span class="time">{time_str}</span> <span class="badge backup">バックアップ</span> <code>{html.escape(b_path)}</code></li>'
-        )
-    files_section = "\n".join(file_items_html) if file_items_html else "<li>本日AIが編集したファイルはありません。</li>"
+        file_lines.append(f"- `{time_str}` **バックアップ** `{b_path}`")
+    files_md = "\n".join(file_lines) if file_lines else "- 本日AIが編集したファイルはありません。"
 
-    conv_sections = []
+    # 2. 分析サマリー & Mermaidフロー図
+    data = _build_daily_analysis_data(target_date_str, conversations, edited_files)
+    if data["unique_files"]:
+        linked_files = []
+        for fp in data["unique_files"][:4]:
+            p = Path(fp)
+            if p.suffix.lower() == ".md" and "Obsidian_2" in fp:
+                linked_files.append(f"[[{p.stem}]]")
+            else:
+                linked_files.append(f"`{p.name}`")
+        short_files = ", ".join(linked_files)
+        if len(data["unique_files"]) > 4:
+            short_files += f" ほか計{len(data['unique_files'])}ファイル"
+        qual_md = f"計 {data['edit_count']} 回のファイル操作により、{short_files} への具体的な成果物反映・記録が完了している。"
+    else:
+        qual_md = "ファイル直接編集を伴わない調査・コマンド実行・方針整理セッションとして、前提確認と手順提示が行われている。"
+
+    issues_md = " / ".join(f"**{t}**：{d}" for t, d in data["issues"])
+    issues_md = convert_text_to_wikilinks(issues_md)
+
+    # 3. 会話ログ本文
+    conv_blocks: list[str] = []
     for idx, conv in enumerate(conversations, 1):
         first_q = next((m["text"].splitlines()[0][:50] for m in conv["messages"] if m["role"] == "よっちゃん"), "会話")
-        msgs_html = []
+        conv_blocks.append(f"### {idx}. {first_q}（開始 {conv['first_time']} / ID: `{conv['id'][:8]}`）")
         for msg in conv["messages"]:
-            is_user = msg["role"] == "よっちゃん"
-            cls = "msg user" if is_user else "msg ai"
-            label = "🧑 よっちゃん" if is_user else "🤖 AI"
-            body = md_to_simple_html(msg["text"])
-            msgs_html.append(
-                f'<div class="{cls}"><div class="msg-header"><strong>{label}</strong> <span class="time">{msg["time"]}</span></div><div class="msg-body">{body}</div></div>'
-            )
-        conv_sections.append(
-            f'<section class="card"><h2>{idx}. {html.escape(first_q)} <small>(開始 {conv["first_time"]} / ID: {conv["id"][:8]})</small></h2>\n'
-            + "\n".join(msgs_html)
-            + "</section>"
-        )
+            label = "🧑 よっちゃん" if msg["role"] == "よっちゃん" else "🤖 AI"
+            body = _format_md_message_body(msg["text"])
+            conv_blocks.append(f"#### {label}（{msg['time']}）\n\n{body}")
+    conv_md = "\n\n---\n\n".join(conv_blocks)
 
-    conv_html = "\n".join(conv_sections) if conv_sections else "<p>本日の会話記録はありません。</p>"
-    analysis_html = build_analysis_section(target_date_str, conversations, edited_files)
+    body_text = f"""---
+date: {target_date_str}
+tags:
+  - antigravity
+  - daily-log
+type: daily-report
+---
 
-    html_doc = f"""<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>{target_date_str} Antigravity 1日の記録</title>
-<style>
-  body {{ font-family: "Segoe UI", "Meiryo", sans-serif; background: #f4f6f9; color: #222; margin: 0; padding: 24px; }}
-  .container {{ max-width: 960px; margin: 0 auto; }}
-  .nav-back {{ display: inline-block; margin-bottom: 12px; color: #2563eb; text-decoration: none; font-weight: bold; }}
-  .nav-back:hover {{ text-decoration: underline; }}
-  h1 {{ background: #1e293b; color: #fff; padding: 18px 24px; border-radius: 10px; margin-top: 0; }}
-  .card {{ background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }}
-  .analysis-card {{ border-top: 4px solid #6366f1; }}
-  h2 {{ margin-top: 0; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; font-size: 1.2rem; color: #0f172a; }}
-  h2 small {{ color: #64748b; font-weight: normal; font-size: 0.85rem; }}
-  h3 {{ color: #1e293b; margin: 16px 0 8px; font-size: 1.05rem; }}
-  h4 {{ color: #334155; margin: 12px 0 6px; font-size: 0.98rem; }}
-  ul.file-list {{ list-style: none; padding: 0; margin: 0; }}
-  ul.file-list li {{ padding: 8px 0; border-bottom: 1px solid #f1f5f9; }}
-  .time {{ color: #64748b; font-family: monospace; font-size: 0.9rem; }}
-  .badge {{ background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }}
-  .badge.backup {{ background: #fef3c7; color: #b45309; }}
-  .msg {{ padding: 14px 18px; border-radius: 10px; margin: 12px 0; line-height: 1.6; }}
-  .msg.user {{ background: #eff6ff; border-left: 5px solid #3b82f6; }}
-  .msg.ai {{ background: #f8fafc; border-left: 5px solid #10b981; }}
-  .msg-header {{ margin-bottom: 6px; font-size: 0.95rem; }}
-  code {{ background: #e2e8f0; padding: 2px 6px; border-radius: 4px; font-family: Consolas, monospace; font-size: 0.9em; }}
-  pre {{ background: #0f172a; color: #f8fafc; padding: 12px; border-radius: 8px; overflow-x: auto; }}
-  pre code {{ background: transparent; color: inherit; padding: 0; }}
-  .mermaid-wrapper {{ border: 2px solid #cbd5e1; border-radius: 10px; background: #fff; margin: 14px 0; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }}
-  .mermaid-wrapper.fullscreen-mode {{ position: fixed; top: 12px; left: 12px; right: 12px; bottom: 12px; z-index: 9999; margin: 0; display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border-color: #3b82f6; }}
-  .mermaid-toolbar {{ display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: #f1f5f9; padding: 8px 14px; border-bottom: 1px solid #cbd5e1; font-size: 0.88rem; }}
-  .mermaid-toolbar .m-title {{ font-weight: bold; color: #334155; margin-right: 4px; }}
-  .mermaid-toolbar .m-btn {{ background: #fff; border: 1px solid #94a3b8; border-radius: 6px; padding: 4px 10px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: #1e293b; transition: background 0.15s; }}
-  .mermaid-toolbar .m-btn:hover {{ background: #e2e8f0; }}
-  .mermaid-toolbar .m-btn.m-fullscreen {{ background: #2563eb; color: #fff; border-color: #1d4ed8; margin-left: auto; }}
-  .mermaid-toolbar .m-btn.m-fullscreen:hover {{ background: #1d4ed8; }}
-  .mermaid-toolbar .m-slider {{ width: 130px; cursor: pointer; }}
-  .mermaid-toolbar .m-label {{ font-family: monospace; font-weight: bold; min-width: 44px; text-align: center; color: #0f172a; }}
-  .mermaid-toolbar .m-hint {{ color: #64748b; font-size: 0.8rem; }}
-  .mermaid-viewport {{ overflow: auto; padding: 20px; min-height: 260px; max-height: 680px; resize: vertical; background: #f8fafc; cursor: grab; text-align: center; }}
-  .mermaid-wrapper.fullscreen-mode .mermaid-viewport {{ flex: 1; max-height: none; height: auto; resize: none; }}
-  .mermaid-viewport:active {{ cursor: grabbing; }}
-  .mermaid {{ display: inline-block; text-align: center; }}
-  .mermaid svg {{ max-width: none !important; height: auto; transition: width 0.1s ease, height 0.1s ease; }}
-  .md-table {{ width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 0.92rem; }}
-  .md-table th, .md-table td {{ border: 1px solid #cbd5e1; padding: 10px 12px; text-align: left; vertical-align: top; }}
-  .md-table th {{ background: #f1f5f9; color: #0f172a; font-weight: bold; }}
-  .md-table tr:nth-child(even) {{ background: #f8fafc; }}
-  .md-table tr.issue-row {{ background: #fef2f2; }}
-  .issue-summary {{ background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px; line-height: 1.7; }}
-</style>
-<script type="module">
-  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  mermaid.initialize({{
-    startOnLoad: false,
-    theme: 'default',
-    themeVariables: {{ fontSize: '16px' }},
-    flowchart: {{ useMaxWidth: false, htmlLabels: true, padding: 14 }}
-  }});
+# 📅 {target_date_str} Antigravity 1日の記録
 
-  window.addEventListener('DOMContentLoaded', async () => {{
-    await mermaid.run({{ querySelector: '.mermaid' }});
+## 📝 AIが編集・作成したファイル履歴
 
-    document.querySelectorAll('.mermaid').forEach((el) => {{
-      const svg = el.querySelector('svg');
-      if (!svg) return;
+{files_md}
 
-      const bbox = svg.getBoundingClientRect();
-      const viewBox = svg.getAttribute('viewBox');
-      let baseW = bbox.width || 800;
-      let baseH = bbox.height || 500;
-      if (viewBox) {{
-        const parts = viewBox.trim().split(/[\\s,]+/).map(Number);
-        if (parts.length === 4 && parts[2] > 0 && parts[3] > 0) {{
-          baseW = parts[2];
-          baseH = parts[3];
-        }}
-      }}
+## 📊 AIとよっちゃんのやり取り図解 ＆ 今後の課題・問題点
 
-      const wrapper = document.createElement('div');
-      wrapper.className = 'mermaid-wrapper';
+### 1. やり取りの全体フロー図（全 {data['user_turns']} 往復 ・ {data['conv_count']} セッション）
 
-      const toolbar = document.createElement('div');
-      toolbar.className = 'mermaid-toolbar';
-      toolbar.innerHTML = `
-        <span class="m-title">🔍 図解サイズ調整:</span>
-        <button type="button" class="m-btn" data-act="out">－ 縮小</button>
-        <input type="range" class="m-slider" min="40" max="300" step="10" value="100">
-        <span class="m-label">100%</span>
-        <button type="button" class="m-btn" data-act="in">＋ 拡大</button>
-        <button type="button" class="m-btn" data-act="fit">枠に合わせる</button>
-        <button type="button" class="m-btn" data-act="reset">100%</button>
-        <span class="m-hint">（ドラッグで移動 ／ 右下つまみで枠の高さ変更可）</span>
-        <button type="button" class="m-btn m-fullscreen" data-act="full">⛶ 全画面で大きく見る</button>
-      `;
+```mermaid
+{data['mermaid_auto']}
+```
 
-      const viewport = document.createElement('div');
-      viewport.className = 'mermaid-viewport';
+### 2. 現状診断（核・質・特・欠）と今後の課題解決ベクトル（方・移・拡・新）
 
-      el.parentNode.insertBefore(wrapper, el);
-      wrapper.appendChild(toolbar);
-      wrapper.appendChild(viewport);
-      viewport.appendChild(el);
+| 視点 | 診断結果（やり取りから見えた事実と課題） |
+| :--- | :--- |
+| **【核】核心** | 本日の主要テーマ：{data['topics_summary']} を軸に、よっちゃんの意図（Vibe）を具体的な手順・設定・コードへ変換。 |
+| **【質】品質** | {qual_md} |
+| **【特】特性** | 「前提条件の確認（Think Before Coding）」と選択肢（A/B/C）の提示により、最小のタイプ数で合意形成と実行が回っている。 |
+| **【欠】欠損（問題点）** | {issues_md} |
 
-      const slider = toolbar.querySelector('.m-slider');
-      const label = toolbar.querySelector('.m-label');
-      const fullBtn = toolbar.querySelector('[data-act="full"]');
-      let scale = 100;
+| ベクトル | 今後の具体的な改善アクション |
+| :--- | :--- |
+| **【方】方向性** | **暗黙知のレシピ化（Compilation）**：本日のやり取りで確定した手順やコマンドを、再利用可能な標準レシピ・長期記憶（`memories/`）として定着させる。 |
+| **【移】移動性** | **1テーマ＝1ファイル＆ダッシュボード連携**：成果物の保存先を迷わせないよう独立ファイル化し、[[Cockpit_MOC]] や日報目次から即座にアクセス可能にする。 |
+| **【拡】拡張性** | **アイアンマンスーツ化（自動化スクリプト連携）**：定型作業や検証コマンドをスクリプト・タスクスケジューラへ組み込み、人間の手作業ループを削減する。 |
+| **【新】新規性** | **視覚化（図解・表）の標準適用**：複雑な仕様やログは文字だけで追わず、ズーム可能なフロー図とマトリクス表で直感的に俯瞰する。 |
 
-      const applyScale = (newScale) => {{
-        scale = Math.max(40, Math.min(300, Math.round(newScale / 5) * 5));
-        slider.value = scale;
-        label.textContent = scale + '%';
-        svg.style.width = (baseW * scale / 100) + 'px';
-        svg.style.height = (baseH * scale / 100) + 'px';
-      }};
+## 💬 会話ログ
 
-      applyScale(100);
+{conv_md}
+"""
 
-      slider.addEventListener('input', () => applyScale(Number(slider.value)));
-      toolbar.querySelector('[data-act="out"]').addEventListener('click', () => applyScale(scale - 20));
-      toolbar.querySelector('[data-act="in"]').addEventListener('click', () => applyScale(scale + 20));
-      toolbar.querySelector('[data-act="reset"]').addEventListener('click', () => applyScale(100));
-      toolbar.querySelector('[data-act="fit"]').addEventListener('click', () => {{
-        const vw = viewport.clientWidth - 48;
-        if (vw > 0 && baseW > 0) {{
-          applyScale((vw / baseW) * 100);
-        }}
-      }});
-      fullBtn.addEventListener('click', () => {{
-        const isFull = wrapper.classList.toggle('fullscreen-mode');
-        fullBtn.textContent = isFull ? '✕ 全画面を閉じる' : '⛶ 全画面で大きく見る';
-      }});
+    # 本文中でリンクされた関連ノートを収集して末尾ナビゲーションにまとめる
+    found_links = list(dict.fromkeys(re.findall(r"\[\[([^\]|]+)(?:\|[^\]]+)?\]\]", body_text)))
+    related_notes = [lnk for lnk in found_links if lnk != "Cockpit_MOC"]
+    nav_lines = [
+        "---",
+        "## 🔗 関連ナビゲーション",
+        "- [[Cockpit_MOC]]",
+    ]
+    for lnk in related_notes[:20]:
+        nav_lines.append(f"- [[{lnk}]]")
 
-      let isDown = false, startX = 0, startY = 0, scrollL = 0, scrollT = 0;
-      viewport.addEventListener('mousedown', (e) => {{
-        isDown = true;
-        startX = e.pageX - viewport.offsetLeft;
-        startY = e.pageY - viewport.offsetTop;
-        scrollL = viewport.scrollLeft;
-        scrollT = viewport.scrollTop;
-      }});
-      window.addEventListener('mouseup', () => {{ isDown = false; }});
-      viewport.addEventListener('mousemove', (e) => {{
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - viewport.offsetLeft;
-        const y = e.pageY - viewport.offsetTop;
-        viewport.scrollLeft = scrollL - (x - startX);
-        viewport.scrollTop = scrollT - (y - startY);
-      }});
-    }});
-  }});
-</script>
-</head>
-<body>
-<div class="container">
-  <a class="nav-back" href="index.html">← 目次（全日程一覧）へ戻る</a>
-  <h1>📅 {target_date_str} Antigravity 1日の記録（CLI版）</h1>
-  <section class="card">
-    <h2>📝 AIが編集・作成したファイル履歴</h2>
-    <ul class="file-list">
-      {files_section}
-    </ul>
-  </section>
-{analysis_html}
-  {conv_html}
-</div>
-</body>
-</html>"""
-
-    out_file.write_text(html_doc, encoding="utf-8")
+    md_doc = body_text + "\n" + "\n".join(nav_lines) + "\n"
+    out_file.write_text(md_doc, encoding="utf-8")
+    _backup_to_gdrive(out_file)
     return out_file
-
-
-def generate_index_html() -> Path:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    index_file = OUTPUT_DIR / "index.html"
-    report_files = sorted(OUTPUT_DIR.glob("*_Antigravity日報.html"), reverse=True)
-
-    rows_html = []
-    for rf in report_files:
-        date_str = rf.name.split("_")[0]
-        content = rf.read_text(encoding="utf-8", errors="ignore")
-        topics = re.findall(r"<h2>(\d+\.\s*.*?)<small>", content)
-        topics_clean = [html.unescape(t.strip()) for t in topics]
-        topics_badges = "".join(f'<div class="topic-item">💬 {html.escape(t)}</div>' for t in topics_clean)
-        if not topics_badges:
-            topics_badges = '<div class="topic-item muted">会話記録なし</div>'
-
-        rows_html.append(
-            f"""<div class="day-card" data-search="{html.escape(date_str + ' ' + ' '.join(topics_clean)).lower()}">
-              <div class="day-header">
-                <a class="day-link" href="{rf.name}">📅 {date_str} の日報を開く</a>
-                <span class="conv-count">会話 {len(topics_clean)} 件</span>
-              </div>
-              <div class="topic-list">{topics_badges}</div>
-            </div>"""
-        )
-
-    cards_section = "\n".join(rows_html)
-
-    index_doc = f"""<!DOCTYPE html>
-<html lang="ja">
-<head>
-<meta charset="UTF-8">
-<title>Antigravity 日報 目次（全 {len(report_files)} 日分）</title>
-<style>
-  body {{ font-family: "Segoe UI", "Meiryo", sans-serif; background: #f4f6f9; color: #222; margin: 0; padding: 24px; }}
-  .container {{ max-width: 960px; margin: 0 auto; }}
-  h1 {{ background: #0f172a; color: #fff; padding: 20px 24px; border-radius: 10px; margin-top: 0; }}
-  .search-box {{ width: 100%; box-sizing: border-box; padding: 14px 18px; font-size: 1rem; border: 2px solid #cbd5e1; border-radius: 10px; margin-bottom: 20px; outline: none; }}
-  .search-box:focus {{ border-color: #3b82f6; }}
-  .day-card {{ background: #fff; border-radius: 10px; padding: 16px 20px; margin-bottom: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: transform 0.1s; }}
-  .day-card:hover {{ transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }}
-  .day-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }}
-  .day-link {{ font-size: 1.15rem; font-weight: bold; color: #2563eb; text-decoration: none; }}
-  .day-link:hover {{ text-decoration: underline; }}
-  .conv-count {{ background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: bold; }}
-  .topic-item {{ color: #334155; font-size: 0.95rem; padding: 3px 0; }}
-  .topic-item.muted {{ color: #94a3b8; }}
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>📚 Antigravity 日報 目次（全 {len(report_files)} 日分）</h1>
-  <input type="text" id="searchInput" class="search-box" placeholder="🔍 日付や質問キーワードで絞り込み（例: 2026-11、速読、契約書、Loop）...">
-  <div id="cardContainer">
-    {cards_section}
-  </div>
-</div>
-<script>
-  const input = document.getElementById('searchInput');
-  const cards = document.querySelectorAll('.day-card');
-  input.addEventListener('input', () => {{
-    const q = input.value.toLowerCase().trim();
-    cards.forEach(c => {{
-      c.style.display = c.dataset.search.includes(q) ? '' : 'none';
-    }});
-  }});
-</script>
-</body>
-</html>"""
-
-    index_file.write_text(index_doc, encoding="utf-8")
-    return index_file
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--all":
-        existing_reports = sorted(OUTPUT_DIR.glob("*_Antigravity日報.html"))
+        existing_reports = sorted(OUTPUT_DIR.glob("*_Antigravity日報.md"))
         all_dates = [rf.name.split("_")[0] for rf in existing_reports]
         today_str = datetime.now(JST).strftime("%Y-%m-%d")
         if today_str not in all_dates:
             all_dates.append(today_str)
         data_map = collect_all_daily_data(set(all_dates))
+        updated_md = 0
         for d_str in sorted(all_dates):
-            generate_html(d_str, precollected=data_map.get(d_str))
-        saved_index = generate_index_html()
-        print(f"Updated all {len(all_dates)} HTML reports.")
-        print(f"Saved Index: {saved_index}")
+            pre = data_map.get(d_str)
+            if generate_markdown(d_str, precollected=pre) is not None:
+                updated_md += 1
+        print(f"Updated {updated_md} Markdown reports (checked {len(all_dates)} dates).")
     else:
         target_date = sys.argv[1] if len(sys.argv) > 1 else datetime.now(JST).strftime("%Y-%m-%d")
-        saved_html = generate_html(target_date)
-        saved_index = generate_index_html()
-        print(f"Saved HTML: {saved_html}")
-        print(f"Saved Index: {saved_index}")
+        pre = collect_daily_data(target_date)
+        saved_md = generate_markdown(target_date, precollected=pre)
+        if saved_md:
+            print(f"Saved Markdown: {saved_md}")
+        else:
+            print(f"Skipped Markdown (0 conversations): {target_date}")
