@@ -11,6 +11,11 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 from jev_hybrid_auditor import run_hybrid_jev_audit
+from photo_triage import (
+    format_lane_subject_tag,
+    run_jev_winter_audit,
+    triage_photo_inquiry,
+)
 
 # --- [1] パス・環境変数設定 ---
 script_dir = Path(__file__).resolve().parent
@@ -283,6 +288,55 @@ def extract_body(msg: email.message.Message) -> str:
     return ""
 
 
+def extract_first_image_attachment(msg: email.message.Message) -> bytes | None:
+    """メール内の最初の画像添付（image/*）バイト列を抽出する。添付なし時は None。"""
+    if not msg.is_multipart():
+        return None
+    for part in msg.walk():
+        content_type = part.get_content_type() or ""
+        if content_type.startswith("image/"):
+            payload = part.get_payload(decode=True)
+            if payload:
+                return payload
+    return None
+
+
+def process_inquiry_with_optional_photo(
+    inquiry_content: str,
+    image_bytes: bytes | None = None,
+    vision_client=None,
+    jev_winter_evaluator=None,
+) -> tuple[str, str, str, str, str]:
+    """
+    添付画像がある場合は photo_triage.py で写真診断トリアージを実行し、
+    画像添付なしの場合は既存の generate_audited_reply_routed をそのまま実行する。
+    """
+    if image_bytes:
+        winter_eval = jev_winter_evaluator or run_jev_winter_audit
+        photo_res = triage_photo_inquiry(
+            image_input=image_bytes,
+            tenant_message=inquiry_content,
+            vision_client=vision_client,
+            jev_winter_evaluator=winter_eval,
+        )
+        draft_prefix = format_lane_subject_tag(photo_res)
+        verdict = "PASS" if photo_res.lane == "AUTO_APPROVE" else photo_res.lane
+        save_audit_report(
+            tenant_issue=inquiry_content,
+            reply_text=photo_res.reply_text,
+            category="photo_triage",
+            verdict=verdict,
+            attempts=1,
+            score=photo_res.confidence,
+            feedback=photo_res.escalation_summary_for_owner or f"quality_issue={photo_res.quality_issue}",
+            action_lane=photo_res.lane,
+            draft_prefix=draft_prefix,
+        )
+        return photo_res.reply_text, "photo_triage", verdict, photo_res.lane, draft_prefix
+
+    return generate_audited_reply_routed(inquiry_content)
+
+
 def save_to_gmail_drafts(to_email: str, subject: str, reply_body: str, draft_prefix: str = ""):
     """IMAP APPEND を使い、Jev監査済みの文面を3レーン件名タグ付きで Gmail の「下書き」フォルダに自動保存"""
     try:
@@ -360,12 +414,16 @@ def run_triage_and_audit_pipeline():
                 continue
 
             short_body = body_text[:800]
+            attached_image = extract_first_image_attachment(msg)
 
-            if any(k in subject or k in short_body for k in ALL_TENANT_KEYWORDS):
+            if attached_image is not None or any(k in subject or k in short_body for k in ALL_TENANT_KEYWORDS):
                 print("  => [🔥 入居者相談・トラブル案件を検知]")
                 inquiry_content = f"件名: {subject}\n差出人: {sender}\n本文: {short_body}"
 
-                audited_reply, category, verdict, action_lane, draft_prefix = generate_audited_reply_routed(inquiry_content)
+                audited_reply, category, verdict, action_lane, draft_prefix = process_inquiry_with_optional_photo(
+                    inquiry_content,
+                    image_bytes=attached_image,
+                )
 
                 print(f"\n  === [Jev確定返信文面 ({category} / {verdict} / {action_lane})] ===")
                 print(audited_reply)
