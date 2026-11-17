@@ -37,7 +37,7 @@ from src.db import (
     log_structured_event,
 )
 from src.repair_db import fetch_monthly_repair_summary, initialize_sample_repairs
-from src.yield_calc import calculate_net_yield_summaries
+from src.yield_calc import calculate_net_yield_summaries, estimate_sapporo_other_expenses
 
 
 def build_combined_chart(df: pd.DataFrame) -> go.Figure:
@@ -429,7 +429,13 @@ def main() -> None:
         try:
             initialize_sample_repairs(DEFAULT_DB_PATH)
             repair_summaries = fetch_monthly_repair_summary(query_filter)
-            yield_summaries = calculate_net_yield_summaries(summaries, repair_summaries)
+            other_expenses = estimate_sapporo_other_expenses(summaries)
+            yield_summaries = calculate_net_yield_summaries(
+                summaries,
+                repair_summaries,
+                other_expenses=other_expenses,
+            )
+            st.caption("※ その他経費には管理委託費（5%）＋共用部固定費＋冬期（11〜3月）除雪・RH加算を含めています。")
 
             if yield_summaries:
                 df_yield = pd.DataFrame([y.model_dump() for y in yield_summaries])

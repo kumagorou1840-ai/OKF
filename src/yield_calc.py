@@ -12,18 +12,59 @@ from typing import Dict, List, Optional, Sequence
 
 from src.db import MonthlyRentalSummary
 from src.models_finance import (
+    DEFAULT_MANAGEMENT_FEE_RATE,
+    DEFAULT_MONTHLY_OTHER_EXPENSES,
     DEFAULT_PROPERTY_PRICES,
+    DEFAULT_WINTER_SNOW_SURCHARGE,
+    FALLBACK_MONTHLY_OTHER_EXPENSE,
     FALLBACK_PROPERTY_PRICE,
     MonthlyRepairSummary,
     NetYieldSummary,
+    WINTER_SNOW_MONTHS,
 )
+
+
+def estimate_sapporo_other_expenses(
+    rental_summaries: Sequence[MonthlyRentalSummary],
+    monthly_fixed_expenses: Optional[Dict[str, Optional[int]]] = None,
+    management_fee_rate: float = DEFAULT_MANAGEMENT_FEE_RATE,
+    winter_snow_surcharge: int = DEFAULT_WINTER_SNOW_SURCHARGE,
+) -> Dict[str, int]:
+    """
+    物件別の家賃収入と対象月数から、札幌の運営経費（管理委託費＋固定費＋冬期除雪/RH加算）を算出する。
+    欠損値（None）や負値は安全にフォールバック/0クリップする。
+    """
+    if not rental_summaries:
+        return {}
+
+    fixed_map = (
+        monthly_fixed_expenses
+        if monthly_fixed_expenses is not None
+        else DEFAULT_MONTHLY_OTHER_EXPENSES
+    )
+    safe_rate = max(0.0, float(management_fee_rate))
+    safe_surcharge = max(0, int(winter_snow_surcharge))
+
+    totals: Dict[str, int] = defaultdict(int)
+    for rental in rental_summaries:
+        prop_name = rental.property_name
+        raw_fixed = fixed_map.get(prop_name, FALLBACK_MONTHLY_OTHER_EXPENSE)
+        monthly_fixed = FALLBACK_MONTHLY_OTHER_EXPENSE if raw_fixed is None else max(0, int(raw_fixed))
+        mgmt_fee = int(round(max(0, rental.rent_revenue) * safe_rate))
+
+        month_part = rental.year_month.split("-")[1] if "-" in rental.year_month else ""
+        snow_cost = safe_surcharge if month_part in WINTER_SNOW_MONTHS else 0
+
+        totals[prop_name] += mgmt_fee + monthly_fixed + snow_cost
+
+    return dict(totals)
 
 
 def calculate_net_yield_summaries(
     rental_summaries: Sequence[MonthlyRentalSummary],
     repair_summaries: Sequence[MonthlyRepairSummary],
     property_prices: Optional[Dict[str, int]] = None,
-    other_expenses: Optional[Dict[str, int]] = None,
+    other_expenses: Optional[Dict[str, Optional[int]]] = None,
 ) -> List[NetYieldSummary]:
     """
     物件別の家賃収入と修繕費・その他運営経費からNOI（純営業収益）および表面・実質利回りを算出する。
@@ -52,8 +93,10 @@ def calculate_net_yield_summaries(
     for prop_name in property_names:
         gross_revenue = revenue_by_prop[prop_name]
         total_repair_cost = repair_by_prop[prop_name]
-        other_exp = expense_map.get(prop_name, 0)
-        property_price = price_map.get(prop_name, FALLBACK_PROPERTY_PRICE)
+        raw_other_exp = expense_map.get(prop_name, 0)
+        other_exp = 0 if raw_other_exp is None else max(0, int(raw_other_exp))
+        raw_price = price_map.get(prop_name, FALLBACK_PROPERTY_PRICE)
+        property_price = FALLBACK_PROPERTY_PRICE if raw_price is None else max(0, int(raw_price))
 
         noi = gross_revenue - total_repair_cost - other_exp
 

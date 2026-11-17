@@ -23,7 +23,7 @@ from src.models_finance import (
     RepairExpenseInput,
 )
 from src.repair_db import fetch_monthly_repair_summary, initialize_sample_repairs
-from src.yield_calc import calculate_net_yield_summaries
+from src.yield_calc import calculate_net_yield_summaries, estimate_sapporo_other_expenses
 
 
 def test_repair_expense_pydantic_validation() -> None:
@@ -239,3 +239,77 @@ def test_yield_calc_normal_and_zero_division() -> None:
     assert zero_summary.property_price == 0
     assert zero_summary.gross_yield_pct == 0.0
     assert zero_summary.net_yield_pct == 0.0
+
+
+def test_sapporo_other_expenses_and_missing_value_resilience() -> None:
+    """4. 札幌の固定運営経費（除雪・RH・管理費）算出および欠損値(None)・負値耐性検証"""
+    rental_samples = [
+        MonthlyRentalSummary(
+            property_name="メゾン札幌北",
+            year_month="2026-01",  # 冬期加算対象月
+            total_units=10,
+            occupied_units=10,
+            vacant_units=0,
+            rent_revenue=600_000,
+            vacancy_loss=0,
+            occupancy_rate=100.0,
+        ),
+        MonthlyRentalSummary(
+            property_name="メゾン札幌北",
+            year_month="2026-06",  # 非冬期月
+            total_units=10,
+            occupied_units=10,
+            vacant_units=0,
+            rent_revenue=600_000,
+            vacancy_loss=0,
+            occupancy_rate=100.0,
+        ),
+    ]
+    repair_samples = [
+        MonthlyRepairSummary(
+            property_name="メゾン札幌北",
+            year_month="2026-01",
+            repair_count=1,
+            total_repair_cost=100_000,
+        ),
+    ]
+
+    # 空リスト時は空辞書
+    assert estimate_sapporo_other_expenses([]) == {}
+
+    # 正常系: 1月(管理費30,000 + 固定25,000 + 冬期15,000 = 70,000) + 6月(30,000 + 25,000 + 0 = 55,000) = 125,000
+    other_exp = estimate_sapporo_other_expenses(rental_samples)
+    assert other_exp["メゾン札幌北"] == 125_000
+
+    # NOI反映検証: 家賃1,200,000 - 修繕100,000 - その他経費125,000 = 975,000
+    yield_res = calculate_net_yield_summaries(
+        rental_summaries=rental_samples,
+        repair_summaries=repair_samples,
+        property_prices={"メゾン札幌北": 20_000_000},
+        other_expenses=other_exp,
+    )
+    assert len(yield_res) == 1
+    assert yield_res[0].other_operating_expenses == 125_000
+    assert yield_res[0].noi == 975_000
+    assert yield_res[0].net_yield_pct == pytest.approx(4.88, rel=1e-2)
+
+    # 欠損値(None)・負値耐性検証
+    corrupted_exp = {"メゾン札幌北": None}
+    corrupted_fixed = {"メゾン札幌北": -5000}
+    safe_exp = estimate_sapporo_other_expenses(
+        rental_samples,
+        monthly_fixed_expenses=corrupted_fixed,
+        management_fee_rate=-0.1,
+        winter_snow_surcharge=-1000,
+    )
+    assert safe_exp["メゾン札幌北"] == 0
+
+    safe_res = calculate_net_yield_summaries(
+        rental_summaries=rental_samples,
+        repair_summaries=repair_samples,
+        property_prices={"メゾン札幌北": None},
+        other_expenses=corrupted_exp,
+    )
+    assert len(safe_res) == 1
+    assert safe_res[0].other_operating_expenses == 0
+    assert safe_res[0].property_price == 30_000_000  # FALLBACK_PROPERTY_PRICE

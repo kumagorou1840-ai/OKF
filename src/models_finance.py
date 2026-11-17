@@ -22,6 +22,19 @@ DEFAULT_PROPERTY_PRICES: Dict[str, int] = {
 }
 FALLBACK_PROPERTY_PRICE: int = 30_000_000
 
+# 札幌の賃貸経営における物件別・月次固定運営経費（共用部電気・除雪積立・ロードヒーティング等）
+DEFAULT_MONTHLY_OTHER_EXPENSES: Dict[str, int] = {
+    "メゾン札幌北": 25_000,
+    "コーポ大通東": 28_000,
+    "円山グリーンハイツ": 30_000,
+    "北18条レジデンス": 25_000,
+    "大通パークサイドコート": 35_000,
+}
+FALLBACK_MONTHLY_OTHER_EXPENSE: int = 25_000
+DEFAULT_MANAGEMENT_FEE_RATE: float = 0.05
+WINTER_SNOW_MONTHS: set[str] = {"11", "12", "01", "02", "03"}
+DEFAULT_WINTER_SNOW_SURCHARGE: int = 15_000
+
 
 class RepairExpenseInput(BaseModel):
     """修繕費明細の入力・シード用スキーマ"""
