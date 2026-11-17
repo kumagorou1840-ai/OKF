@@ -510,7 +510,7 @@ def generate_markdown(target_date_str: str, precollected=None) -> Path | None:
         return None
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    out_file = OUTPUT_DIR / f"{target_date_str}_Antigravity日報.md"
+    out_file = OUTPUT_DIR / f"{target_date_str}_Antigravity問答.md"
 
     # 1. 編集・作成ファイル履歴
     file_lines: list[str] = []
@@ -562,7 +562,7 @@ tags:
 type: daily-report
 ---
 
-# 📅 {target_date_str} Antigravity 1日の記録
+# 📅 {target_date_str} Antigravity問答（1日の記録）
 
 ## 📝 AIが編集・作成したファイル履歴
 
@@ -620,10 +620,10 @@ def update_cockpit_moc(limit: int = 7) -> Path | None:
     if not moc_path.exists():
         return None
 
-    recent_reports = sorted(OUTPUT_DIR.glob("*_Antigravity日報.md"), reverse=True)[:limit]
+    recent_reports = sorted(OUTPUT_DIR.glob("*_Antigravity問答.md"), reverse=True)[:limit]
     links_block = "\n".join(f"- [[{rf.stem}]]" for rf in recent_reports)
     if not links_block:
-        links_block = "- （日報ファイルがありません）"
+        links_block = "- （問答ファイルがありません）"
 
     start_marker = "<!-- YOUYAKU_DAILY_LOGS_START -->"
     end_marker = "<!-- YOUYAKU_DAILY_LOGS_END -->"
@@ -647,7 +647,7 @@ def update_cockpit_moc(limit: int = 7) -> Path | None:
 
 if __name__ == "__main__":
     if len(sys.argv) > 1 and sys.argv[1] == "--all":
-        existing_reports = sorted(OUTPUT_DIR.glob("*_Antigravity日報.md"))
+        existing_reports = sorted(OUTPUT_DIR.glob("*_Antigravity問答.md"))
         all_dates = [rf.name.split("_")[0] for rf in existing_reports]
         today_str = datetime.now(JST).strftime("%Y-%m-%d")
         if today_str not in all_dates:
